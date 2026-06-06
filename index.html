@@ -231,6 +231,19 @@
     text-transform:uppercase;color:#fff;padding:6px 14px;border-radius:99px;font-weight:600;white-space:nowrap}
   .levelhead .l{height:1px;flex:1;background:var(--line)}
 
+  .bd{font-family:"JetBrains Mono",monospace;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:600;white-space:nowrap}
+  .bd.hi{background:var(--green-soft);color:var(--green)}
+  .bd.mid{background:#F3E7CE;color:#8A6D2F}
+  .bd.lo{background:#F3DAD3;color:#A33A1F}
+  .career{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 23px;margin:15px 0;box-shadow:var(--shadow)}
+  .career h3{font-family:"Fraunces",serif;font-weight:500;font-size:21px;margin:0 0 3px;letter-spacing:-.01em}
+  .career .role{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--muted);margin-bottom:6px}
+  .career .role a{color:var(--rust)}
+  .career ul{margin:8px 0 0;padding-left:18px}
+  .career li{margin:4px 0;font-size:14.5px}
+  .career .badges{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 2px;align-items:center}
+  .career .badges span.t{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+
   @media(max-width:960px){
     .wrap{grid-template-columns:1fr;gap:0}
     nav.toc{display:none}
@@ -277,6 +290,10 @@
     <a href="#cad-c">C — fundamentos</a>
     <a href="#cad-strings">Strings em C</a>
     <a href="#cad-ingles">Inglês do zero</a>
+    <div class="lbl">Elite</div>
+    <a href="#elite">Nível craque mundial</a>
+    <div class="lbl">Carreiras</div>
+    <a href="#carreiras">Carreiras &amp; salários</a>
     <div class="lbl">Apoio</div>
     <a href="#timeline">Linha do tempo</a>
     <a href="#mentor">Trilha de mentor</a>
@@ -947,14 +964,14 @@
     <div class="part-head" id="cad-c" style="background:var(--ink)">
       <div class="pk">Caderno de referência · Fase 0–1 (Linguagem C)</div>
       <h2>C — o caderno de fundamentos</h2>
-      <p>Tudo o que vocês precisam de C, do esqueleto do programa até ponteiros e memória. Strings têm caderno próprio; aqui está o resto. Deixe aberto enquanto coda.</p>
+      <p>Tudo o que vocês precisam de C — do esqueleto do programa a ponteiros, memória, arquivos e ponteiro de função. Strings têm caderno próprio; aqui está o resto inteiro. Deixe aberto enquanto coda.</p>
     </div>
 
     <div class="pillrow">
       <span class="pl">1 · esqueleto</span><span class="pl">2 · variáveis</span><span class="pl">3 · entrada/saída</span>
       <span class="pl">4 · operadores</span><span class="pl">5 · condicionais</span><span class="pl">6 · laços</span>
       <span class="pl">7 · vetores</span><span class="pl">8 · matrizes</span><span class="pl">9 · structs</span>
-      <span class="pl">10 · funções</span><span class="pl">11 · ponteiros</span><span class="pl">12 · memória</span><span class="pl">13 · vários arquivos</span>
+      <span class="pl">10 · funções</span><span class="pl">11 · ponteiros</span><span class="pl">12 · memória</span><span class="pl">13 · vários arquivos</span><span class="pl">14 · casting/sizeof</span><span class="pl">15 · ternário</span><span class="pl">16 · escopo/static</span><span class="pl">17 · recursão</span><span class="pl">18 · enum/typedef</span><span class="pl">19 · macros</span><span class="pl">20 · bit a bit</span><span class="pl">21 · ponteiro de função</span><span class="pl">22 · arquivos</span><span class="pl">23 · argc/argv</span>
     </div>
 
     <h3 class="cad-sub">1 · O esqueleto de um programa</h3>
@@ -1232,11 +1249,109 @@ int main() { printf(<span class="s">"%d\n"</span>, somar(2, 3)); return 0; }</pr
       <p>O trio <code>#ifndef / #define / #endif</code> garante que o cabeçalho seja incluído uma única vez, mesmo se vários arquivos o pedirem. Sem ele, dá erro de “redefinição”.</p>
     </div>
 
-    <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Carrossel: <b>“C em 13 conceitos — do <code>printf</code> ao <code>malloc</code>”</b>. Um slide por tópico deste caderno. Conteúdo de fundamento sempre tem audiência de iniciante.</div></div>
+
+    <h3 class="cad-sub">14 · Conversão de tipos (casting) e <code>sizeof</code></h3>
+    <p>Às vezes você precisa forçar um tipo a virar outro. E <code>sizeof</code> diz quantos bytes algo ocupa.</p>
+<pre class="code">int a = 7, b = 2;
+double r = (double)a / b;     <span class="c">// 3.5 — o (double) força a conta a virar decimal</span>
+printf(<span class="s">"%zu\n"</span>, sizeof(int)); <span class="c">// 4 (em geral) — tamanho do tipo em bytes</span></pre>
+
+    <h3 class="cad-sub">15 · Operador ternário</h3>
+    <p>Um <code>if/else</code> enxuto, em uma linha. Formato: <code>condição ? valor_se_verdadeiro : valor_se_falso</code>.</p>
+<pre class="code">int idade = 20;
+char *tipo = (idade &gt;= 18) ? <span class="s">"adulto"</span> : <span class="s">"menor"</span>;   <span class="c">// escolhe na hora</span>
+int maior = (a &gt; b) ? a : b;                        <span class="c">// máximo entre dois</span></pre>
+
+    <h3 class="cad-sub">16 · Escopo, <code>static</code> e <code>const</code></h3>
+    <p>Variável declarada dentro de uma função (<strong>local</strong>) só existe ali. <strong>Global</strong> (fora de tudo) existe no programa inteiro. <code>static</code> faz uma local <em>lembrar</em> o valor entre chamadas. <code>const</code> trava o valor.</p>
+<pre class="code">int contador() {
+    static int n = 0;   <span class="c">// não zera a cada chamada — lembra o valor</span>
+    return ++n;         <span class="c">// 1, 2, 3, ... a cada vez que chamar</span>
+}
+const double TAXA = 0.05;   <span class="c">// não pode ser alterado depois</span></pre>
+
+    <h3 class="cad-sub">17 · Recursão</h3>
+    <p>Uma função que chama <strong>a si mesma</strong>. Precisa SEMPRE de um <strong>caso base</strong> (a condição de parada), senão vira loop infinito que estoura a memória (stack overflow).</p>
+<pre class="code">int fatorial(int n) {
+    if (n &lt;= 1) return 1;          <span class="c">// caso base: para aqui</span>
+    return n * fatorial(n - 1);    <span class="c">// chama a si mesma, menor</span>
+}
+<span class="c">// fatorial(4) = 4*3*2*1 = 24</span></pre>
+    <div class="note green"><h4>Por que importa</h4><p>Recursão é o jeito natural de percorrer árvores e resolver “dividir pra conquistar” (Merge Sort, Quick Sort). É um músculo que você vai usar muito da Fase 3 em diante.</p></div>
+
+    <h3 class="cad-sub">18 · <code>enum</code>, <code>typedef</code> e <code>union</code></h3>
+<pre class="code">enum Status { ATIVO, INATIVO, PENDENTE };   <span class="c">// vira 0, 1, 2 — nomes pra inteiros</span>
+enum Status s = ATIVO;
+
+typedef struct {                            <span class="c">// typedef = apelido de tipo</span>
+    char nome[50];
+    int  idade;
+} Pessoa;
+Pessoa p;        <span class="c">// agora não precisa escrever "struct" toda hora</span>
+
+union Valor {    <span class="c">// union: todos os campos dividem o MESMO espaço</span>
+    int   inteiro;
+    float decimal;
+};               <span class="c">// útil pra economizar memória quando só um é usado por vez</span></pre>
+
+    <h3 class="cad-sub">19 · Pré-processador e macros (<code>#define</code>)</h3>
+    <p>O <code>#define</code> faz uma “troca de texto” antes de compilar. Serve pra constantes e pequenas macros.</p>
+<pre class="code"><span class="p">#define PI 3.14159</span>
+<span class="p">#define AREA(r) (PI * (r) * (r))    // macro com argumento</span>
+
+double a = AREA(5);   <span class="c">// o compilador troca por (3.14159 * (5) * (5))</span></pre>
+    <div class="note"><h4>⚠ Parênteses são obrigatórios</h4><p>Em macro, embrulhe cada argumento em parênteses: <code>(r)</code>. Sem isso, <code>AREA(2+1)</code> vira conta errada. Macro não é função — é substituição literal de texto.</p></div>
+
+    <h3 class="cad-sub">20 · Operadores bit a bit</h3>
+    <p>Mexem nos bits diretamente. Parecem exóticos agora, mas são a base de bitmaps, flags e compressão.</p>
+<pre class="code">a &amp; b    <span class="c">// AND  — 1 só onde os dois são 1</span>
+a | b    <span class="c">// OR   — 1 onde pelo menos um é 1</span>
+a ^ b    <span class="c">// XOR  — 1 onde são diferentes</span>
+~a       <span class="c">// NOT  — inverte todos os bits</span>
+a &lt;&lt; 2   <span class="c">// desloca p/ esquerda  (= multiplica por 4)</span>
+a &gt;&gt; 1   <span class="c">// desloca p/ direita    (= divide por 2)</span></pre>
+    <div class="note green"><h4>Liga com o board</h4><p>Isto reaparece em <a href="#f6">Fase 6</a> (codificação de caracteres) e na Camada C8 do projeto (bitmaps: <code>SETBIT</code>/<code>BITCOUNT</code>).</p></div>
+
+    <h3 class="cad-sub">21 · Ponteiro de função</h3>
+    <p>Dá pra guardar uma <em>função</em> dentro de uma variável e chamá-la depois. Parece estranho, mas é o coração de como C faz “polimorfismo” e tabelas de comando.</p>
+<pre class="code">int somar(int a, int b) { return a + b; }
+
+int (*op)(int, int) = somar;   <span class="c">// op aponta para a função somar</span>
+printf(<span class="s">"%d\n"</span>, op(2, 3));      <span class="c">// 5 — chama através do ponteiro</span></pre>
+    <div class="note green"><h4>Direto no projeto</h4><p>No capstone, o mapa de comandos (<code>GET</code>/<code>SET</code>/<code>DEL</code> → função que executa) usa exatamente isto — é a versão em C do padrão Strategy que você já aplica no trabalho.</p></div>
+
+    <h3 class="cad-sub">22 · Arquivos — ler e escrever em disco</h3>
+    <p>Até aqui tudo morria quando o programa fechava. Com arquivos, os dados <strong>persistem</strong>.</p>
+<pre class="code"><span class="p">#include &lt;stdio.h&gt;</span>
+
+FILE *f = fopen(<span class="s">"dados.txt"</span>, <span class="s">"w"</span>);   <span class="c">// "w" escreve, "r" lê, "a" anexa</span>
+if (f != NULL) {
+    fprintf(f, <span class="s">"Olá, arquivo!\n"</span>);   <span class="c">// escreve formatado, igual printf</span>
+    fclose(f);                       <span class="c">// SEMPRE feche o arquivo</span>
+}
+
+char linha[100];
+f = fopen(<span class="s">"dados.txt"</span>, <span class="s">"r"</span>);
+if (f) { fgets(linha, sizeof linha, f); fclose(f); }</pre>
+    <div class="note green"><h4>Direto no projeto</h4><p>Esta é a base da Camada C4 (persistência): o Write-Ahead Log e os snapshots do banco são, no fundo, leitura e escrita de arquivos com cuidado.</p></div>
+
+    <h3 class="cad-sub">23 · Argumentos de linha de comando</h3>
+    <p>O <code>main</code> pode receber o que o usuário digitou ao rodar o programa (<code>./programa arg1 arg2</code>).</p>
+<pre class="code">int main(int argc, char *argv[]) {
+    <span class="c">// argc = quantidade de argumentos (inclui o nome do programa)</span>
+    <span class="c">// argv = vetor com os textos</span>
+    if (argc &gt; 1) {
+        printf(<span class="s">"Voce passou: %s\n"</span>, argv[1]);
+    }
+    return 0;
+}</pre>
+    <div class="note green"><h4>Direto no projeto</h4><p>O CLI do banco (Camada C0) usa <code>argc</code>/<code>argv</code> pra receber comandos direto do terminal.</p></div>
+
+    <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Carrossel: <b>“C em 23 conceitos — do <code>printf</code> ao ponteiro de função”</b>. Um slide por tópico deste caderno. Conteúdo de fundamento sempre tem audiência de iniciante.</div></div>
 
     <div class="check">
       <div class="ttl">Checkpoint do caderno</div>
-      <p>Sem cola, cada um: (1) lê 5 notas num vetor e calcula a média; (2) escreve uma função que troca o valor de duas variáveis usando ponteiros; (3) cria uma <code>struct</code> de “produto” e imprime; (4) aloca um vetor dinâmico com <code>malloc</code>, usa e dá <code>free</code> sem vazar.</p>
+      <p>Sem cola, cada um: (1) lê 5 notas num vetor e calcula a média; (2) função que troca duas variáveis usando ponteiros; (3) <code>struct</code> de “produto” + <code>typedef</code>; (4) vetor dinâmico com <code>malloc</code>/<code>free</code> sem vazar; (5) função recursiva (fatorial ou Fibonacci); (6) salva e relê uma frase de um arquivo com <code>fopen</code>.</p>
     </div>
     <div class="note green">
       <h4>Liga com o resto do board</h4>
@@ -1682,6 +1797,106 @@ sscanf(<span class="s">"06/06/2026"</span>, <span class="s">"%d/%d/%d"</span>, &
       <div class="ttl">Checkpoint do caderno</div>
       <p><strong>Básico:</strong> (1) se apresentar com o TO BE; (2) uma rotina no Present Simple + negativo; (3) contar o que fez ontem no Past Simple; (4) 3 perguntas com WH-. <strong>Intermediário:</strong> (5) uma frase no Present Perfect com <em>for/since</em>; (6) comparar duas coisas. <strong>Avançado:</strong> (7) uma frase em cada condicional (1ª, 2ª e 3ª); (8) transformar uma frase ativa em passiva. Falem em voz alta — o objetivo é produzir, não reconhecer.</p>
     </div>
+
+
+    <div class="part-head" id="elite" style="background:var(--ink)">
+      <div class="pk">Parte 3 · depois do núcleo</div>
+      <h2>Nível craque mundial</h2>
+      <p>O roadmap inteiro já faz de vocês ótimos profissionais. Esta parte é o que separa “muito bom” de <strong>elite mundial</strong> — opcional, pra fazer depois (ou em paralelo) do núcleo, conforme o interesse de cada um.</p>
+    </div>
+
+    <div class="note">
+      <h4>A real sobre “ser craque”</h4>
+      <p>Ninguém vira elite vendo mais vídeo. Vira <strong>construindo coisas difíceis, lendo código dos grandes e indo fundo num assunto</strong>. O capstone de vocês já é metade disso. O resto é profundidade e gosto por entender o “por quê” embaixo de cada camada.</p>
+    </div>
+
+    <h3 class="cad-sub">1 · Algoritmos de elite</h3>
+    <ul class="ph-body" style="padding-left:20px">
+      <li><strong>Programação dinâmica avançada</strong> (DP em árvore, bitmask, em intervalos) e <strong>fluxo máximo</strong> (Dinic, min-cost-max-flow).</li>
+      <li><strong>Algoritmos de string</strong> de verdade: Suffix Array/Automaton, Aho-Corasick, Z-function.</li>
+      <li><strong>Geometria computacional</strong> (convex hull, sweep line).</li>
+      <li><strong>Treino:</strong> Codeforces / competitive programming — é academia pesada pra raciocínio algorítmico.</li>
+    </ul>
+
+    <h3 class="cad-sub">2 · Matemática de verdade</h3>
+    <p>É o que destrava ML, criptografia e análise séria de algoritmos: <strong>matemática discreta</strong> (lógica, combinatória, grafos), <strong>álgebra linear</strong> (base de toda IA), <strong>teoria dos números</strong> (criptografia) e <strong>probabilidade</strong>.</p>
+
+    <h3 class="cad-sub">3 · Sistemas a fundo</h3>
+    <ul class="ph-body" style="padding-left:20px">
+      <li><strong>Como um compilador funciona</strong> (lexer, parser, geração de código) — escreva um pequeno.</li>
+      <li><strong>Internals de SO</strong>: escreva um “toy kernel” ou um shell; entenda paginação e escalonamento por dentro.</li>
+      <li><strong>Internals de banco</strong>: B+Tree, LSM-Tree, MVCC, WAL — exatamente o que o capstone toca.</li>
+      <li><strong>Sistemas distribuídos</strong>: consenso (Raft, Paxos), CAP/PACELC na prática, relógios lógicos.</li>
+    </ul>
+
+    <h3 class="cad-sub">4 · Performance e concorrência (mechanical sympathy)</h3>
+    <ul class="ph-body" style="padding-left:20px">
+      <li>Programação <strong>cache-aware</strong>, SIMD/vetorização, profiling com <code>perf</code>.</li>
+      <li>Concorrência avançada: estruturas <strong>lock-free</strong>, atomics, memory ordering, event loop (<code>epoll</code>/<code>io_uring</code>).</li>
+    </ul>
+
+    <h3 class="cad-sub">5 · Qualidade e meta-habilidades</h3>
+    <ul class="ph-body" style="padding-left:20px">
+      <li>Testes <strong>property-based</strong>, <strong>fuzzing</strong>, e uma pitada de <strong>métodos formais</strong> (TLA+).</li>
+      <li><strong>Ler papers</strong> (o do Raft, o do Dynamo, o do MapReduce) e <strong>ler código</strong> de projetos grandes (Redis, SQLite, Linux).</li>
+      <li><strong>Contribuir pra open source</strong> e <strong>escrever/ensinar</strong> — ensinar é o teste final de domínio.</li>
+    </ul>
+
+    <div class="note">
+      <h4>Livros que valem a estante (recomendação, não cópia)</h4>
+      <p><em>Designing Data-Intensive Applications</em> (Kleppmann) · <em>Computer Systems: A Programmer's Perspective</em> (Bryant &amp; O'Hallaron) · <em>The Algorithm Design Manual</em> (Skiena) · <em>Operating Systems: Three Easy Pieces</em> (grátis online). São os clássicos que aparecem na estante de quase todo engenheiro sênior.</p>
+    </div>
+
+    <div class="note green">
+      <h4>Como levar o capstone ao nível elite</h4>
+      <p>Quando o banco de dados de vocês estiver pronto, estes “stretch goals” o colocam em outro patamar — e rendem os melhores posts de todos: <strong>(1)</strong> consenso com <strong>Raft</strong> (réplicas que concordam mesmo com falha); <strong>(2)</strong> storage em <strong>LSM-Tree</strong> (como o RocksDB); <strong>(3)</strong> rede com <strong>io_uring/epoll</strong> (milhares de conexões); <strong>(4)</strong> hash table <strong>lock-free</strong>; <strong>(5)</strong> <strong>fuzzing</strong> do parser do protocolo. Cada um destes é assunto de entrevista de empresa top.</p>
+    </div>
+
+    <div class="part-head" id="carreiras" style="background:var(--rust)">
+      <div class="pk">Pra onde isso leva</div>
+      <h2>Carreiras, roadmaps &amp; salários</h2>
+      <p>Onde esse estudo todo pode te levar — com o roadmap de cada caminho, faixas de salário no Brasil, no remoto internacional e na Europa, e uma leitura honesta sobre IA e longevidade.</p>
+    </div>
+
+    <div class="note">
+      <h4>⚠ Leiam isto antes da tabela</h4>
+      <p>Os salários são <strong>faixas aproximadas</strong> (mês no Brasil, ano em US$/€) pra perfil <strong>pleno→sênior</strong> — júnior é abaixo, e staff/principal/arquiteto pode ir bem acima. Variam <em>muito</em> por empresa, cidade e momento. Meu conhecimento vai até o início de 2026, então tratem como ordem de grandeza e confiram o número atual em <strong>levels.fyi</strong>, <strong>Glassdoor</strong> e pesquisas salariais brasileiras. O remoto internacional paga em dólar, mas em geral <em>abaixo</em> do salário local dos EUA.</p>
+    </div>
+    <div class="note">
+      <h4>Sobre as previsões de IA</h4>
+      <p>“Resistência à IA” aqui é uma <strong>tendência fundamentada, não uma certeza</strong>. A leitura geral: a IA <em>amplifica</em> quem domina fundamentos e <em>pressiona</em> quem só faz o trivial. Quanto mais perto de <strong>arquitetura, sistemas, segurança e decisão</strong>, mais resiliente. O verdadeiro seguro de carreira é o que este plano constrói: fundamentos sólidos + capacidade de aprender rápido.</p>
+    </div>
+
+    <div class="covwrap"><table class="cov"><thead><tr>
+      <th>Carreira</th><th>Roadmap</th><th>Brasil /mês</th><th>Remoto intl /ano</th><th>Europa /ano</th><th>IA</th><th>Longevidade</th>
+    </tr></thead><tbody><tr><td>Backend Engineer</td><td class="th"><a href="https://roadmap.sh/backend">backend</a></td><td>R$ 8–22k</td><td>US$ 60–150k</td><td>€ 55–100k</td><td><span class="bd hi">Alta</span></td><td><span class="bd hi">Alta</span></td></tr><tr><td>Software Architect</td><td class="th"><a href="https://roadmap.sh/software-architect">software-architect</a></td><td>R$ 18–40k</td><td>US$ 120–250k</td><td>€ 90–150k</td><td><span class="bd hi">Alta</span></td><td><span class="bd hi">Alta</span></td></tr><tr><td>Full Stack</td><td class="th"><a href="https://roadmap.sh/full-stack">full-stack</a></td><td>R$ 8–20k</td><td>US$ 60–140k</td><td>€ 55–95k</td><td><span class="bd mid">Média</span></td><td><span class="bd hi">Alta</span></td></tr><tr><td>Frontend Engineer</td><td class="th"><a href="https://roadmap.sh/frontend">frontend</a></td><td>R$ 7–18k</td><td>US$ 55–130k</td><td>€ 50–90k</td><td><span class="bd mid">Média</span></td><td><span class="bd mid">Média</span></td></tr><tr><td>DevOps / SRE / Platform</td><td class="th"><a href="https://roadmap.sh/devops">devops</a></td><td>R$ 10–28k</td><td>US$ 80–180k</td><td>€ 65–120k</td><td><span class="bd hi">Alta</span></td><td><span class="bd hi">Alta</span></td></tr><tr><td>Cloud Engineer</td><td class="th"><a href="https://roadmap.sh/aws">aws</a></td><td>R$ 10–26k</td><td>US$ 80–170k</td><td>€ 65–115k</td><td><span class="bd hi">Alta</span></td><td><span class="bd hi">Alta</span></td></tr><tr><td>Data Engineer</td><td class="th"><a href="https://roadmap.sh/data-engineer">data-engineer</a></td><td>R$ 10–26k</td><td>US$ 80–180k</td><td>€ 65–120k</td><td><span class="bd hi">Alta</span></td><td><span class="bd hi">Alta</span></td></tr><tr><td>Data Scientist / ML</td><td class="th"><a href="https://roadmap.sh/ai-data-scientist">ai-data-scientist</a></td><td>R$ 9–28k</td><td>US$ 90–200k</td><td>€ 65–130k</td><td><span class="bd hi">Alta</span></td><td><span class="bd hi">Alta</span></td></tr><tr><td>AI Engineer</td><td class="th"><a href="https://roadmap.sh/ai-engineer">ai-engineer</a></td><td>R$ 12–35k</td><td>US$ 120–300k</td><td>€ 80–160k</td><td><span class="bd hi">Alta</span></td><td><span class="bd hi">Alta</span></td></tr><tr><td>Cybersecurity</td><td class="th"><a href="https://roadmap.sh/cyber-security">cyber-security</a></td><td>R$ 10–30k</td><td>US$ 90–200k</td><td>€ 70–130k</td><td><span class="bd hi">Alta</span></td><td><span class="bd hi">Alta</span></td></tr><tr><td>Mobile (iOS/Android)</td><td class="th"><a href="https://roadmap.sh/android">android</a></td><td>R$ 8–22k</td><td>US$ 70–160k</td><td>€ 55–100k</td><td><span class="bd mid">Média</span></td><td><span class="bd hi">Média-Alta</span></td></tr><tr><td>Engineering Manager</td><td class="th"><a href="https://roadmap.sh/engineering-manager">engineering-manager</a></td><td>R$ 20–45k</td><td>US$ 130–280k</td><td>€ 100–180k</td><td><span class="bd hi">Alta</span></td><td><span class="bd hi">Alta</span></td></tr><tr><td>QA / SDET</td><td class="th"><a href="https://roadmap.sh/qa">qa</a></td><td>R$ 6–18k</td><td>US$ 50–120k</td><td>€ 45–85k</td><td><span class="bd mid">Média</span></td><td><span class="bd hi">Média-Alta</span></td></tr><tr><td>Power Platform / D365</td><td class="th">—</td><td>R$ 8–22k</td><td>US$ 60–130k</td><td>€ 55–95k</td><td><span class="bd hi">Média-Alta</span></td><td><span class="bd hi">Alta</span></td></tr></tbody></table></div>
+
+    <h3 class="cad-sub">As mais resilientes, em detalhe</h3>
+<div class="career"><h3>Software Architect</h3><div class="role">Roadmap: <a href="https://roadmap.sh/software-architect">roadmap.sh/software-architect</a></div><p class="sub">Desenha o sistema inteiro: que banco, que cache, como escala, quais trade-offs. Decisão e visão de conjunto — o oposto de tarefa repetível.</p><div class="badges"><span class="t">IA</span><span class="bd hi">Alta</span><span class="t">longevidade</span><span class="bd hi">Alta</span></div><ul><li>Exige anos de base (é pra onde o seu caminho aponta).</li><li>IA ajuda a desenhar, mas a responsabilidade e o julgamento são humanos.</li><li>Roadmap direto do que vocês já estudam: System Design + bancos + redes.</li></ul></div><div class="career"><h3>Backend / Distributed Systems</h3><div class="role">Roadmap: <a href="https://roadmap.sh/backend">roadmap.sh/backend</a></div><p class="sub">Constrói o motor por trás dos produtos: APIs, dados, performance, sistemas que não podem cair. Quanto mais distribuído, mais valioso.</p><div class="badges"><span class="t">IA</span><span class="bd hi">Alta</span><span class="t">longevidade</span><span class="bd hi">Alta</span></div><ul><li>O capstone de vocês é literalmente um portfólio dessa carreira.</li><li>Demanda alta e estável; base perfeita pra remoto em dólar.</li><li>Caminho natural saindo de C# + Dataverse + APIs (seu caso).</li></ul></div><div class="career"><h3>DevOps / SRE / Platform Engineer</h3><div class="role">Roadmap: <a href="https://roadmap.sh/devops">roadmap.sh/devops</a></div><p class="sub">Mantém tudo no ar, automatiza deploy, monitora e responde a incidentes. Vira “platform” quando você constrói a base que os outros times usam.</p><div class="badges"><span class="t">IA</span><span class="bd hi">Alta</span><span class="t">longevidade</span><span class="bd hi">Alta</span></div><ul><li>Mistura código + infra + nuvem; muito procurado e bem pago.</li><li>Responsabilidade operacional é difícil de automatizar fora.</li><li>Combina com a Fase 8 (SO) e a 13 (System Design).</li></ul></div><div class="career"><h3>Cybersecurity Engineer</h3><div class="role">Roadmap: <a href="https://roadmap.sh/cyber-security">roadmap.sh/cyber-security</a></div><p class="sub">Protege sistemas, encontra brechas, responde a ataques. Área com escassez crônica de gente boa.</p><div class="badges"><span class="t">IA</span><span class="bd hi">Alta</span><span class="t">longevidade</span><span class="bd hi">Alta</span></div><ul><li>Confiança e accountability não terceirizam pra IA.</li><li>Salários altos e demanda só crescendo.</li><li>Conecta com a Fase 11 (Segurança).</li></ul></div><div class="career"><h3>Data / AI Engineer</h3><div class="role">Roadmap: <a href="https://roadmap.sh/ai-engineer">roadmap.sh/ai-engineer</a></div><p class="sub">Constrói os pipelines de dados e a infraestrutura que faz IA funcionar. Quem constrói a IA é, por definição, difícil de substituir por ela.</p><div class="badges"><span class="t">IA</span><span class="bd hi">Alta</span><span class="t">longevidade</span><span class="bd hi">Alta</span></div><ul><li>O teto salarial mais alto da lista, principalmente em IA.</li><li>Exige a matemática da seção elite pra ir longe.</li><li>Cresce mais rápido que qualquer outra área agora.</li></ul></div>
+    <div class="career" style="border-color:var(--green)">
+      <h3>Seu ponto de partida — Power Platform / Dynamics 365</h3>
+      <div class="role">Onde você já está · ponte pro resto</div>
+      <p class="sub">É um nicho com boa demanda corporativa e que paga bem (consultoria internacional em dólar existe). O low-code básico é mais exposto à IA; mas <strong>arquitetura de plataforma, integrações e Dataverse a fundo</strong> são resilientes — e é exatamente onde você já atua.</p>
+      <div class="badges"><span class="t">IA</span><span class="bd hi">Média-Alta</span><span class="t">longevidade</span><span class="bd hi">Alta</span></div>
+      <ul>
+        <li><strong>Curto prazo:</strong> aprofundar (PL-400, MB-500) + inglês = consultoria remota em USD já.</li>
+        <li><strong>Médio prazo:</strong> os fundamentos de CS deste plano abrem a porta de <strong>backend / arquiteto</strong> internacional.</li>
+        <li>Você não está começando do zero — está somando uma base que multiplica o que já tem.</li>
+      </ul>
+    </div>
+
+    <h3 class="cad-sub">Tendências pros próximos anos</h3>
+    <ul class="ph-body" style="padding-left:20px">
+      <li><strong>Em alta:</strong> IA/ML e a infra por trás dela, segurança, dados, platform/cloud, sistemas distribuídos.</li>
+      <li><strong>Sob pressão:</strong> trabalho trivial e repetível (CRUD puro, QA 100% manual, relatório braçal). Não “acaba”, mas exige subir de nível.</li>
+      <li><strong>O diferencial que não muda:</strong> fundamentos fortes + saber aprender rápido + comunicação (inclusive inglês). É o que torna a IA sua ferramenta, não sua concorrente.</li>
+    </ul>
+
+    <div class="note green">
+      <h4>Recomendação pro grupo</h4>
+      <p>Pros iniciantes: comecem mirando <strong>Backend</strong> (é onde o capstone vira portfólio) e deixem a porta aberta pra DevOps, Dados ou Segurança conforme descobrem o que curtem. Pra você, Caio: <strong>Power Platform aprofundado + inglês</strong> destrava o remoto em dólar no curto prazo, e a base de CS abre <strong>backend/arquiteto internacional</strong> no médio. Nenhuma dessas é “substituível por IA” quando feita com profundidade — e todas têm plano de carreira longo.</p>
+    </div>
+    <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Carrossel: <b>“Tech careers in 2026: salary, AI-resilience & roadmap”</b> com a tabela desta seção. Conteúdo de carreira tem altíssimo alcance — e mostra que você pensa estrategicamente.</div></div>
 
     <!-- TIMELINE -->
     <h2 id="timeline"><span class="num">§</span>Linha do tempo</h2>
