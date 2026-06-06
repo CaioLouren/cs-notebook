@@ -1,0 +1,53 @@
+# ───────────────────────────────
+#  Sistema operacional
+# ───────────────────────────────
+.DS_Store          # macOS
+.AppleDouble
+Thumbs.db          # Windows
+ehthumbs.db
+desktop.ini
+*~                 # backups do Linux
+
+# ───────────────────────────────
+#  Editores / IDEs
+# ───────────────────────────────
+.vscode/           # VS Code
+.idea/             # JetBrains (CLion, Rider...)
+*.sublime-project
+*.sublime-workspace
+*.layout           # Dev-C++ (arquivo de layout do projeto)
+*.dev              # Dev-C++ (arquivo de projeto)
+
+# ───────────────────────────────
+#  Artefatos de build em C
+#  (caso alguém deixe código de prática no repo)
+# ───────────────────────────────
+*.o                # objetos
+*.obj
+*.exe              # executável (Dev-C++ gera isso)
+*.out
+a.out
+*.app
+*.so               # bibliotecas
+*.dll
+*.dylib
+*.a
+*.lib
+*.gch              # cabeçalhos pré-compilados
+*.pch
+
+# ───────────────────────────────
+#  Logs e temporários
+# ───────────────────────────────
+*.log
+*.tmp
+*.bak
+*.swp              # vim
+
+# ───────────────────────────────
+#  Segredos / ambiente (nunca commitar)
+# ───────────────────────────────
+.env
+.env.local
+*.pem
+*.key
