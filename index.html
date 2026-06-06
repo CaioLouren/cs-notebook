@@ -1,0 +1,1205 @@
+<!-- Plano de Estudo — Ciência da Computação -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plano de Estudo — Ciência da Computação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF5EC;
+    --paper2:#F2EADC;
+    --card:#FFFDF8;
+    --ink:#1F1C16;
+    --muted:#6E6655;
+    --faint:#9A917E;
+    --rust:#B5481F;
+    --rust-soft:#F0E0D6;
+    --green:#3C6B4A;
+    --green-soft:#E2EBDF;
+    --line:rgba(31,28,22,.12);
+    --line2:rgba(31,28,22,.07);
+    --shadow:0 1px 2px rgba(31,28,22,.05),0 8px 24px rgba(31,28,22,.06);
+    --blue:#2C5F8A;--blue-soft:#E6EDF4;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Public Sans",sans-serif;font-size:16px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(var(--line2) 1px,transparent 1px);
+    background-size:26px 26px;
+  }
+  a{color:var(--rust);text-decoration:none}
+  code,.mono{font-family:"JetBrains Mono",monospace;font-size:.86em}
+
+  /* progress bar */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(250,245,236,.92);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .topbar-inner{max-width:1180px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:16px}
+  .topbar .tag{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .pbar{flex:1;height:7px;background:var(--paper2);border-radius:99px;overflow:hidden;border:1px solid var(--line2)}
+  .pbar-fill{height:100%;width:0;background:var(--rust);border-radius:99px;transition:width .5s cubic-bezier(.2,.7,.2,1)}
+  .pct{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:500;color:var(--rust);min-width:42px;text-align:right}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;display:grid;
+    grid-template-columns:230px 1fr;gap:48px;align-items:start}
+
+  /* sidebar nav */
+  nav.toc{position:sticky;top:64px;padding:32px 0;font-size:13.5px;max-height:calc(100vh - 64px);overflow:auto}
+  nav.toc .lbl{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--faint);margin:18px 0 8px}
+  nav.toc a{display:block;color:var(--muted);padding:4px 0;border-left:2px solid transparent;padding-left:12px;
+    margin-left:-2px;transition:.15s}
+  nav.toc a:hover{color:var(--ink);border-color:var(--line)}
+  nav.toc a.here{color:var(--rust);border-color:var(--rust);font-weight:500}
+
+  main{padding:8px 0 80px;min-width:0}
+
+  /* hero */
+  header.hero{padding:56px 0 40px;border-bottom:1px solid var(--line)}
+  .kicker{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--rust);margin-bottom:18px}
+  h1{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(38px,6vw,62px);line-height:1.02;
+    letter-spacing:-.02em;margin:0 0 20px}
+  h1 em{font-style:italic;color:var(--rust)}
+  .lede{font-size:18px;color:var(--muted);max-width:60ch;margin:0 0 28px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{font-family:"JetBrains Mono",monospace;font-size:12px;padding:6px 12px;border-radius:99px;
+    border:1px solid var(--line);background:var(--card);color:var(--muted)}
+  .chip strong{color:var(--ink);font-weight:500}
+
+  h2{font-family:"Fraunces",serif;font-weight:500;font-size:30px;letter-spacing:-.01em;
+    margin:64px 0 6px;scroll-margin-top:80px}
+  h2 .num{color:var(--rust);font-style:italic;margin-right:10px}
+  .part-head{margin:72px 0 28px;padding:24px 28px;background:var(--ink);color:var(--paper);border-radius:16px;
+    scroll-margin-top:80px}
+  .part-head .pk{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;opacity:.6;margin-bottom:8px}
+  .part-head h2{color:var(--paper);margin:0 0 6px;font-size:34px}
+  .part-head p{margin:0;opacity:.8;font-size:15px}
+
+  p{margin:0 0 14px}
+  .sub{color:var(--muted)}
+
+  /* callout */
+  .note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--rust);
+    border-radius:0 12px 12px 0;padding:18px 22px;margin:22px 0}
+  .note.green{border-left-color:var(--green)}
+  .note h4{margin:0 0 8px;font-family:"Public Sans";font-weight:600;font-size:15px}
+  .note p{margin:0;font-size:15px;color:var(--muted)}
+
+  /* phase card */
+  .phase{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px 30px;
+    margin:22px 0;box-shadow:var(--shadow);scroll-margin-top:80px;position:relative;overflow:hidden}
+  .phase::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--rust);opacity:.6}
+  .phase.here-card{border-color:var(--rust);box-shadow:0 0 0 1px var(--rust),var(--shadow)}
+  .ph-top{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:4px}
+  .ph-num{font-family:"Fraunces",serif;font-size:30px;font-weight:500;color:var(--rust);line-height:1;margin-top:2px}
+  .ph-titles{flex:1;min-width:200px}
+  .ph-titles h3{font-family:"Fraunces",serif;font-weight:500;font-size:22px;margin:0;letter-spacing:-.01em}
+  .ph-titles .src{font-size:13.5px;color:var(--muted);margin-top:3px}
+  .ph-titles .src .mono{color:var(--ink)}
+  .dur{font-family:"JetBrains Mono",monospace;font-size:11.5px;padding:6px 11px;border-radius:99px;
+    background:var(--paper2);color:var(--muted);white-space:nowrap;border:1px solid var(--line2)}
+  .here-pill{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+    padding:5px 10px;border-radius:99px;background:var(--rust);color:#fff;font-weight:500}
+  .ph-body{margin-top:14px}
+  .ph-body ul{margin:6px 0 14px;padding-left:20px}
+  .ph-body li{margin:5px 0}
+  .ph-body .focus{color:var(--rust);font-weight:600}
+  .skip{font-size:13.5px;color:var(--muted);background:var(--paper2);border-radius:10px;padding:12px 14px;margin:12px 0}
+
+  .check{background:var(--green-soft);border-radius:12px;padding:14px 16px;margin-top:16px}
+  .check .ttl{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--green);margin-bottom:8px;font-weight:500}
+  .check p{margin:0;font-size:14.5px;color:#3a4a3e}
+
+  .milestones{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px}
+  .ms{display:flex;align-items:flex-start;gap:11px;padding:6px 0;cursor:pointer;font-size:14.5px}
+  .ms input{appearance:none;-webkit-appearance:none;width:19px;height:19px;border:1.5px solid var(--faint);
+    border-radius:6px;margin:1px 0 0;cursor:pointer;flex-shrink:0;position:relative;transition:.15s;background:var(--paper)}
+  .ms input:checked{background:var(--green);border-color:var(--green)}
+  .ms input:checked::after{content:"";position:absolute;left:5.5px;top:2px;width:5px;height:9px;
+    border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .ms input:checked + span{color:var(--faint);text-decoration:line-through}
+  .ms span{transition:.15s}
+
+  /* timeline */
+  .tl{margin:24px 0}
+  .tl-row{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--line2)}
+  .tl-row .bar{height:14px;border-radius:99px;background:var(--rust);opacity:.85}
+  .tl-row.p2 .bar{background:var(--green)}
+  .tl-row .lab{font-size:14px;min-width:230px;flex-shrink:0}
+  .tl-row .d{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted);min-width:90px;text-align:right}
+
+  /* day structure */
+  .day{display:grid;grid-template-columns:84px 1fr;gap:0;border:1px solid var(--line);border-radius:14px;
+    overflow:hidden;margin:18px 0;background:var(--card)}
+  .day .t{font-family:"JetBrains Mono",monospace;font-size:12px;padding:13px 12px;background:var(--paper2);
+    color:var(--rust);border-bottom:1px solid var(--line2);display:flex;align-items:center;font-weight:500}
+  .day .d{padding:13px 16px;border-bottom:1px solid var(--line2);font-size:14.5px}
+  .day .t:last-of-type,.day .d:last-child{border-bottom:none}
+
+  /* search appendix */
+  .qgroup{margin:18px 0}
+  .qgroup h4{font-family:"Fraunces",serif;font-weight:500;font-size:18px;margin:22px 0 4px}
+  .qrow{padding:11px 0;border-bottom:1px solid var(--line2)}
+  .qrow .topic{font-weight:600;font-size:14.5px}
+  .qrow .pt{color:var(--rust);font-size:13.5px}
+  .qrow .qq{display:block;margin-top:5px}
+  .qq code{background:var(--paper2);border:1px solid var(--line2);border-radius:7px;padding:3px 8px;
+    display:inline-block;margin:3px 5px 0 0;color:var(--ink);font-size:12.5px}
+
+  footer{border-top:1px solid var(--line);margin-top:64px;padding:28px 0;color:var(--faint);font-size:13px}
+
+  .phase.proj::before{background:var(--green)}
+  .phase.proj .ph-num{color:var(--green);font-size:22px}
+  .unlock{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.03em;color:var(--green);
+    background:var(--green-soft);padding:5px 11px;border-radius:99px;display:inline-block;margin-top:7px}
+  .exer{font-size:13.5px;color:var(--muted);margin:8px 0 0}
+  .exer b{color:var(--ink);font-weight:600}
+  .owner{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--rust)}
+  .reveal{opacity:0;transform:translateY(14px);animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1;transform:none}}
+
+
+  /* ---- code block ---- */
+  pre.code{background:#241F18;color:#EDE4D3;border-radius:12px;padding:15px 17px;overflow:auto;
+    font-family:"JetBrains Mono",monospace;font-size:12.5px;line-height:1.62;margin:13px 0;
+    border:1px solid rgba(0,0,0,.25);white-space:pre}
+  pre.code .c{color:#93A06F;font-style:italic}
+  pre.code .s{color:#E0A36A}
+  pre.code .p{color:#D98A63}
+
+  /* ---- command card (caderno) ---- */
+  .cmd{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:17px 19px;
+    margin:15px 0;box-shadow:var(--shadow)}
+  .cmd .sig{font-family:"JetBrains Mono",monospace;font-size:14px;color:var(--ink);font-weight:500;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .cmd .lib{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.03em;
+    background:var(--rust-soft);color:var(--rust);padding:3px 9px;border-radius:99px;border:1px solid var(--line2)}
+  .cmd .what{color:var(--muted);font-size:14.5px;margin:9px 0 0}
+  .cmd .what code{background:var(--paper2);border:1px solid var(--line2);border-radius:6px;padding:1px 5px}
+  .cmdout{margin-top:11px;font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--ink);
+    background:var(--green-soft);border-radius:9px;padding:9px 12px;white-space:pre-wrap}
+  .cmdout .ol{display:block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:4px}
+
+  .cad-sub{font-family:"Fraunces",serif;font-weight:500;font-size:20px;margin:38px 0 4px;letter-spacing:-.01em}
+  .pillrow{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 4px}
+  .pillrow .pl{font-family:"JetBrains Mono",monospace;font-size:11.5px;padding:4px 10px;border-radius:99px;
+    background:var(--paper2);border:1px solid var(--line2);color:var(--muted)}
+
+  /* ---- linkedin callout ---- */
+  .li{display:flex;gap:12px;align-items:flex-start;background:var(--blue-soft);border:1px solid var(--line);
+    border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:12px 15px;margin:14px 0;font-size:14px;color:#274055}
+  .li .ic{font-family:"JetBrains Mono",monospace;font-weight:700;color:#fff;background:var(--blue);border-radius:6px;
+    padding:3px 7px;font-size:11px;line-height:1;flex-shrink:0;margin-top:1px}
+  .li .lt{flex:1;min-width:0}
+  .li .lab{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--blue);margin-bottom:3px;font-weight:600}
+  .li b{color:#19405e}
+
+  /* ---- coverage table ---- */
+  .covwrap{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:14px}
+  table.cov{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+  table.cov th,table.cov td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line2);vertical-align:top}
+  table.cov thead th{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--faint);font-weight:500;background:var(--paper2)}
+  table.cov tbody tr:last-child td{border-bottom:none}
+  table.cov td:first-child{font-weight:600;color:var(--ink)}
+  table.cov .pj{color:var(--green);font-family:"JetBrains Mono",monospace;font-size:12px}
+  table.cov .th{color:var(--rust);font-family:"JetBrains Mono",monospace;font-size:12px}
+  table.cov tbody tr:hover{background:var(--paper2)}
+  .secthead{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--faint);margin:30px 0 2px}
+
+  @media(max-width:960px){
+    .wrap{grid-template-columns:1fr;gap:0}
+    nav.toc{display:none}
+    main{padding-top:0}
+  }
+</style>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="tag">Progresso do grupo</span>
+    <div class="pbar"><div class="pbar-fill" id="pfill"></div></div>
+    <span class="pct" id="ppct">0%</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <nav class="toc" id="toc">
+    <div class="lbl">Início</div>
+    <a href="#topo">Visão geral</a>
+    <a href="#como">Como usar</a>
+    <a href="#dia">O dia de 4h</a>
+    <div class="lbl">Parte 1 — Núcleo</div>
+    <a href="#f0">0 · Linguagem C</a>
+    <a href="#f1">1 · Fundamentos em C</a>
+    <a href="#f2">2 · Estruturas lineares</a>
+    <a href="#f3">3 · Largura das estruturas</a>
+    <a href="#f4">4 · Profundidade e análise</a>
+    <a href="#f5">5 · Lacunas de DS&A</a>
+    <div class="lbl">Parte 2 — O resto de CS</div>
+    <a href="#f6">6 · Teoria adjacente</a>
+    <a href="#f7">7 · Arquitetura</a>
+    <a href="#f8">8 · Sistemas Operacionais</a>
+    <a href="#f9">9 · Redes</a>
+    <a href="#f10">10 · Bancos de Dados</a>
+    <a href="#f11">11 · Segurança</a>
+    <a href="#f12">12 · Design Patterns</a>
+    <a href="#f13">13 · System Design</a>
+    <div class="lbl">Projeto</div>
+    <a href="#projeto">Trilha de projeto</a>
+    <div class="lbl">Extras</div>
+    <a href="#cobertura">Cobertura do roadmap</a>
+    <a href="#linkedin">Build in Public</a>
+    <a href="#cad-strings">Caderno · Strings em C</a>
+    <div class="lbl">Apoio</div>
+    <a href="#timeline">Linha do tempo</a>
+    <a href="#mentor">Trilha de mentor</a>
+    <a href="#buscas">Buscas no Google</a>
+  </nav>
+
+  <main>
+    <header class="hero" id="topo">
+      <div class="kicker">Plano de estudo · grupo · 4h por dia</div>
+      <h1>Ciência da<br>Computação,<br>do <em>zero ao domínio</em>.</h1>
+      <p class="lede">Roteiro completo seguindo o roadmap de Computer Science — da linguagem C até System Design. Uma trilha pros iniciantes e uma trilha pra você conduzir como mentor.</p>
+      <div class="meta">
+        <span class="chip"><strong>Ritmo</strong> · 4h/dia</span>
+        <span class="chip"><strong>Duração</strong> · ~12–14 meses</span>
+        <span class="chip"><strong>14</strong> fases</span>
+        <span class="chip"><strong>Idioma</strong> · cursos em PT</span>
+      </div>
+    </header>
+
+    <h2 id="como"><span class="num">§</span>Como usar este plano</h2>
+    <p>São <strong>duas trilhas paralelas</strong>. A <strong>trilha do grupo</strong> é a ordem das aulas e exercícios que vocês fazem juntos. A <strong>trilha do mentor</strong> (você) é como se preparar antes pra ensinar e responder dúvidas — está no fim do documento.</p>
+    <p>Cada fase tem um <strong>checkpoint</strong>: o que os amigos devem conseguir fazer <em>sozinhos, sem ajuda</em>, antes de avançar. Se não passam, não avança — repete o exercício, não o vídeo.</p>
+    <div class="note">
+      <h4>A regra de ouro</h4>
+      <p>Vídeo não forma mestre — <strong>código forma</strong>. A cada estrutura ou conceito novo, cada pessoa reimplementa do zero sem olhar. Assistir passivamente cria uma ilusão de domínio que evapora na primeira tela em branco.</p>
+    </div>
+    <div class="note green">
+      <h4>Sobre o prazo, com honestidade</h4>
+      <p>4h por dia por mais de um ano é uma maratona. Consistência vale mais que velocidade. Reservem 1 semana de folga/revisão a cada ~2 meses — descanso planejado evita o abandono por exaustão. As durações abaixo assumem dias de estudo de verdade, não dias corridos de calendário.</p>
+    </div>
+    <div class="note green">
+      <h4>Estudo e projeto andam juntos</h4>
+      <p>Vocês <strong>não esperam o fim pra construir</strong>. A partir da Fase 2 (quando já têm hash table) abrem o capstone — o mini-Redis — e cada fase nova destrava uma camada nova dele. O estudo ensina o conceito; a camada do projeto crava ele. Detalhes na <a href="#projeto">Trilha de projeto</a>.</p>
+    </div>
+
+    <h2 id="dia"><span class="num">§</span>O dia de 4 horas</h2>
+    <p class="sub">Uma estrutura que funciona pra grupo com mentor. Ajustem, mas mantenham os quatro blocos.</p>
+    <div class="day">
+      <div class="t">0:00</div><div class="d"><strong>Revisão (20 min).</strong> Cada um explica em voz alta o que aprendeu ontem. Quem ensina, fixa.</div>
+      <div class="t">0:20</div><div class="d"><strong>Conteúdo novo (90 min).</strong> Vídeo da fase + você explicando e abrindo espaço pra dúvida.</div>
+      <div class="t">1:50</div><div class="d"><strong>Codar junto (60 min).</strong> Implementar ao vivo, todos digitando, não só assistindo.</div>
+      <div class="t">2:50</div><div class="d"><strong>Prática individual (60 min).</strong> Cada um sozinho, refazendo sem cola e resolvendo exercícios.</div>
+      <div class="t">3:50</div><div class="d"><strong>Checkpoint (10 min).</strong> Conferir o que travou e definir o ponto de partida de amanhã.</div>
+    </div>
+
+    <!-- PARTE 1 -->
+    <div class="part-head" id="parte1">
+      <div class="pk">Parte 1 de 2</div>
+      <h2>Núcleo — Linguagem + Estrutura de Dados &amp; Algoritmos</h2>
+      <p>A fundação. Quase tudo na Parte 2 depende disto. ~6–7 meses.</p>
+    </div>
+
+    <div class="phase here-card" id="f0">
+      <div class="ph-top">
+        <div class="ph-num">0</div>
+        <div class="ph-titles">
+          <h3>A linguagem C</h3>
+          <div class="src">Curso do <span class="mono">Pietro Martins</span> (36 aulas) · posição atual: aula 5.4</div>
+        </div>
+        <span class="here-pill">Vocês estão aqui</span>
+      </div>
+      <div class="ph-body">
+        <p>Já feito: setup, I/O (<code>printf</code>/<code>scanf</code>), variáveis, condicionais e loops. Pela frente até o fim:</p>
+        <ul>
+          <li>6.1–6.2 · vetores (arrays) e <strong>strings</strong> &nbsp;·&nbsp; <a href="#cad-strings">abrir o caderno de strings ↓</a></li>
+          <li>7 · matrizes &nbsp;|&nbsp; 8 · structs</li>
+          <li>9.1–9.2 · funções/procedimentos e projeto com vários arquivos</li>
+          <li>22–36 · bateria de exercícios — <span class="focus">façam todos</span>, é onde a sintaxe vira reflexo</li>
+        </ul>
+        <div class="note" style="margin:14px 0">
+          <h4>⚠ O furo crítico deste curso</h4>
+          <p>O curso do Pietro <strong>não cobre ponteiros nem alocação dinâmica de memória</strong> (<code>malloc</code>/<code>free</code>) — e isso é <em>o</em> pré-requisito de toda estrutura de dados. A ponte pra Fase 1 é exatamente o bloco de ponteiros da xavecoding. Não pulem.</p>
+        </div>
+        <div class="check">
+          <div class="ttl">Checkpoint</div>
+          <p>Cada amigo escreve, compila e roda um programa em C com funções, structs, vetores e loops, dividido em mais de um arquivo; resolve os exercícios do curso sem cola.</p>
+        </div>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Carrossel: <b>“7 erros de string em C que todo iniciante comete”</b> — o <code>\0</code>, comparar com <code>==</code>, buffer overflow. Cada slide um erro + a correção.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f0a"><span>Terminar loops (5.x) e controle de fluxo</span></label>
+          <label class="ms"><input type="checkbox" data-id="f0b"><span>Vetores, strings e matrizes (6–7)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f0c"><span>Structs e funções multi-arquivo (8–9.2)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f0d"><span>Exercícios 22–36 resolvidos</span></label>
+          <label class="ms"><input type="checkbox" data-id="f0e"><span>Checkpoint da fase passado por todos</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="f1">
+      <div class="ph-top">
+        <div class="ph-num">1</div>
+        <div class="ph-titles">
+          <h3>Fundamentos aplicados em C</h3>
+          <div class="src">xavecoding ED1 · aulas <span class="mono">#1–46</span></div>
+        </div>
+        <span class="dur">~3–4 semanas</span>
+      </div>
+      <div class="ph-body">
+        <div class="skip">Vindo do Pietro, otimizem: passem <strong>rápido em revisão</strong> por variáveis (#1), funções (#9–10), vetores estáticos (#13–14), matrizes (#20–26) e structs (#27–31) — já viram. Gastem o tempo de verdade no que é novo abaixo.</div>
+        <ul>
+          <li><span class="focus">#2–8 · ponteiros</span> (inclui ponteiro de ponteiros) — o muro mais alto do caminho todo</li>
+          <li>#11–12 · passagem por referência (usa ponteiro)</li>
+          <li><span class="focus">#15–19 · alocação dinâmica de memória</span></li>
+          <li>#32–36 · TAD (Tipo Abstrato de Dados)</li>
+          <li>#37–46 · encapsulamento, include guards, compilação, Makefile</li>
+        </ul>
+        <div class="check">
+          <div class="ttl">Checkpoint</div>
+          <p>Explicar com as próprias palavras o que é um ponteiro; usar <code>malloc</code>/<code>free</code> certo; alocar e desalocar um vetor dinâmico; escrever um Makefile simples.</p>
+        </div>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post: <b>“Ponteiro em C explicado com a analogia de endereço de casa”</b> — o conceito que mais trava gente. Um diagrama simples engaja muito.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f1a"><span>Ponteiros dominados (#2–8)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f1b"><span>Alocação dinâmica (#15–19)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f1c"><span>TAD, compilação e Makefile (#32–46)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f1d"><span>Checkpoint passado</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="f2">
+      <div class="ph-top">
+        <div class="ph-num">2</div>
+        <div class="ph-titles">
+          <h3>Estruturas lineares</h3>
+          <div class="src">xavecoding ED1 · aulas <span class="mono">#47–101</span></div>
+        </div>
+        <span class="dur">~3–4 semanas</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>#47–65 · Listas Encadeadas</li>
+          <li>#66–75 · Listas Duplamente Encadeadas (+ Desafio: lista auto-organizável)</li>
+          <li>#76–85 · Listas Circulares</li>
+          <li>#86–93 · Pilhas &nbsp;|&nbsp; #94–101 · Filas</li>
+        </ul>
+        <div class="skip"><strong>Economia:</strong> terminada a ED1, pulem as aulas <strong>1–44 da Programação Descomplicada inteiras</strong> — é o mesmo conteúdo (TAD, listas, filas, pilhas). Não vejam duas vezes.</div>
+        <div class="check">
+          <div class="ttl">Checkpoint</div>
+          <p>Implementar do zero, sem olhar: lista encadeada (inserir cabeça/fim, remover, imprimir), pilha e fila; dizer o Big-O de cada operação.</p>
+        </div>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post de marco: <b>“Implementei lista, pilha e fila do zero em C, sem biblioteca”</b> — print do código + o que aprendi sobre memória. Link pro repo.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f2a"><span>Listas (simples, dupla, circular)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f2b"><span>Pilhas e filas</span></label>
+          <label class="ms"><input type="checkbox" data-id="f2c"><span>Reimplementação sem cola + checkpoint</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="f3">
+      <div class="ph-top">
+        <div class="ph-num">3</div>
+        <div class="ph-titles">
+          <h3>A largura das estruturas</h3>
+          <div class="src">Programação Descomplicada · <span class="mono">a partir da aula 45</span></div>
+        </div>
+        <span class="dur">~5–6 semanas</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>45–55 · busca em vetores e ordenação (Bubble, Insertion, Selection, Merge, Quick, Heap)</li>
+          <li><span class="focus">99–104 · Análise de Algoritmos (vejam logo após o 45–55)</span> — Big-O tem que vir cedo</li>
+          <li>56–66 · Grafos (DFS, BFS, menor caminho, ordenação externa)</li>
+          <li>67–84 · Árvores (binária, BST, AVL) &nbsp;|&nbsp; 105–111 · Rubro-Negra</li>
+          <li>85–88 · Heap / Fila de Prioridades &nbsp;|&nbsp; 89–98 · Tabela Hash</li>
+          <li>112–114 · MST (Prim, Kruskal) &nbsp;|&nbsp; 115–121 · Deque</li>
+          <li>123–124, 140 · Counting/Bucket/Shell Sort &nbsp;|&nbsp; 125–129 · Skip List</li>
+          <li>131–139 · Set e Bag &nbsp;|&nbsp; 142 · Rabin-Karp</li>
+          <li class="sub">Opcional/avançado · 141, 144–159 · estruturas em disco, Árvores B/B*/B+, Huffman</li>
+        </ul>
+        <div class="skip"><strong>UNIVESP aqui:</strong> assistam só <span class="mono">Aula 14 (matriz esparsa)</span> e <span class="mono">Aulas 19–20 (árvores N-árias)</span>. Ignorem o resto.</div>
+        <div class="check">
+          <div class="ttl">Checkpoint</div>
+          <p>Implementar do zero um BST (inserir/buscar/remover), uma hash table com colisão e um min-heap; ordenar com Merge e Quick; escolher a estrutura certa pra um problema e justificar pelo Big-O.</p>
+        </div>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Carrossel: <b>“Big-O sem matemática assustadora”</b> e <b>“Qual estrutura de dados usar (mapa de decisão)”</b>. Conteúdo evergreen que sempre salva.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f3a"><span>Ordenação + Big-O (45–55, 99–104)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f3b"><span>Grafos (56–66)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f3c"><span>Árvores, Heap, Hash (67–111)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f3d"><span>MST, Deque, Set/Bag, Skip List</span></label>
+          <label class="ms"><input type="checkbox" data-id="f3e"><span>Checkpoint passado</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="f4">
+      <div class="ph-top">
+        <div class="ph-num">4</div>
+        <div class="ph-titles">
+          <h3>Profundidade e análise</h3>
+          <div class="src">Professor Mario — AED2 · <span class="mono">playlist completa</span></div>
+        </div>
+        <span class="dur">~10–12 semanas</span>
+      </div>
+      <div class="ph-body">
+        <p>Re-cobre árvores, ordenação e grafos — mas agora com <strong>provas de corretude e análise de eficiência</strong>. É a camada que transforma "sei implementar" em "entendo por que funciona". <strong>Não comecem por ela</strong>; é o passo final do núcleo.</p>
+        <ul>
+          <li>02–05 · BST, AVL, Rubro-Negra (com demonstrações)</li>
+          <li>07–08 · Hash Tables (análise de colisões) &nbsp;|&nbsp; 09 · Kadane</li>
+          <li>10–15 · ordenação com análise + seleção, inversões, limitante inferior, Radix</li>
+          <li>18–20 · árvores digitais, <strong>Tries, PATRICIA</strong> <span class="sub">(exclusivo)</span></li>
+          <li>21–27 · grafos: DFS, BFS, <strong>ordenação topológica</strong>, <strong>componentes fortemente conexos</strong>, Dijkstra com heap <span class="sub">(exclusivo)</span></li>
+          <li class="sub">Variantes de árvore balanceada do roadmap (buscar à parte): 2-3, 2-3-4, K-ária/M-ária, K-D Trees</li>
+        </ul>
+        <div class="check">
+          <div class="ttl">Checkpoint</div>
+          <p>Explicar o limite de altura de uma AVL; analisar QuickSort no pior e médio caso; rodar DFS/BFS na mão e explicar ordenação topológica; analisar a complexidade de qualquer algoritmo que escreverem.</p>
+        </div>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post técnico: <b>“Por que uma árvore AVL nunca desbalanceia — a prova de altura O(log n)”</b>. Mostra que você entende, não só usa.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f4a"><span>Árvores e hash com prova (02–08)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f4b"><span>Ordenação com análise (10–15)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f4c"><span>Tries e PATRICIA (18–20)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f4d"><span>Grafos avançados (21–27)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f4e"><span>Checkpoint passado</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="f5">
+      <div class="ph-top">
+        <div class="ph-num">5</div>
+        <div class="ph-titles">
+          <h3>Lacunas de DS&amp;A</h3>
+          <div class="src">Fora das playlists · buscar em PT (ver apêndice)</div>
+        </div>
+        <span class="dur">~3–4 semanas</span>
+      </div>
+      <div class="ph-body">
+        <p>Nenhuma das playlists cobre estes — e são essenciais pra entrevista e LeetCode:</p>
+        <ul>
+          <li><span class="focus">Programação Dinâmica</span> (o maior buraco — prioridade alta)</li>
+          <li>Union-Find / Conjuntos Disjuntos</li>
+          <li>Segment Tree e Fenwick Tree (range queries)</li>
+          <li>Backtracking (N-Rainhas, labirinto…)</li>
+          <li>Caches: LRU / LFU</li>
+          <li>Caminhos mínimos: Bellman-Ford, Floyd-Warshall, A*, Ford-Fulkerson</li>
+        </ul>
+        <p class="sub">Depois desta fase: <strong>LeetCode</strong> (Easy → Medium) pra consolidar tudo da Parte 1.</p>
+        <div class="check">
+          <div class="ttl">Checkpoint</div>
+          <p>Resolver LeetCode Medium usando DP e Union-Find sem cola.</p>
+        </div>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post: <b>“Resolvi 30 LeetCode com Programação Dinâmica — o padrão que destrava 80% deles”</b>. Bom pra recrutador técnico.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f5a"><span>Programação Dinâmica</span></label>
+          <label class="ms"><input type="checkbox" data-id="f5b"><span>Union-Find, Segment/Fenwick</span></label>
+          <label class="ms"><input type="checkbox" data-id="f5c"><span>Backtracking, caches, caminhos mínimos avançados</span></label>
+          <label class="ms"><input type="checkbox" data-id="f5d"><span>LeetCode Medium destravado</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARTE 2 -->
+    <div class="part-head" id="parte2">
+      <div class="pk">Parte 2 de 2</div>
+      <h2>O resto da Ciência da Computação</h2>
+      <p>Os ramos do roadmap que nenhuma playlist cobre. Comecem pela UNIVESP — ela tem curso completo em PT de quase todos. ~6–7 meses.</p>
+    </div>
+
+    <div class="phase" id="f6">
+      <div class="ph-top">
+        <div class="ph-num">6</div>
+        <div class="ph-titles"><h3>Teoria adjacente</h3><div class="src">Tópicos curtos, próximos de DS&amp;A</div></div>
+        <span class="dur">~3–4 semanas</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li><strong>Codificação de caracteres</strong> · ASCII, Unicode, UTF-8 · operadores bit a bit · endianness (big/little) · ponto flutuante (como decimais são representados)</li>
+          <li><strong>Matemática base</strong> · probabilidade e combinatória (base da análise probabilística de algoritmos)</li>
+          <li><strong>Classes de complexidade</strong> · P, NP, Co-NP, NP-Hard, NP-Completo, P=NP? · clássicos: Caixeiro Viajante, Mochila, Caminho Mais Longo</li>
+          <li><strong>Casamento de padrões</strong> · busca de substring, força bruta, KMP, Boyer-Moore, Suffix Arrays (Rabin-Karp já visto)</li>
+        </ul>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post curto e viral: <b>“O que é UTF-8 de verdade (e por que seu acento quebra no terminal)”</b>. Bônus: <b>“P vs NP pra quem não é acadêmico”</b>.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f6a"><span>Codificação, bitwise, endianness, ponto flutuante</span></label>
+          <label class="ms"><input type="checkbox" data-id="f6d"><span>Matemática base (probabilidade, combinatória)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f6b"><span>Classes de complexidade (P/NP)</span></label>
+          <label class="ms"><input type="checkbox" data-id="f6c"><span>KMP, Boyer-Moore, Suffix Arrays</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="f7">
+      <div class="ph-top">
+        <div class="ph-num">7</div>
+        <div class="ph-titles"><h3>Como os computadores funcionam</h3><div class="src">Arquitetura de Computadores · UNIVESP tem curso completo</div></div>
+        <span class="dur">~3–4 semanas</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>Como a CPU executa programas · registradores e RAM · instruções</li>
+          <li>Cache da CPU · interrupções · como o computador calcula (binário, ponto flutuante)</li>
+        </ul>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post: <b>“O que acontece de verdade quando você roda um programa — da RAM ao registrador”</b>. Diagrama do caminho instrução→CPU.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f7a"><span>Execução de programas, registradores, RAM</span></label>
+          <label class="ms"><input type="checkbox" data-id="f7b"><span>Cache, interrupções, aritmética da máquina</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="f8">
+      <div class="ph-top">
+        <div class="ph-num">8</div>
+        <div class="ph-titles"><h3>Sistemas Operacionais</h3><div class="src">UNIVESP "Sistemas Operacionais"</div></div>
+        <span class="dur">~4–5 semanas</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>Processos vs threads · concorrência em múltiplos núcleos · fork</li>
+          <li>Escalonamento (scheduling) · interrupções</li>
+          <li>Gerência de memória · lock, mutex, semáforo</li>
+        </ul>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post: <b>“Minha primeira race condition (no projeto) me ensinou mais que 10 vídeos”</b> — exemplo real + como o mutex resolveu.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f8a"><span>Processos, threads, concorrência</span></label>
+          <label class="ms"><input type="checkbox" data-id="f8b"><span>Escalonamento e interrupções</span></label>
+          <label class="ms"><input type="checkbox" data-id="f8c"><span>Memória, mutex, semáforo</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="f9">
+      <div class="ph-top">
+        <div class="ph-num">9</div>
+        <div class="ph-titles"><h3>Redes de Computadores</h3><div class="src">UNIVESP "Redes de Computadores"</div></div>
+        <span class="dur">~4–5 semanas</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>Modelo OSI e modelo TCP/IP</li>
+          <li>DNS · HTTP · TLS e HTTPS · Sockets</li>
+        </ul>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>O clássico que sempre engaja: <b>“O que acontece quando você digita uma URL — do DNS ao TLS”</b>, em carrossel.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f9a"><span>OSI e TCP/IP</span></label>
+          <label class="ms"><input type="checkbox" data-id="f9b"><span>DNS, HTTP, TLS, sockets</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="f10">
+      <div class="ph-top">
+        <div class="ph-num">10</div>
+        <div class="ph-titles"><h3>Bancos de Dados</h3><div class="src">UNIVESP "Banco de Dados" + SQL (você domina do trabalho)</div></div>
+        <span class="dur">~4–5 semanas</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>SQL vs NoSQL · modelagem Entidade-Relacionamento · normalização</li>
+          <li>DDL / DML / DQL / DCL · índices, views, transações, stored procedures</li>
+          <li>ACID, BASE, CAP, PACELC · replicação, sharding, federação · locking</li>
+        </ul>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post de autoridade (você domina): <b>“ACID na prática — o que cada letra significa, com exemplos reais”</b>.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f10a"><span>Modelagem, normalização, SQL</span></label>
+          <label class="ms"><input type="checkbox" data-id="f10b"><span>Índices, transações, ACID</span></label>
+          <label class="ms"><input type="checkbox" data-id="f10c"><span>Escala: replicação, sharding, CAP</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="f11">
+      <div class="ph-top">
+        <div class="ph-num">11</div>
+        <div class="ph-titles"><h3>Segurança</h3><div class="src">Buscar em PT (ver apêndice)</div></div>
+        <span class="dur">~2–3 semanas</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>Hashing, criptografia e encoding (e a diferença entre eles)</li>
+          <li>Criptografia de chave pública · algoritmos de hashing · OWASP Top 10</li>
+        </ul>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post que derruba dev em entrevista: <b>“Hashing vs criptografia vs encoding — a diferença que quase todo mundo erra”</b>.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f11a"><span>Criptografia e hashing</span></label>
+          <label class="ms"><input type="checkbox" data-id="f11b"><span>Chave pública e OWASP Top 10</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="f12">
+      <div class="ph-top">
+        <div class="ph-num">12</div>
+        <div class="ph-titles"><h3>Design Patterns &amp; UML</h3><div class="src">Você já domina do trabalho — aqui você é o professor principal</div></div>
+        <span class="dur">~2–3 semanas</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>Padrões GoF · padrões arquiteturais · injeção de dependência · Null Object, Type Object</li>
+          <li>Diagramas UML · classe, caso de uso, atividade, máquina de estados, sequência</li>
+        </ul>
+        <div class="note green" style="margin:8px 0 0">
+          <p>Você usa Strategy e DI no dia a dia na Plaenge — esta fase você ensina de cabeça, com exemplos reais de código que vocês já escreveram. É a fase em que a sua experiência vira a melhor aula.</p>
+        </div>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Estudo de caso real: <b>“Refatorei 3 apps com 90% de código duplicado usando Strategy Pattern”</b> — antes/depois do seu trabalho na Plaenge.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f12a"><span>Padrões GoF + DI</span></label>
+          <label class="ms"><input type="checkbox" data-id="f12b"><span>Diagramas UML</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="f13">
+      <div class="ph-top">
+        <div class="ph-num">13</div>
+        <div class="ph-titles"><h3>System Design — o capstone</h3><div class="src">Roadmap próprio (você tem bookmarkado)</div></div>
+        <span class="dur">~3–4 semanas</span>
+      </div>
+      <div class="ph-body">
+        <p>Vem por último porque <strong>junta tudo</strong>: estruturas, redes, bancos e sistemas operacionais convergem aqui.</p>
+        <ul>
+          <li>Escala horizontal vs vertical · load balancing · clustering · CDN</li>
+          <li>Caching · filas · proxy · long/short polling · WebSockets · SSE</li>
+          <li>Estilos arquiteturais · REST, GraphQL, gRPC · cloud design patterns</li>
+        </ul>
+        <div class="check">
+          <div class="ttl">Checkpoint final</div>
+          <p>Desenhar, no quadro, a arquitetura de um sistema real (ex: um encurtador de URL ou um feed) explicando as escolhas de banco, cache e escala.</p>
+        </div>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post: <b>“Desenhei a arquitetura de um encurtador de URL — as 5 decisões que importam”</b>. Diagrama de System Design rende muito.</div></div>
+<div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="f13a"><span>Escala, balanceamento, caching</span></label>
+          <label class="ms"><input type="checkbox" data-id="f13b"><span>Estilos arquiteturais e APIs</span></label>
+          <label class="ms"><input type="checkbox" data-id="f13c"><span>Desenhar um sistema do zero</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJETO -->
+    <div class="part-head" id="projeto" style="background:var(--green)">
+      <div class="pk">Trilha de projeto · roda em paralelo às fases</div>
+      <h2>O capstone — seu próprio banco de dados</h2>
+      <p>Um KV store distribuído (mini-Redis) do zero, em C, construído em camadas. A peça do GitHub que prova que vocês são fora da curva.</p>
+    </div>
+
+    <div class="note green">
+      <h4>Sim — podem começar cedo, e devem</h4>
+      <p>Não esperem o fim. A partir da <strong>Fase 2</strong> (quando já têm hash table) abrem a Camada 0. Cada fase nova destrava a próxima camada. Usem o bloco de "prática individual" do dia + 1–2 sessões por semana só pro projeto. Construir em paralelo é o que transforma teoria em habilidade sênior.</p>
+    </div>
+
+    <div class="note">
+      <h4>Divisão dos 4</h4>
+      <p>Donos por área: <span class="owner">A</span> Core/estruturas · <span class="owner">B</span> Rede/protocolo · <span class="owner">C</span> Persistência/storage · <span class="owner">D</span> Concorrência/infra. <strong>Rodem o dono a cada camada</strong> pra todos tocarem tudo, e abram <strong>Pull Requests com code review</strong> entre vocês — prática sênior que fica registrada no GitHub.</p>
+    </div>
+
+    <div class="phase proj">
+      <div class="ph-top">
+        <div class="ph-num">C0</div>
+        <div class="ph-titles"><h3>A base — biblioteca de estruturas</h3><div><span class="unlock">Destrava após Fase 2</span></div></div>
+        <span class="dur">esforço ~1–2 sem</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>Criar o repositório e a <strong>hash table</strong> que será o coração do store</li>
+          <li>Comandos <code>GET</code> / <code>SET</code> / <code>DEL</code> em memória, via CLI</li>
+        </ul>
+        <p class="exer"><b>Exercita do roadmap:</b> Hash Table, Linked List, ponteiros, Makefile.</p>
+        <p class="exer"><b>Dono:</b> <span class="owner">A · Core</span></p>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Anúncio de lançamento: <b>“Comecei a construir um banco de dados key-value do zero em C 🧵”</b> — Camada 0: hash table + GET/SET/DEL. Repo aberto no GitHub.</div></div>
+<div class="milestones"><label class="ms"><input type="checkbox" data-id="p0"><span>Camada 0 entregue</span></label></div>
+      </div>
+    </div>
+
+    <div class="phase proj">
+      <div class="ph-top">
+        <div class="ph-num">C1</div>
+        <div class="ph-titles"><h3>Cache de verdade</h3><div><span class="unlock">Destrava após Fase 3 (refina na 5)</span></div></div>
+        <span class="dur">esforço ~1–2 sem</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>Expiração de chaves (TTL) e políticas de despejo <strong>LRU e LFU</strong></li>
+          <li>Métricas de hit/miss — medir antes e depois</li>
+        </ul>
+        <p class="exer"><b>Exercita do roadmap:</b> caches LRU/LFU, heap, análise de complexidade.</p>
+        <p class="exer"><b>Dono:</b> <span class="owner">A + B</span></p>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post com número: <b>“Adicionei cache LRU/LFU ao meu mini-Redis — hit rate subiu de X% pra Y%”</b>. Métrica + gráfico simples.</div></div>
+<div class="milestones"><label class="ms"><input type="checkbox" data-id="p1"><span>Camada 1 entregue</span></label></div>
+      </div>
+    </div>
+
+    <div class="phase proj">
+      <div class="ph-top">
+        <div class="ph-num">C2</div>
+        <div class="ph-titles"><h3>Concorrência</h3><div><span class="unlock">Destrava após Fase 8 (SO)</span></div></div>
+        <span class="dur">esforço ~2–3 sem</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>Tornar o store <strong>multi-thread</strong>: pool de threads, locks por região</li>
+          <li>Gerência de memória cuidadosa (sem vazamentos, sem corrida de dados)</li>
+        </ul>
+        <p class="exer"><b>Exercita do roadmap:</b> threads, mutex, semáforo, gerência de memória, escalonamento.</p>
+        <p class="exer"><b>Dono:</b> <span class="owner">D · Infra</span></p>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Vídeo curto: <b>“Tornei meu banco de dados multi-thread”</b> — mostre o pool de threads rodando e fale do primeiro deadlock.</div></div>
+<div class="milestones"><label class="ms"><input type="checkbox" data-id="p2"><span>Camada 2 entregue</span></label></div>
+      </div>
+    </div>
+
+    <div class="phase proj">
+      <div class="ph-top">
+        <div class="ph-num">C3</div>
+        <div class="ph-titles"><h3>Rede</h3><div><span class="unlock">Destrava após Fase 9 (Redes)</span></div></div>
+        <span class="dur">esforço ~2–3 sem</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>Servidor <strong>TCP</strong> com protocolo próprio (estilo RESP do Redis)</li>
+          <li>Cliente que conecta pela rede; lidar com várias conexões ao mesmo tempo</li>
+        </ul>
+        <p class="exer"><b>Exercita do roadmap:</b> sockets, TCP/IP, design de protocolo, HTTP (opcional).</p>
+        <p class="exer"><b>Dono:</b> <span class="owner">B · Rede</span></p>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Demo em vídeo: <b>“Meu DB agora fala por TCP com protocolo próprio (estilo RESP do Redis)”</b> — cliente conectando pela rede.</div></div>
+<div class="milestones"><label class="ms"><input type="checkbox" data-id="p3"><span>Camada 3 entregue</span></label></div>
+      </div>
+    </div>
+
+    <div class="phase proj">
+      <div class="ph-top">
+        <div class="ph-num">C4</div>
+        <div class="ph-titles"><h3>Persistência</h3><div><span class="unlock">Destrava após Fase 10 (Bancos)</span></div></div>
+        <span class="dur">esforço ~2–3 sem</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>Write-ahead log (WAL), snapshots em disco, recuperação no boot</li>
+          <li>Índices pra busca rápida</li>
+        </ul>
+        <p class="exer"><b>Exercita do roadmap:</b> internals de banco, transações, durabilidade (o "D" do ACID), I/O de disco.</p>
+        <p class="exer"><b>Dono:</b> <span class="owner">C · Storage</span></p>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post: <b>“Persistência com Write-Ahead Log: meu banco sobrevive a um crash”</b> — explique o WAL com um diagrama.</div></div>
+<div class="milestones"><label class="ms"><input type="checkbox" data-id="p4"><span>Camada 4 entregue</span></label></div>
+      </div>
+    </div>
+
+    <div class="phase proj">
+      <div class="ph-top">
+        <div class="ph-num">C5</div>
+        <div class="ph-titles"><h3>Segurança</h3><div><span class="unlock">Destrava após Fase 11</span></div></div>
+        <span class="dur">esforço ~1–2 sem</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>Autenticação por senha (com hash), TLS na conexão, controle de acesso</li>
+        </ul>
+        <p class="exer"><b>Exercita do roadmap:</b> hashing, criptografia, TLS, OWASP.</p>
+        <p class="exer"><b>Dono:</b> <span class="owner">D + C</span></p>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post: <b>“Coloquei autenticação e TLS no meu banco de dados”</b> — fale de hash de senha vs texto puro (lição de segurança).</div></div>
+<div class="milestones"><label class="ms"><input type="checkbox" data-id="p5"><span>Camada 5 entregue</span></label></div>
+      </div>
+    </div>
+
+    <div class="phase proj">
+      <div class="ph-top">
+        <div class="ph-num">C6</div>
+        <div class="ph-titles"><h3>Arquitetura limpa</h3><div><span class="unlock">Destrava após Fase 12 (Design Patterns)</span></div></div>
+        <span class="dur">esforço ~1–2 sem</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li>Refatorar em camadas; aplicar padrões (ex: Strategy pras políticas de cache)</li>
+          <li>Suíte de testes</li>
+        </ul>
+        <p class="exer"><b>Exercita do roadmap:</b> design patterns, injeção de dependência, organização de projeto.</p>
+        <p class="exer"><b>Dono:</b> <span class="owner">todos · refactor + code review</span></p>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Antes/depois: <b>“Refatorei meu projeto em arquitetura limpa + testes”</b> — print do diagrama de camadas e da suíte de testes verde.</div></div>
+<div class="milestones"><label class="ms"><input type="checkbox" data-id="p6"><span>Camada 6 entregue</span></label></div>
+      </div>
+    </div>
+
+    <div class="phase proj">
+      <div class="ph-top">
+        <div class="ph-num">C7</div>
+        <div class="ph-titles"><h3>Distribuído — o ápice</h3><div><span class="unlock">Destrava após Fase 13 (System Design)</span></div></div>
+        <span class="dur">esforço ~3–4 sem</span>
+      </div>
+      <div class="ph-body">
+        <ul>
+          <li><strong>Replicação</strong> master-réplica e <strong>sharding</strong> por hash de chave</li>
+          <li>Documento de arquitetura + apresentação final</li>
+        </ul>
+        <p class="exer"><b>Exercita do roadmap:</b> replicação, sharding, CAP, load balancing, system design.</p>
+        <p class="exer"><b>Dono:</b> <span class="owner">todos</span></p>
+                <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post final (o que vira entrevista): <b>“Construí um banco de dados distribuído do zero em C — replicação, sharding e benchmark”</b> + link do repo e do doc de arquitetura.</div></div>
+<div class="milestones"><label class="ms"><input type="checkbox" data-id="p7"><span>Camada 7 entregue — projeto completo</span></label></div>
+      </div>
+    </div>
+
+    <div class="phase proj">
+      <div class="ph-top">
+        <div class="ph-num">C8</div>
+        <div class="ph-titles"><h3>Tipos de dados avançados — fechando o roadmap</h3><div><span class="unlock">Destrava ao longo das Fases 3–6</span></div></div>
+        <span class="dur">esforço ~3–4 sem (incremental)</span>
+      </div>
+      <div class="ph-body">
+        <p>Esta é a camada que faz o projeto <strong>cravar os nós do roadmap que sobrariam de fora</strong>. Cada comando novo do seu DB é, na prática, uma estrutura ou algoritmo do roadmap em uso real — exatamente como o Redis de verdade faz.</p>
+        <ul>
+          <li><strong>Sorted Set</strong> (<code>ZADD</code>/<code>ZRANGE</code>) sobre uma <strong>Skip List</strong> — exercita skip list e ordenação por score.</li>
+          <li><strong>Autocomplete</strong> de chaves por prefixo sobre uma <strong>Trie / PATRICIA</strong> — exercita árvores digitais.</li>
+          <li><strong><code>KEYS pattern</code> e <code>SCAN MATCH</code></strong> com glob — casamento de padrões: força bruta → <strong>KMP / Boyer-Moore</strong>; o glob com <code>*</code>/<code>?</code> é backtracking.</li>
+          <li><strong>Busca fuzzy</strong> (“você quis dizer…”) por <strong>distância de edição</strong> — Programação Dinâmica em produção.</li>
+          <li><strong>Bitmaps</strong> (<code>SETBIT</code>/<code>BITCOUNT</code>) — operadores bit a bit; e a serialização binária do C4 te dá endianness.</li>
+          <li><strong>HyperLogLog</strong> e <strong>Bloom filter</strong> (<code>PFADD</code>/<code>PFCOUNT</code>) — probabilidade, combinatória e hashing aplicados.</li>
+          <li><strong>Geo</strong> (<code>GEOADD</code>/<code>GEOSEARCH</code>) sobre uma <strong>K-D Tree</strong> — busca espacial; e <code>INCRBYFLOAT</code> exercita ponto flutuante.</li>
+          <li class="sub">Opcional/ápice: módulo de <strong>grafo</strong> com menor caminho (Dijkstra/BFS) — fecha a parte de grafos do roadmap dentro do projeto.</li>
+        </ul>
+        <p class="exer"><b>Exercita do roadmap:</b> skip list, tries, K-D tree, casamento de padrões (KMP/Boyer-Moore/suffix), programação dinâmica, backtracking, bitwise, probabilidade/combinatória, ponto flutuante, grafos.</p>
+        <p class="exer"><b>Dono:</b> <span class="owner">rotativo — uma estrutura por pessoa, com code review</span></p>
+        <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Mini-série: <b>“Construindo os tipos do Redis do zero”</b> — um post por estrutura (skip list, trie, bloom filter, HyperLogLog). Conteúdo raro = muito alcance.</div></div>
+        <div class="milestones"><label class="ms"><input type="checkbox" data-id="p8"><span>Camada 8 — tipos avançados entregues</span></label></div>
+      </div>
+    </div>
+
+    <div class="note green">
+      <h4>O que mostrar no fim</h4>
+      <p>README matador com diagrama de arquitetura · histórico de PRs com code review · benchmarks (operações por segundo) · um post ou apresentação contando as decisões e trade-offs. Esse repositório vale mais que qualquer certificado — porque quase ninguém constrói um banco de dados do zero.</p>
+    </div>
+
+
+    <h2 id="cobertura"><span class="num">§</span>Cobertura do roadmap — onde cada skill é cravada</h2>
+    <p class="sub">A regra do plano: <strong>todo nó do roadmap de Computer Science é estudado numa fase e exercitado no projeto</strong>. Onde for teoria pura e não couber em código, está marcado honestamente. É essa dupla — estudar &amp; construir — que transforma o repositório numa prova real de domínio, não num certificado a mais.</p>
+<div class="covwrap"><table class="cov"><thead><tr><th>Tópico do roadmap</th><th>Onde você estuda</th><th>Onde o projeto crava</th></tr></thead><tbody><tr><td>Linguagem (C)</td><td class="th">Fase 0 · 1</td><td class="pj">projeto inteiro</td></tr><tr><td>Arrays · Listas · Pilha · Fila</td><td class="th">Fase 2</td><td class="pj">C0 (CLI + estruturas base)</td></tr><tr><td>Hash Table</td><td class="th">Fase 3</td><td class="pj">C0 (o coração do store)</td></tr><tr><td>Árvores (BST/AVL/Rubro-Negra/B/2-3-4/K-ária)</td><td class="th">Fase 3 · 4</td><td class="pj">C4 (índices) · C8</td></tr><tr><td>Heap / Fila de prioridades</td><td class="th">Fase 3</td><td class="pj">C1 (despejo)</td></tr><tr><td>Grafos (DFS/BFS/Dijkstra/MST/topo/SCC)</td><td class="th">Fase 3 · 4</td><td class="pj">C8 (módulo de grafo)</td></tr><tr><td>Skip List</td><td class="th">Fase 3</td><td class="pj">C8 (Sorted Set)</td></tr><tr><td>Tries / PATRICIA</td><td class="th">Fase 4</td><td class="pj">C8 (autocomplete)</td></tr><tr><td>K-D Trees</td><td class="th">Fase 4</td><td class="pj">C8 (Geo)</td></tr><tr><td>Ordenação (todas)</td><td class="th">Fase 3 · 4</td><td class="pj">C8 (ZRANGE) · benchmarks</td></tr><tr><td>Big-O / Notação assintótica / runtimes</td><td class="th">Fase 3 · 4</td><td class="pj">benchmarks do projeto</td></tr><tr><td>Recursão (incl. tail)</td><td class="th">Fase 1 · 3</td><td class="pj">travessias de árvore (C4/C8)</td></tr><tr><td>Busca binária / linear</td><td class="th">Fase 3</td><td class="pj">C4 (índices)</td></tr><tr><td>Programação Dinâmica</td><td class="th">Fase 5</td><td class="pj">C8 (busca fuzzy / edit distance)</td></tr><tr><td>Greedy (Huffman, Prim, Kruskal)</td><td class="th">Fase 3 · 5</td><td class="pj">C4 (Huffman no snapshot, opc.)</td></tr><tr><td>Backtracking (N-Rainhas, labirinto)</td><td class="th">Fase 5</td><td class="pj">C8 (glob matching KEYS)</td></tr><tr><td>Caches (LRU / LFU / MFU)</td><td class="th">Fase 5</td><td class="pj">C1</td></tr><tr><td>Casamento de padrões (brute/Rabin-Karp/KMP/Boyer-Moore)</td><td class="th">Fase 3 · 6</td><td class="pj">C8 (KEYS/SCAN/full-text)</td></tr><tr><td>Suffix Arrays</td><td class="th">Fase 6</td><td class="pj">C8 (busca avançada, opc.)</td></tr><tr><td>Codificação de caracteres (ASCII/Unicode/UTF-8)</td><td class="th">Fase 6</td><td class="pj">protocolo RESP + caderno de strings</td></tr><tr><td>Operadores bit a bit</td><td class="th">Fase 6</td><td class="pj">C8 (bitmaps)</td></tr><tr><td>Endianness</td><td class="th">Fase 6</td><td class="pj">C4 (serialização binária)</td></tr><tr><td>Ponto flutuante</td><td class="th">Fase 6</td><td class="pj">C8 (INCRBYFLOAT, Geo)</td></tr><tr><td>Matemática (probabilidade / combinatória)</td><td class="th">Fase 6</td><td class="pj">C8 (HyperLogLog / Bloom)</td></tr><tr><td>Classes de complexidade (P/NP)</td><td class="th">Fase 6</td><td class="sub">— teoria pura (fora do projeto)</td></tr><tr><td>Arquitetura (CPU/cache/RAM/interrupções)</td><td class="th">Fase 7</td><td class="pj">tuning cache-friendly do store</td></tr><tr><td>SO (processos/threads/escalon./memória/mutex)</td><td class="th">Fase 8</td><td class="pj">C2 (concorrência)</td></tr><tr><td>Redes (OSI/TCP-IP/DNS/HTTP/TLS/sockets)</td><td class="th">Fase 9</td><td class="pj">C3 (TCP) · C5 (TLS)</td></tr><tr><td>Bancos (ACID/transações/índices/replicação/sharding/CAP/locking)</td><td class="th">Fase 10</td><td class="pj">C4 · C7 · C2</td></tr><tr><td>Segurança (hash/cripto/encoding/chave pública/OWASP)</td><td class="th">Fase 11</td><td class="pj">C5</td></tr><tr><td>Design Patterns + UML</td><td class="th">Fase 12</td><td class="pj">C6 (refactor + Strategy)</td></tr><tr><td>System Design (escala/LB/cache/filas/REST/gRPC/WebSocket)</td><td class="th">Fase 13</td><td class="pj">C7 (distribuído) · C3</td></tr></tbody></table></div>
+    <div class="note green">
+      <h4>Por que isso importa</h4>
+      <p>Quase ninguém consegue dizer “implementei skip list, trie, bloom filter, WAL, replicação e protocolo de rede — tudo no mesmo projeto, em C”. Quando os quatro chegarem ao fim, cada um terá tocado todas as áreas do roadmap <em>com as próprias mãos</em>. Isso é o que separa “fiz um curso” de “sei construir”.</p>
+    </div>
+
+    <h2 id="linkedin"><span class="num">§</span>Build in Public — LinkedIn</h2>
+    <p>Cada fase e cada camada do projeto já tem, ali em cima, uma <span style="color:var(--blue);font-weight:600">ideia de post</span> marcada com o selo <span class="li" style="display:inline-flex;padding:2px 8px;margin:0;border-radius:99px;border-left-width:1px"><span class="ic" style="padding:1px 5px">in</span></span>. Esta seção é o <strong>como</strong> postar pra virar oportunidade — não só diário público.</p>
+
+    <div class="note">
+      <h4>Por que postar enquanto estuda</h4>
+      <p>Três retornos diretos: <strong>(1)</strong> recrutador internacional acha você pelo conteúdo — é vitrine passiva; <strong>(2)</strong> ensinar em público fixa o que você aprende (o mesmo princípio do checkpoint); <strong>(3)</strong> compromisso público vira combustível pra não abandonar a maratona. Vocês quatro postando juntos amplificam um ao outro.</p>
+    </div>
+
+    <div class="note green">
+      <h4>Dica de carreira — poste em inglês</h4>
+      <p>Seu objetivo é trabalho remoto internacional em USD. <strong>Poste em inglês</strong> (ou PT + EN) desde já: dobra o alcance pra quem contrata lá fora <em>e</em> é treino de escrita técnica em inglês — bate direto na sua meta de fluência. Não precisa ser perfeito; precisa ser constante.</p>
+    </div>
+
+    <h3 class="cad-sub">Ritmo e formatos que funcionam</h3>
+    <ul>
+      <li><strong>1 post por checkpoint</strong> (≈ 1 por semana). Não force diário — qualidade &gt; volume.</li>
+      <li><strong>Carrossel de aprendizado:</strong> 5–8 slides com um conceito (“7 erros de string em C”). É o formato que mais salva e compartilha.</li>
+      <li><strong>Marco “I built X”:</strong> a cada camada do projeto, um post com print/vídeo + link do repo. Esses são os que viram entrevista.</li>
+      <li><strong>Snippet + lição:</strong> um trecho de código curto e a lição que ele ensina. Rápido de fazer, alto retorno.</li>
+      <li><strong>Antes/depois:</strong> refatoração, ganho de performance, bug resolvido. Número no título engaja (“hit rate de 40% → 92%”).</li>
+    </ul>
+
+    <h3 class="cad-sub">Modelos prontos (preencha e poste)</h3>
+    <div class="cmd"><div class="sig"><span>Marco do projeto</span><span class="lib">milestone</span></div>
+      <p class="what">“Just shipped layer N of my from-scratch database in C: &lt;feature&gt;. The hardest part was &lt;X&gt; — here’s what I learned. 🧵 Repo 👇”</p></div>
+    <div class="cmd"><div class="sig"><span>Conceito que você dominou</span><span class="lib">carousel</span></div>
+      <p class="what">“&lt;Conceito&gt; explained simply — the version I wish I had when I started. Slide 1: the problem. Slides 2–6: the idea. Last slide: when to use it.”</p></div>
+    <div class="cmd"><div class="sig"><span>Bug / lição</span><span class="lib">story</span></div>
+      <p class="what">“This bug cost me 3 hours: &lt;descrição&gt;. The fix was one line. The lesson wasn’t. Here’s what &lt;ponteiro / mutex / '\0'&gt; really does.”</p></div>
+
+    <div class="note">
+      <h4>Regra de ouro do build in public</h4>
+      <p>Mostre o <strong>processo</strong>, não só a vitória. “Travei aqui e descobri assim” engaja mais que “terminei”. E sempre que o post falar do projeto, <strong>link o repositório</strong> — é o ativo que vocês estão construindo.</p>
+    </div>
+
+    <div class="part-head" id="cad-strings" style="background:var(--ink)">
+      <div class="pk">Caderno de referência · Fase 0 (Linguagem C)</div>
+      <h2>Strings em C — o caderno</h2>
+      <p>Tudo o que vocês precisam sobre strings: o conceito, os comandos, as funções e as pegadinhas. Cole no caderno, deixe aberto enquanto codam.</p>
+    </div>
+
+    <div class="note">
+      <h4>A ideia que explica tudo: o <code>\0</code></h4>
+      <p>Em C <strong>não existe um tipo “string”</strong>. Uma string é só um <strong>vetor de <code>char</code></strong> que termina num caractere especial: o <code>\0</code> (byte zero, “null terminator”). Toda função de string para de trabalhar quando encontra o <code>\0</code>. Entendeu isso, entendeu 90% dos bugs.</p>
+    </div>
+
+    <h3 class="cad-sub">1 · Declaração e inicialização</h3>
+<pre class="code">char a[] = <span class="s">"C"</span>;          <span class="c">// tamanho 2: 'C' + '\0' (o compilador conta)</span>
+char b[20] = <span class="s">"Plaenge"</span>;  <span class="c">// reserva 20, usa 8, sobra espaço pra crescer</span>
+char c[4] = <span class="s">"abc"</span>;       <span class="c">// OK: a,b,c,\0 — exatamente 4</span>
+char d[3] = <span class="s">"abc"</span>;       <span class="c">// BUG: não cabe o '\0'!</span>
+char *e = <span class="s">"texto"</span>;       <span class="c">// ponteiro p/ string LITERAL (não pode alterar)</span></pre>
+    <div class="note">
+      <h4>Vetor <code>char[]</code> vs ponteiro <code>char*</code></h4>
+      <p><code>char s[] = "oi"</code> cria uma cópia que <strong>você pode alterar</strong>. <code>char *s = "oi"</code> aponta pra um literal <strong>somente-leitura</strong> — tentar mudar trava o programa. Pra texto que muda, use vetor.</p>
+    </div>
+
+    <h3 class="cad-sub">2 · Acentos no console — <code>setlocale</code></h3>
+    <p class="sub">É o que aparece no topo do código da sua aula. Sem isso, <code>ç</code>, <code>ã</code> e <code>á</code> saem quebrados no terminal do Windows.</p>
+<pre class="code"><span class="p">#include &lt;locale.h&gt;</span>
+setlocale(LC_ALL, <span class="s">"Portuguese"</span>);   <span class="c">// habilita acentuação</span></pre>
+
+    <h3 class="cad-sub">3 · Entrada — lendo strings</h3>
+<div class="cmd"><div class="sig"><span>scanf(&quot;%s&quot;, s)</span><span class="lib">stdio.h</span></div><p class="what">Lê <strong>uma palavra</strong> (para no primeiro espaço). Repare: com vetor de char <strong>não</strong> se usa <code>&amp;</code>.</p><pre class="code">char nome[30];
+scanf(<span class="s">"%s"</span>, nome);   <span class="c">// digita "João Silva" -&gt; guarda só "João"</span></pre></div><div class="cmd"><div class="sig"><span>fgets(s, n, stdin)</span><span class="lib">stdio.h</span></div><p class="what">Lê uma <strong>linha inteira</strong> com segurança (limita o tamanho). <strong>É o jeito recomendado.</strong> Inclui o <code>\n</code> no fim — às vezes você quer remover.</p><pre class="code">char linha[100];
+fgets(linha, sizeof linha, stdin);
+linha[strcspn(linha, <span class="s">"\n"</span>)] = '\0';   <span class="c">// tira o \n do fim</span></pre></div><div class="cmd"><div class="sig"><span>gets(s)  ❌ PROIBIDO</span><span class="lib">stdio.h</span></div><p class="what">O Pietro mostra, mas é pra você <strong>nunca usar</strong>. Não limita o tamanho → estoura o buffer → falha de segurança clássica. Foi <strong>removido do C11</strong>. Use sempre <code>fgets</code> no lugar.</p><pre class="code">char s[10];
+gets(s);   <span class="c">// se o usuário digitar 50 chars, corrompe a memória</span></pre></div>
+
+    <h3 class="cad-sub">4 · Saída — imprimindo strings</h3>
+<div class="cmd"><div class="sig"><span>puts(s)</span><span class="lib">stdio.h</span></div><p class="what">Imprime a string e <strong>já pula linha</strong> (adiciona <code>\n</code> sozinho). Mais simples que <code>printf</code> quando é só texto puro.</p><pre class="code">puts(<span class="s">"Antes do strcat:"</span>);   <span class="c">// imprime e quebra a linha</span></pre><div class="cmdout"><span class="ol">saída</span>Antes do strcat:</div></div><div class="cmd"><div class="sig"><span>printf(&quot;%s&quot;, s)</span><span class="lib">stdio.h</span></div><p class="what">Imprime com formatação. Use quando precisa misturar texto e variáveis.</p><pre class="code">printf(<span class="s">"str1: %s\n"</span>, s1);   <span class="c">// %s = encaixa a string aqui</span></pre></div><div class="cmd"><div class="sig"><span>putchar(c)</span><span class="lib">stdio.h</span></div><p class="what">Imprime <strong>um único caractere</strong>. Útil ao percorrer a string letra a letra.</p><pre class="code">putchar('A');   <span class="c">// imprime: A</span></pre></div>
+
+    <h3 class="cad-sub">5 · Percorrer caractere a caractere</h3>
+    <p class="sub">O padrão mais importante: ande pelo vetor até bater no <code>\0</code>.</p>
+<pre class="code">char s[] = <span class="s">"C é vida"</span>;
+for (int i = 0; s[i] != '\0'; i++) {   <span class="c">// para no terminador</span>
+    putchar(s[i]);
+}</pre>
+
+    <h3 class="cad-sub">6 · Biblioteca <code>string.h</code> — as funções</h3>
+<div class="cmd"><div class="sig"><span>strlen(s)</span><span class="lib">string.h</span></div><p class="what">Tamanho <em>lógico</em> da string — conta até o <code>\0</code>, <strong>sem</strong> incluí-lo. Diferente de <code>sizeof</code>, que é o tamanho do vetor.</p><pre class="code">char s[] = <span class="s">"Plaenge"</span>;
+size_t n = strlen(s);   <span class="c">// 7  (P-l-a-e-n-g-e)</span>
+sizeof s;               <span class="c">// 8  (7 letras + o '\0')</span></pre><div class="cmdout"><span class="ol">saída</span>n = 7  |  sizeof = 8</div></div>
+<div class="cmd"><div class="sig"><span>strcpy / strncpy</span><span class="lib">string.h</span></div><p class="what">Copia conteúdo (com <code>=</code> NÃO funciona!). <code>strncpy</code> limita o tamanho — mais seguro, mas pode <strong>não</strong> pôr o <code>\0</code>.</p><pre class="code">char destino[20];
+strcpy(destino, <span class="s">"lead@plaenge.com"</span>);   <span class="c">// copia incl. o '\0'</span>
+strncpy(destino, origem, 19);          <span class="c">// versão limitada</span>
+destino[19] = '\0';                    <span class="c">// garanta o terminador!</span></pre></div>
+<div class="cmd"><div class="sig"><span>strcat / strncat</span><span class="lib">string.h</span></div><p class="what">Concatena (gruda) <code>s2</code> no fim de <code>s1</code>. O destino precisa ter espaço pros dois + o <code>\0</code> — é exatamente o exemplo da sua aula.</p><pre class="code">char s1[40] = <span class="s">"Lógica de"</span>;
+char s2[]   = <span class="s">" Programação!"</span>;
+strcat(s1, s2);   <span class="c">// s1 -&gt; "Lógica de Programação!"</span></pre><div class="cmdout"><span class="ol">saída</span>Lógica de Programação!</div></div>
+<div class="cmd"><div class="sig"><span>strcmp / strncmp</span><span class="lib">string.h</span></div><p class="what">Compara strings. Retorna <code>0</code> se iguais, <code>&lt;0</code> ou <code>&gt;0</code> pela ordem. <strong>NUNCA</strong> use <code>a == b</code> (isso compara endereços!).</p><pre class="code">if (strcmp(usuario, <span class="s">"admin"</span>) == 0) {
+    <span class="c">// são iguais</span>
+}
+strncmp(a, b, 3);   <span class="c">// compara só os 3 primeiros chars</span></pre></div>
+<div class="cmd"><div class="sig"><span>strchr / strrchr</span><span class="lib">string.h</span></div><p class="what">Acha um caractere: <code>strchr</code> a primeira ocorrência, <code>strrchr</code> a última. Retornam ponteiro (ou <code>NULL</code>).</p><pre class="code">char *arroba = strchr(email, '@');   <span class="c">// 1º '@'</span>
+char *ext    = strrchr(arq, '.');    <span class="c">// último '.' (extensão)</span>
+if (ext) printf(<span class="s">"extensão: %s"</span>, ext + 1);</pre></div>
+<div class="cmd"><div class="sig"><span>strstr</span><span class="lib">string.h</span></div><p class="what">Procura uma <strong>substring</strong> dentro de outra. Retorna ponteiro pro início (ou <code>NULL</code>). É o irmão de alto nível do KMP/Boyer-Moore que vocês veem na Fase 6.</p><pre class="code">char *m = strstr(<span class="s">"relatorio_2026.pdf"</span>, <span class="s">"2026"</span>);
+if (m) printf(<span class="s">"achei: %s"</span>, m);   <span class="c">// achei: 2026.pdf</span></pre></div>
+<div class="cmd"><div class="sig"><span>strtok</span><span class="lib">string.h</span></div><p class="what">Quebra a string em pedaços por um delimitador (ótimo pra CSV). <strong>Modifica</strong> a string original e não é thread-safe (use <code>strtok_r</code> no projeto).</p><pre class="code">char csv[] = <span class="s">"nome;email;telefone"</span>;
+char *tok = strtok(csv, <span class="s">";"</span>);
+while (tok != NULL) {
+    printf(<span class="s">"%s\n"</span>, tok);
+    tok = strtok(NULL, <span class="s">";"</span>);   <span class="c">// próximos: passe NULL</span>
+}</pre><div class="cmdout"><span class="ol">saída</span>nome
+email
+telefone</div></div>
+<div class="cmd"><div class="sig"><span>memset / memcpy</span><span class="lib">string.h</span></div><p class="what">Operações de baixo nível por <em>bytes</em>. <code>memset</code> preenche; <code>memcpy</code> copia n bytes (não para no <code>\0</code> — serve pra dados binários também).</p><pre class="code">char buf[100];
+memset(buf, 0, sizeof buf);   <span class="c">// zera o buffer inteiro</span>
+memcpy(destino, origem, n);   <span class="c">// copia n bytes crus</span></pre></div>
+
+    <h3 class="cad-sub">7 · Classificar e converter caracteres — <code>ctype.h</code></h3>
+<pre class="code"><span class="p">#include &lt;ctype.h&gt;</span>
+toupper('a');    <span class="c">// 'A'        tolower('B');  // 'b'</span>
+isdigit('7');    <span class="c">// != 0       isalpha('x');  // != 0</span>
+isspace(' ');    <span class="c">// != 0       isalnum, isupper, islower, ispunct</span></pre>
+    <p class="sub">Ótimas pra validar entrada e normalizar texto (ex.: deixar tudo minúsculo antes de comparar).</p>
+
+    <h3 class="cad-sub">8 · Converter string ↔ número</h3>
+<pre class="code"><span class="p">#include &lt;stdlib.h&gt;</span>
+int    x = atoi(<span class="s">"42"</span>);              <span class="c">// string -&gt; int</span>
+double d = atof(<span class="s">"3.14"</span>);            <span class="c">// string -&gt; double</span>
+long   l = strtol(<span class="s">"100"</span>, NULL, 10); <span class="c">// robusto: detecta erro e base</span>
+
+<span class="p">#include &lt;stdio.h&gt;</span>
+char out[50];
+sprintf(out, <span class="s">"Lead #%d"</span>, 42);            <span class="c">// monta string (cuidado c/ tamanho)</span>
+snprintf(out, sizeof out, <span class="s">"Lead #%d"</span>, 42); <span class="c">// SEGURO: limita o tamanho</span>
+
+int dia, mes, ano;
+sscanf(<span class="s">"06/06/2026"</span>, <span class="s">"%d/%d/%d"</span>, &amp;dia, &amp;mes, &amp;ano); <span class="c">// lê de uma string</span></pre>
+
+    <h3 class="cad-sub">9 · Tabela-resumo</h3>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Função</th><th>Lib</th><th>O que faz</th></tr></thead><tbody>
+      <tr><td>strlen</td><td class="th">string.h</td><td>tamanho até o \0</td></tr>
+      <tr><td>strcpy / strncpy</td><td class="th">string.h</td><td>copia uma string para outra</td></tr>
+      <tr><td>strcat / strncat</td><td class="th">string.h</td><td>concatena (gruda no fim)</td></tr>
+      <tr><td>strcmp / strncmp</td><td class="th">string.h</td><td>compara (0 = iguais)</td></tr>
+      <tr><td>strchr / strrchr</td><td class="th">string.h</td><td>acha um caractere</td></tr>
+      <tr><td>strstr</td><td class="th">string.h</td><td>acha uma substring</td></tr>
+      <tr><td>strtok</td><td class="th">string.h</td><td>quebra em pedaços por delimitador</td></tr>
+      <tr><td>memset / memcpy</td><td class="th">string.h</td><td>preenche / copia bytes</td></tr>
+      <tr><td>toupper / tolower</td><td class="th">ctype.h</td><td>troca maiúscula/minúscula</td></tr>
+      <tr><td>isdigit / isalpha / isspace</td><td class="th">ctype.h</td><td>testa o tipo do caractere</td></tr>
+      <tr><td>atoi / atof / strtol</td><td class="th">stdlib.h</td><td>string → número</td></tr>
+      <tr><td>sprintf / snprintf / sscanf</td><td class="th">stdio.h</td><td>monta / lê string formatada</td></tr>
+      <tr><td>fgets / puts / putchar</td><td class="th">stdio.h</td><td>ler linha / imprimir</td></tr>
+    </tbody></table></div>
+
+    <h3 class="cad-sub">10 · Pegadinhas clássicas (decore estas)</h3>
+    <ol class="ph-body" style="padding-left:20px">
+      <li>Esquecer o espaço do <code>\0</code>: <code>"abc"</code> precisa de <code>char[4]</code>, não <code>char[3]</code>.</li>
+      <li>Comparar com <code>==</code> (compara <em>endereços</em>!). Use <code>strcmp</code>.</li>
+      <li>Copiar com <code>=</code> (<code>s1 = s2</code> não copia o conteúdo). Use <code>strcpy</code>.</li>
+      <li><code>strcat</code>/<code>strcpy</code> sem espaço no destino → <strong>buffer overflow</strong> (corrompe memória).</li>
+      <li><code>gets()</code> → nunca. Use <code>fgets</code>.</li>
+      <li>Misturar <code>scanf("%d")</code> e <code>fgets</code> → sobra um <code>\n</code> no buffer. Padronize em <code>fgets</code>.</li>
+      <li><code>strncpy</code> pode não pôr o <code>\0</code> — coloque você mesmo.</li>
+      <li><code>strtok</code> destrói a string original e não é thread-safe (<code>strtok_r</code>).</li>
+      <li>Usar string não inicializada (lixo de memória, sem <code>\0</code>) → leitura infinita.</li>
+      <li>Confundir <code>strlen</code> (tamanho do texto) com <code>sizeof</code> (tamanho do vetor).</li>
+    </ol>
+
+    <div class="check">
+      <div class="ttl">Checkpoint do caderno</div>
+      <p>Cada um resolve sem cola: (1) contar vogais de uma frase; (2) inverter uma string no lugar; (3) testar se é palíndromo ignorando espaços e maiúsculas; (4) reescrever <code>strlen</code> e <code>strcpy</code> do zero, sem <code>string.h</code>.</p>
+    </div>
+
+    <div class="note green">
+      <h4>Liga com o projeto</h4>
+      <p>Isto não morre na Fase 0. No capstone, manipulação de string volta com força: o <strong>protocolo de rede</strong> (C3) parseia comandos texto, o <strong>casamento de padrões</strong> do <code>KEYS</code> (C8) é a versão hardcore do <code>strstr</code>, e a <strong>codificação de caracteres</strong> (Fase 6) explica por que o <code>\0</code> e o UTF-8 se comportam assim. Dominar string agora é juros compostos lá na frente.</p>
+    </div>
+
+    <!-- TIMELINE -->
+    <h2 id="timeline"><span class="num">§</span>Linha do tempo</h2>
+    <p class="sub">Largura ≈ duração relativa em ritmo de 4h/dia. Rust = Parte 1 (núcleo), verde = Parte 2.</p>
+    <div class="tl">
+      <div class="tl-row"><span class="lab">0 · Linguagem C</span><span class="bar" style="width:6%"></span><span class="d">2–3 sem</span></div>
+      <div class="tl-row"><span class="lab">1 · Fundamentos em C</span><span class="bar" style="width:9%"></span><span class="d">3–4 sem</span></div>
+      <div class="tl-row"><span class="lab">2 · Estruturas lineares</span><span class="bar" style="width:9%"></span><span class="d">3–4 sem</span></div>
+      <div class="tl-row"><span class="lab">3 · Largura das estruturas</span><span class="bar" style="width:14%"></span><span class="d">5–6 sem</span></div>
+      <div class="tl-row"><span class="lab">4 · Profundidade e análise</span><span class="bar" style="width:28%"></span><span class="d">10–12 sem</span></div>
+      <div class="tl-row"><span class="lab">5 · Lacunas de DS&A</span><span class="bar" style="width:9%"></span><span class="d">3–4 sem</span></div>
+      <div class="tl-row p2"><span class="lab">6 · Teoria adjacente</span><span class="bar" style="width:6%"></span><span class="d">2–3 sem</span></div>
+      <div class="tl-row p2"><span class="lab">7 · Arquitetura</span><span class="bar" style="width:9%"></span><span class="d">3–4 sem</span></div>
+      <div class="tl-row p2"><span class="lab">8 · Sistemas Operacionais</span><span class="bar" style="width:12%"></span><span class="d">4–5 sem</span></div>
+      <div class="tl-row p2"><span class="lab">9 · Redes</span><span class="bar" style="width:12%"></span><span class="d">4–5 sem</span></div>
+      <div class="tl-row p2"><span class="lab">10 · Bancos de Dados</span><span class="bar" style="width:12%"></span><span class="d">4–5 sem</span></div>
+      <div class="tl-row p2"><span class="lab">11 · Segurança</span><span class="bar" style="width:6%"></span><span class="d">2–3 sem</span></div>
+      <div class="tl-row p2"><span class="lab">12 · Design Patterns</span><span class="bar" style="width:6%"></span><span class="d">2–3 sem</span></div>
+      <div class="tl-row p2"><span class="lab">13 · System Design</span><span class="bar" style="width:9%"></span><span class="d">3–4 sem</span></div>
+    </div>
+
+    <!-- MENTOR -->
+    <h2 id="mentor"><span class="num">§</span>Sua trilha de mentor</h2>
+    <p>Sua preparação é diferente da deles — você já é avançado.</p>
+    <ul>
+      <li><strong>Veja sempre um módulo na frente</strong>, em 1.5x–2x. Você não está aprendendo o conteúdo; está caçando <em>como</em> o professor explica.</li>
+      <li><strong>Colete analogias.</strong> Tenha 2–3 formas de explicar cada conceito difícil. Eles vão perguntar a mesma coisa de cinco jeitos.</li>
+      <li><strong>Sobre-prepare ponteiros e memória.</strong> É o muro onde a maioria trava. Tenha pronto: endereço = "número da casa", <code>*</code> = "abrir a casa", <code>&amp;</code> = "pegar o endereço".</li>
+      <li><strong>Reimplemente cada estrutura antes de ensinar</strong>, pra codar ao vivo sem gaguejar.</li>
+      <li><strong>Na Fase 4 (Mario), estude de verdade, não em 2x.</strong> As provas e análises fecham aquele gap de confundir posição física no array com rank lógico ordenado.</li>
+      <li><strong>Ensinar é o seu teste de maestria.</strong> Se não consegue explicar simples, não dominou. Ensinar consolida mais que qualquer revisão.</li>
+    </ul>
+
+    <!-- APPENDIX -->
+    <h2 id="buscas"><span class="num">§</span>Apêndice — Buscas no Google em português</h2>
+    <p>O maior obstáculo não é achar curso, é saber o <strong>termo certo em PT</strong>. Três atalhos antes das queries:</p>
+    <div class="note">
+      <p><strong>1.</strong> Comecem pelos canais que já confiam (Professor Mario, Programação Descomplicada, xavecoding) — olhem a aba "playlists". &nbsp; <strong>2.</strong> <strong>UNIVESP</strong> tem curso completo e gratuito em PT de Redes, Sistemas Operacionais, Banco de Dados e Arquitetura — resolve metade da lista. &nbsp; <strong>3.</strong> Adicionem <code>curso completo</code>, <code>playlist</code> ou <code>do zero</code> e usem <strong>visualgo.net</strong> pra ver estruturas animadas sem depender de inglês.</p>
+    </div>
+
+    <div class="qgroup">
+      <h4>Lacunas de DS&amp;A (Fase 5)</h4>
+      <div class="qrow"><span class="topic">Dynamic Programming</span> <span class="pt">→ Programação Dinâmica</span><span class="qq"><code>programação dinâmica curso</code><code>programação dinâmica memoização explicação</code></span></div>
+      <div class="qrow"><span class="topic">Union-Find</span> <span class="pt">→ Conjuntos Disjuntos</span><span class="qq"><code>union find conjuntos disjuntos aula</code></span></div>
+      <div class="qrow"><span class="topic">Segment Tree</span> <span class="pt">→ Árvore de Segmentos</span><span class="qq"><code>árvore de segmentos segment tree português</code></span></div>
+      <div class="qrow"><span class="topic">Fenwick / BIT</span> <span class="pt">→ Árvore de Fenwick</span><span class="qq"><code>fenwick tree BIT português</code></span></div>
+      <div class="qrow"><span class="topic">Backtracking</span> <span class="pt">→ Backtracking / N-Rainhas</span><span class="qq"><code>backtracking algoritmo aula</code><code>problema das N rainhas backtracking</code></span></div>
+      <div class="qrow"><span class="topic">Caches</span> <span class="pt">→ LRU / LFU</span><span class="qq"><code>algoritmo LRU cache implementação</code></span></div>
+      <div class="qrow"><span class="topic">Caminhos mínimos</span><span class="qq"><code>Bellman-Ford português</code><code>Floyd-Warshall caminhos mínimos</code><code>algoritmo A estrela busca</code><code>Ford-Fulkerson fluxo máximo redes</code></span></div>
+    </div>
+
+    <div class="qgroup">
+      <h4>Outros ramos do roadmap (Parte 2)</h4>
+      <div class="qrow"><span class="topic">KMP / Boyer-Moore</span> <span class="pt">→ Casamento de Padrões</span><span class="qq"><code>algoritmo KMP Knuth Morris Pratt português</code><code>casamento de padrões string</code></span></div>
+      <div class="qrow"><span class="topic">Character Encodings</span> <span class="pt">→ Codificação de Caracteres / Operadores Bit a Bit</span><span class="qq"><code>unicode ASCII explicação português</code><code>operadores bit a bit C aula</code></span></div>
+      <div class="qrow"><span class="topic">Complexity Classes</span> <span class="pt">→ Classes de Complexidade</span><span class="qq"><code>classes de complexidade P NP NP-completo português</code></span></div>
+      <div class="qrow"><span class="topic">Arquitetura</span> <span class="pt">→ Arquitetura de Computadores</span><span class="qq"><code>UNIVESP organização e arquitetura de computadores</code><code>como o processador executa um programa</code></span></div>
+      <div class="qrow"><span class="topic">Sistemas Operacionais</span><span class="qq"><code>UNIVESP sistemas operacionais</code><code>processos e threads concorrência</code><code>escalonamento de processos</code><code>semáforo e mutex</code></span></div>
+      <div class="qrow"><span class="topic">Redes</span> <span class="pt">→ Redes de Computadores</span><span class="qq"><code>UNIVESP redes de computadores</code><code>modelo OSI TCP IP explicação</code></span></div>
+      <div class="qrow"><span class="topic">Bancos de Dados</span><span class="qq"><code>UNIVESP banco de dados</code><code>modelagem e normalização banco de dados</code><code>SQL do zero</code></span></div>
+      <div class="qrow"><span class="topic">Segurança</span> <span class="pt">→ Segurança da Informação</span><span class="qq"><code>criptografia chave pública português</code><code>OWASP top 10 português</code></span></div>
+      <div class="qrow"><span class="topic">Design Patterns</span> <span class="pt">→ Padrões de Projeto</span><span class="qq"><code>padrões de projeto GoF curso português</code></span></div>
+      <div class="qrow"><span class="topic">System Design</span> <span class="pt">→ Projeto de Sistemas Escaláveis</span><span class="qq"><code>system design português</code><code>arquitetura de sistemas escaláveis</code></span></div>
+    </div>
+
+    <footer>
+      Plano de estudo do grupo · cobre o roadmap de Computer Science completo · marque os checkboxes conforme avançam — o progresso fica salvo neste navegador (incl. abrindo o arquivo localmente).
+    </footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  var KEY='cs_plan_progress_v1';
+  var mem={};
+  var boxes=[].slice.call(document.querySelectorAll('.ms input[type=checkbox]'));
+  var fill=document.getElementById('pfill');
+  var pct=document.getElementById('ppct');
+
+  function updateBar(){
+    var done=boxes.filter(function(b){return b.checked}).length;
+    var p=boxes.length?Math.round(done/boxes.length*100):0;
+    fill.style.width=p+'%';
+    pct.textContent=p+'%';
+  }
+  function apply(){
+    boxes.forEach(function(b){ b.checked=!!mem[b.dataset.id]; });
+    updateBar();
+  }
+  async function save(){
+    var data=JSON.stringify(mem);
+    try{ if(window.storage){ await window.storage.set(KEY, data, false); } }catch(e){}
+    try{ localStorage.setItem(KEY, data); }catch(e){}
+  }
+  async function load(){
+    var loaded=false;
+    try{
+      if(window.storage){
+        var r=await window.storage.get(KEY, false);
+        if(r&&r.value){ mem=JSON.parse(r.value); loaded=true; }
+      }
+    }catch(e){}
+    if(!loaded){
+      try{ var v=localStorage.getItem(KEY); if(v){ mem=JSON.parse(v); } }catch(e){ mem={}; }
+    }
+    apply();
+  }
+
+  boxes.forEach(function(b){
+    b.addEventListener('change',function(){
+      mem[b.dataset.id]=b.checked;
+      updateBar();
+      save();
+    });
+  });
+
+  // scroll-spy for TOC
+  var links=[].slice.call(document.querySelectorAll('nav.toc a'));
+  var map={};
+  links.forEach(function(l){ var id=l.getAttribute('href').slice(1); var el=document.getElementById(id); if(el) map[id]=l; });
+  var targets=Object.keys(map).map(function(id){return document.getElementById(id);});
+  if('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          links.forEach(function(l){l.classList.remove('here');});
+          var l=map[en.target.id]; if(l) l.classList.add('here');
+        }
+      });
+    },{rootMargin:'-20% 0px -70% 0px'});
+    targets.forEach(function(t){obs.observe(t);});
+  }
+
+  // staggered reveal
+  var cards=[].slice.call(document.querySelectorAll('.phase'));
+  cards.forEach(function(c,i){ c.classList.add('reveal'); c.style.animationDelay=(Math.min(i,6)*0.04)+'s'; });
+
+  load();
+})();
+</script>
