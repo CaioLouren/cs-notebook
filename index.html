@@ -217,6 +217,20 @@
   .secthead{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
     color:var(--faint);margin:30px 0 2px}
 
+  .enex{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--green);
+    border-radius:0 12px 12px 0;padding:11px 15px;margin:11px 0}
+  .enex .en{font-weight:600;color:var(--ink)}
+  .enex .en::before{content:"🇬🇧 ";font-weight:400}
+  .enex .pt{color:var(--muted);font-size:14px;margin-top:2px}
+  .enex .pt::before{content:"🇧🇷 ";}
+  ol.steps{padding-left:20px;margin:6px 0 14px}
+  ol.steps li{margin:6px 0}
+
+  .levelhead{display:flex;align-items:center;gap:14px;margin:46px 0 8px}
+  .levelhead .n{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:#fff;padding:6px 14px;border-radius:99px;font-weight:600;white-space:nowrap}
+  .levelhead .l{height:1px;flex:1;background:var(--line)}
+
   @media(max-width:960px){
     .wrap{grid-template-columns:1fr;gap:0}
     nav.toc{display:none}
@@ -259,7 +273,10 @@
     <div class="lbl">Extras</div>
     <a href="#cobertura">Cobertura do roadmap</a>
     <a href="#linkedin">Build in Public</a>
-    <a href="#cad-strings">Caderno · Strings em C</a>
+    <div class="lbl">Cadernos</div>
+    <a href="#cad-c">C — fundamentos</a>
+    <a href="#cad-strings">Strings em C</a>
+    <a href="#cad-ingles">Inglês do zero</a>
     <div class="lbl">Apoio</div>
     <a href="#timeline">Linha do tempo</a>
     <a href="#mentor">Trilha de mentor</a>
@@ -926,6 +943,306 @@
       <p>Mostre o <strong>processo</strong>, não só a vitória. “Travei aqui e descobri assim” engaja mais que “terminei”. E sempre que o post falar do projeto, <strong>link o repositório</strong> — é o ativo que vocês estão construindo.</p>
     </div>
 
+    
+    <div class="part-head" id="cad-c" style="background:var(--ink)">
+      <div class="pk">Caderno de referência · Fase 0–1 (Linguagem C)</div>
+      <h2>C — o caderno de fundamentos</h2>
+      <p>Tudo o que vocês precisam de C, do esqueleto do programa até ponteiros e memória. Strings têm caderno próprio; aqui está o resto. Deixe aberto enquanto coda.</p>
+    </div>
+
+    <div class="pillrow">
+      <span class="pl">1 · esqueleto</span><span class="pl">2 · variáveis</span><span class="pl">3 · entrada/saída</span>
+      <span class="pl">4 · operadores</span><span class="pl">5 · condicionais</span><span class="pl">6 · laços</span>
+      <span class="pl">7 · vetores</span><span class="pl">8 · matrizes</span><span class="pl">9 · structs</span>
+      <span class="pl">10 · funções</span><span class="pl">11 · ponteiros</span><span class="pl">12 · memória</span><span class="pl">13 · vários arquivos</span>
+    </div>
+
+    <h3 class="cad-sub">1 · O esqueleto de um programa</h3>
+    <p>Todo programa em C tem a mesma espinha: você <strong>inclui</strong> bibliotecas, declara a função <code>main</code> (o ponto de partida) e termina cada comando com <strong>ponto e vírgula</strong>.</p>
+<pre class="code"><span class="p">#include &lt;stdio.h&gt;      // biblioteca de entrada e saída (printf, scanf)</span>
+
+int main() {            <span class="c">// a execução SEMPRE começa aqui</span>
+    printf(<span class="s">"Olá!\n"</span>);   <span class="c">// cada comando termina com ;</span>
+    return 0;           <span class="c">// 0 = "terminou tudo certo"</span>
+}</pre>
+    <div class="note">
+      <h4>As 4 peças que se repetem sempre</h4>
+      <p><code>#include</code> traz ferramentas prontas. <code>{ }</code> delimitam blocos. <code>;</code> encerra cada comando (esquecer o <code>;</code> é o erro nº1 do iniciante). <code>return 0;</code> avisa o sistema que deu tudo certo.</p>
+    </div>
+
+    <h3 class="cad-sub">2 · Variáveis e tipos</h3>
+    <p>Uma variável é uma “caixa” com nome que guarda um valor. Em C você precisa dizer <strong>o tipo</strong> da caixa antes de usar.</p>
+<pre class="code">int    idade = 25;        <span class="c">// número inteiro</span>
+float  altura = 1.75;     <span class="c">// número com vírgula (precisão simples)</span>
+double preco = 1999.90;   <span class="c">// número com vírgula (mais preciso)</span>
+char   letra = 'A';       <span class="c">// UM caractere — aspas SIMPLES</span>
+const double PI = 3.14159; <span class="c">// const = não pode mudar depois</span></pre>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Tipo</th><th>Guarda</th><th>Exemplo</th><th>printf</th></tr></thead><tbody>
+      <tr><td>int</td><td class="th">inteiro</td><td>42, -7, 0</td><td><code>%d</code></td></tr>
+      <tr><td>float</td><td class="th">decimal</td><td>1.75</td><td><code>%f</code></td></tr>
+      <tr><td>double</td><td class="th">decimal preciso</td><td>1999.90</td><td><code>%lf</code></td></tr>
+      <tr><td>char</td><td class="th">1 caractere</td><td>'A', '7', '@'</td><td><code>%c</code></td></tr>
+    </tbody></table></div>
+    <div class="note">
+      <h4>Aspas fazem diferença</h4>
+      <p><code>'A'</code> (aspas simples) é UM caractere. <code>"A"</code> (aspas duplas) é uma string. Trocar isso é um erro comum.</p>
+    </div>
+
+    <h3 class="cad-sub">3 · Entrada e saída — <code>printf</code> e <code>scanf</code></h3>
+    <p><code>printf</code> mostra na tela; <code>scanf</code> lê o que o usuário digita. Os <strong>“%” são marcadores</strong> que dizem o tipo do dado.</p>
+<pre class="code">int idade;
+printf(<span class="s">"Quantos anos voce tem? "</span>);
+scanf(<span class="s">"%d"</span>, &amp;idade);              <span class="c">// &amp; = "endereco de" (scanf precisa dele!)</span>
+printf(<span class="s">"Voce tem %d anos.\n"</span>, idade);
+
+<span class="c">// vários de uma vez:</span>
+printf(<span class="s">"Nome: %s | Idade: %d | Altura: %.2f\n"</span>, nome, idade, altura);</pre>
+    <div class="note">
+      <h4>O <code>&amp;</code> no <code>scanf</code> e os atalhos</h4>
+      <p>No <code>scanf</code>, variáveis comuns levam <code>&amp;</code> antes (ex.: <code>&amp;idade</code>) — é onde o valor vai ser guardado. <strong>Exceção:</strong> string (vetor de char) NÃO leva <code>&amp;</code>. Atalhos úteis: <code>\n</code> pula linha, <code>\t</code> dá um tab, <code>%.2f</code> mostra 2 casas decimais.</p>
+    </div>
+
+    <h3 class="cad-sub">4 · Operadores</h3>
+<pre class="code"><span class="c">// Aritméticos</span>
+a + b   a - b   a * b   a / b   a % b   <span class="c">// % = resto da divisão</span>
+
+<span class="c">// Atribuição (atalhos)</span>
+x += 5;   <span class="c">// x = x + 5      x -= 2;   x *= 3;   x /= 2;</span>
+
+<span class="c">// Comparação (resultam em verdadeiro/falso)</span>
+a == b   <span class="c">// IGUAL  (atencao: == e nao =)</span>
+a != b   <span class="c">// diferente</span>
+a &gt; b    a &lt; b    a &gt;= b    a &lt;= b
+
+<span class="c">// Lógicos</span>
+a &amp;&amp; b   <span class="c">// E   (os dois verdadeiros)</span>
+a || b   <span class="c">// OU  (pelo menos um)</span>
+!a       <span class="c">// NAO (inverte)</span>
+
+<span class="c">// Incremento / decremento</span>
+i++;   <span class="c">// i = i + 1        i--;   // i = i - 1</span></pre>
+    <div class="note">
+      <h4>A pegadinha eterna: <code>=</code> vs <code>==</code></h4>
+      <p><code>=</code> <strong>atribui</strong> (coloca um valor na variável). <code>==</code> <strong>compara</strong>. Escrever <code>if (x = 5)</code> sem querer é um bug clássico — sempre dá “verdadeiro” e muda o <code>x</code>. Para comparar, é sempre <code>==</code>.</p>
+    </div>
+    <div class="note">
+      <h4>Divisão de inteiros engana</h4>
+      <p><code>7 / 2</code> dá <strong>3</strong> (não 3.5!), porque os dois são <code>int</code>. Para ter casas decimais, um deles precisa ser <code>float</code>/<code>double</code>: <code>7.0 / 2</code> dá 3.5.</p>
+    </div>
+
+    <h3 class="cad-sub">5 · Condicionais — <code>if</code>, <code>else</code>, <code>switch</code></h3>
+<pre class="code">if (idade &gt;= 18) {
+    printf(<span class="s">"Maior de idade\n"</span>);
+} else if (idade &gt;= 13) {
+    printf(<span class="s">"Adolescente\n"</span>);
+} else {
+    printf(<span class="s">"Crianca\n"</span>);
+}
+
+<span class="c">// switch: quando você compara UMA variável com vários valores fixos</span>
+switch (opcao) {
+    case 1: printf(<span class="s">"Um\n"</span>);   break;   <span class="c">// break = sai do switch</span>
+    case 2: printf(<span class="s">"Dois\n"</span>); break;
+    default: printf(<span class="s">"Invalido\n"</span>);     <span class="c">// se nenhum bateu</span>
+}</pre>
+    <div class="note">
+      <h4>Não esqueça o <code>break</code></h4>
+      <p>Sem <code>break</code>, o <code>switch</code> “escorrega” e executa os próximos <code>case</code> também. Quase sempre você quer o <code>break</code> em cada caso.</p>
+    </div>
+
+    <h3 class="cad-sub">6 · Laços (loops)</h3>
+    <p>Servem pra repetir. <code>while</code> repete enquanto uma condição for verdadeira; <code>for</code> é o mesmo, mas com contador embutido; <code>do-while</code> roda pelo menos uma vez.</p>
+<pre class="code"><span class="c">// for — quando você sabe quantas vezes (o mais usado)</span>
+for (int i = 0; i &lt; 5; i++) {
+    printf(<span class="s">"%d "</span>, i);     <span class="c">// imprime: 0 1 2 3 4</span>
+}
+
+<span class="c">// while — repete enquanto a condição for verdadeira</span>
+int n = 10;
+while (n &gt; 0) {
+    printf(<span class="s">"%d "</span>, n);
+    n--;                  <span class="c">// CUIDADO: se esquecer isso, loop infinito!</span>
+}
+
+<span class="c">// do-while — executa, depois testa (roda no minimo 1 vez)</span>
+do {
+    printf(<span class="s">"Pelo menos uma vez\n"</span>);
+} while (0);
+
+<span class="c">// break sai do laço; continue pula pra próxima volta</span>
+for (int i = 0; i &lt; 10; i++) {
+    if (i == 5) break;       <span class="c">// para tudo no 5</span>
+    if (i % 2 == 0) continue; <span class="c">// pula os pares</span>
+    printf(<span class="s">"%d "</span>, i);         <span class="c">// imprime: 1 3</span>
+}</pre>
+    <div class="note">
+      <h4>Loop infinito</h4>
+      <p>Todo <code>while</code> precisa de algo que <strong>aproxime do fim</strong> (mudar a variável da condição). Esqueceu o <code>n--</code>? O programa trava repetindo pra sempre. É a pegadinha mais comum de laço.</p>
+    </div>
+
+    <h3 class="cad-sub">7 · Vetores (arrays)</h3>
+    <p>Um vetor guarda <strong>vários valores do mesmo tipo</strong> numa fila. O índice <strong>começa em 0</strong> — sempre.</p>
+<pre class="code">int notas[5] = {7, 8, 9, 10, 6};   <span class="c">// 5 posições: índices 0 a 4</span>
+printf(<span class="s">"%d\n"</span>, notas[0]);          <span class="c">// 7  (a PRIMEIRA é o índice 0)</span>
+notas[2] = 5;                      <span class="c">// muda a terceira posição</span>
+
+<span class="c">// percorrer com for:</span>
+int soma = 0;
+for (int i = 0; i &lt; 5; i++) {
+    soma += notas[i];
+}</pre>
+    <div class="note">
+      <h4>Estourar o vetor não dá erro… na hora</h4>
+      <p>Um <code>int v[5]</code> vai de <code>v[0]</code> a <code>v[4]</code>. Acessar <code>v[5]</code> é “fora dos limites” — C deixa, mas você lê/escreve numa memória que não é sua. Vira bug bizarro ou crash. Sempre respeite <code>0</code> até <code>tamanho-1</code>.</p>
+    </div>
+
+    <h3 class="cad-sub">8 · Matrizes (vetores 2D)</h3>
+    <p>Uma matriz é um vetor de vetores — tipo uma tabela com linhas e colunas.</p>
+<pre class="code">int tabela[2][3] = {
+    {1, 2, 3},    <span class="c">// linha 0</span>
+    {4, 5, 6}     <span class="c">// linha 1</span>
+};
+printf(<span class="s">"%d\n"</span>, tabela[1][2]);   <span class="c">// 6  (linha 1, coluna 2)</span>
+
+<span class="c">// percorrer: um for dentro do outro</span>
+for (int i = 0; i &lt; 2; i++) {       <span class="c">// linhas</span>
+    for (int j = 0; j &lt; 3; j++) {   <span class="c">// colunas</span>
+        printf(<span class="s">"%d "</span>, tabela[i][j]);
+    }
+    printf(<span class="s">"\n"</span>);
+}</pre>
+
+    <h3 class="cad-sub">9 · Structs (registros)</h3>
+    <p>Uma <code>struct</code> junta vários campos relacionados num só “tipo” seu. Perfeito pra representar coisas do mundo real (um lead, um cliente, um ponto…).</p>
+<pre class="code">struct Lead {
+    char  nome[50];
+    int   idade;
+    double valor;
+};
+
+struct Lead l1;                 <span class="c">// cria um</span>
+strcpy(l1.nome, <span class="s">"Caio"</span>);        <span class="c">// acessa campo com ponto (.)</span>
+l1.idade = 25;
+l1.valor = 1999.90;
+printf(<span class="s">"%s tem %d anos\n"</span>, l1.nome, l1.idade);</pre>
+    <div class="note green">
+      <h4>Liga com o trabalho</h4>
+      <p>Struct é a base do que você já faz em C# com classes/DTOs. Aqui é a versão crua: um agrupamento de dados. No projeto capstone, cada entrada do banco vai ser, no fundo, uma struct.</p>
+    </div>
+
+    <h3 class="cad-sub">10 · Funções e procedimentos</h3>
+    <p>Função é um bloco de código com nome, que você chama quando quiser. Evita repetir e organiza tudo. Tem <strong>tipo de retorno</strong>, <strong>nome</strong> e <strong>parâmetros</strong>.</p>
+<pre class="code"><span class="c">// função que RETORNA um valor</span>
+int somar(int a, int b) {
+    return a + b;
+}
+
+<span class="c">// "procedimento": não retorna nada -&gt; void</span>
+void saudar(char nome[]) {
+    printf(<span class="s">"Ola, %s!\n"</span>, nome);
+}
+
+int main() {
+    int r = somar(3, 4);   <span class="c">// r = 7</span>
+    saudar(<span class="s">"Caio"</span>);
+    return 0;
+}</pre>
+    <div class="note">
+      <h4>Passagem por valor</h4>
+      <p>Por padrão, C passa uma <strong>cópia</strong> do argumento. Mudar o parâmetro dentro da função <em>não</em> muda a variável original lá fora. Pra mudar de verdade, você usa <strong>ponteiros</strong> (próximo tópico). Esse é o link direto pra Fase 1.</p>
+    </div>
+    <div class="note">
+      <h4>Protótipo</h4>
+      <p>Se a função aparece <em>depois</em> do <code>main</code>, declare o <strong>protótipo</strong> no topo: <code>int somar(int, int);</code> — é só avisar ao compilador que ela existe.</p>
+    </div>
+
+    <h3 class="cad-sub">11 · Ponteiros — o muro mais alto</h3>
+    <p>Esse é o conceito que mais trava iniciante, então vai devagar. Toda variável mora num <strong>endereço</strong> na memória (tipo o número de uma casa). Um <strong>ponteiro</strong> é uma variável que guarda um endereço — ou seja, “aponta” pra onde outra variável mora.</p>
+    <div class="note">
+      <h4>A analogia da casa</h4>
+      <p><strong>Endereço</strong> = o número da casa. &nbsp; <code>&amp;x</code> = “me dá o endereço da casa do x”. &nbsp; <code>*p</code> = “abre a casa que o p aponta e me mostra o que tem dentro”.</p>
+    </div>
+<pre class="code">int x = 10;
+int *p = &amp;x;     <span class="c">// p guarda o ENDEREÇO de x  (&amp; = "endereço de")</span>
+
+printf(<span class="s">"%d\n"</span>, x);    <span class="c">// 10  -&gt; o valor</span>
+printf(<span class="s">"%p\n"</span>, p);    <span class="c">// 0x...  -&gt; o endereço (a "casa")</span>
+printf(<span class="s">"%d\n"</span>, *p);   <span class="c">// 10  -&gt; o valor NA casa que p aponta (* = "conteúdo de")</span>
+
+*p = 20;         <span class="c">// muda o conteúdo da casa -&gt; muda o PRÓPRIO x!</span>
+printf(<span class="s">"%d\n"</span>, x);    <span class="c">// 20</span></pre>
+    <p>Agora o passo que faltava nas funções: passar o <strong>endereço</strong> pra função poder alterar a variável original.</p>
+<pre class="code">void dobrar(int *n) {     <span class="c">// recebe um ponteiro</span>
+    *n = *n * 2;          <span class="c">// altera o conteúdo lá na origem</span>
+}
+
+int main() {
+    int valor = 5;
+    dobrar(&amp;valor);       <span class="c">// passa o ENDEREÇO de valor</span>
+    printf(<span class="s">"%d\n"</span>, valor); <span class="c">// 10  -&gt; mudou de verdade!</span>
+}</pre>
+    <div class="note">
+      <h4>Resumo dos dois símbolos</h4>
+      <p><code>&amp;</code> pega o <strong>endereço</strong> de uma variável. <code>*</code> (na hora de usar) abre o ponteiro e mexe no <strong>valor</strong> que ele aponta. Decore: “<code>&amp;</code> = onde mora, <code>*</code> = o que tem dentro”.</p>
+    </div>
+
+    <h3 class="cad-sub">12 · Alocação dinâmica de memória</h3>
+    <p>Até aqui o tamanho de tudo era fixo (<code>int v[5]</code>). Mas e quando você só descobre o tamanho durante a execução (ex.: o usuário diz quantos itens)? Aí você <strong>pede memória na hora</strong> com <code>malloc</code> — e depois <strong>devolve</strong> com <code>free</code>.</p>
+<pre class="code"><span class="p">#include &lt;stdlib.h&gt;     // malloc, free</span>
+
+int n;
+printf(<span class="s">"Quantos numeros? "</span>);
+scanf(<span class="s">"%d"</span>, &amp;n);
+
+<span class="c">// pede memória pra n inteiros (na "heap")</span>
+int *v = malloc(n * sizeof(int));
+if (v == NULL) { return 1; }   <span class="c">// sempre cheque se deu certo</span>
+
+for (int i = 0; i &lt; n; i++) v[i] = i * 10;
+
+free(v);     <span class="c">// DEVOLVE a memória. Esquecer = vazamento (memory leak)</span>
+v = NULL;    <span class="c">// boa prática: evita usar um ponteiro "morto"</span></pre>
+    <div class="note">
+      <h4>A regra de ouro da memória</h4>
+      <p>Todo <code>malloc</code> precisa de um <code>free</code> correspondente. Esqueceu o <code>free</code>? O programa vai comendo memória (leak). Usou depois do <code>free</code>? Bug grave (use-after-free). Esse cuidado é exatamente o que a Camada C2 do projeto vai cobrar de vocês.</p>
+    </div>
+    <div class="note green">
+      <h4>Por que isso é o pré-requisito de tudo</h4>
+      <p>Listas, árvores, hash tables — toda estrutura de dados “cresce” em tempo de execução, e isso só é possível com ponteiros + alocação dinâmica. É por isso que o plano insiste: <strong>não pulem ponteiros e memória</strong>. Sem isso, a Fase 2 em diante não anda.</p>
+    </div>
+
+    <h3 class="cad-sub">13 · Projeto com vários arquivos</h3>
+    <p>Programas reais não vivem num arquivo só. Você separa em <code>.h</code> (o que existe — as “assinaturas”) e <code>.c</code> (como funciona — o código).</p>
+<pre class="code"><span class="c">// ---------- matematica.h ----------</span>
+<span class="p">#ifndef MATEMATICA_H      // include guard: evita incluir 2x</span>
+<span class="p">#define MATEMATICA_H</span>
+int somar(int a, int b);  <span class="c">// só a assinatura (protótipo)</span>
+<span class="p">#endif</span>
+
+<span class="c">// ---------- matematica.c ----------</span>
+<span class="p">#include "matematica.h"</span>
+int somar(int a, int b) { return a + b; }   <span class="c">// a implementação</span>
+
+<span class="c">// ---------- main.c ----------</span>
+<span class="p">#include &lt;stdio.h&gt;</span>
+<span class="p">#include "matematica.h"   // aspas " " = arquivo seu (&lt; &gt; = do sistema)</span>
+int main() { printf(<span class="s">"%d\n"</span>, somar(2, 3)); return 0; }</pre>
+    <div class="note">
+      <h4>Include guard</h4>
+      <p>O trio <code>#ifndef / #define / #endif</code> garante que o cabeçalho seja incluído uma única vez, mesmo se vários arquivos o pedirem. Sem ele, dá erro de “redefinição”.</p>
+    </div>
+
+    <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Carrossel: <b>“C em 13 conceitos — do <code>printf</code> ao <code>malloc</code>”</b>. Um slide por tópico deste caderno. Conteúdo de fundamento sempre tem audiência de iniciante.</div></div>
+
+    <div class="check">
+      <div class="ttl">Checkpoint do caderno</div>
+      <p>Sem cola, cada um: (1) lê 5 notas num vetor e calcula a média; (2) escreve uma função que troca o valor de duas variáveis usando ponteiros; (3) cria uma <code>struct</code> de “produto” e imprime; (4) aloca um vetor dinâmico com <code>malloc</code>, usa e dá <code>free</code> sem vazar.</p>
+    </div>
+    <div class="note green">
+      <h4>Liga com o resto do board</h4>
+      <p>Os tópicos 11 e 12 (ponteiros e memória) são a ponte pra <a href="#f1">Fase 1</a> — o curso do Pietro não cobre eles, e são o pré-requisito de toda estrutura de dados. Domine este caderno e a Fase 2 em diante fica natural.</p>
+    </div>
+
     <div class="part-head" id="cad-strings" style="background:var(--ink)">
       <div class="pk">Caderno de referência · Fase 0 (Linguagem C)</div>
       <h2>Strings em C — o caderno</h2>
@@ -1062,6 +1379,308 @@ sscanf(<span class="s">"06/06/2026"</span>, <span class="s">"%d/%d/%d"</span>, &
     <div class="note green">
       <h4>Liga com o projeto</h4>
       <p>Isto não morre na Fase 0. No capstone, manipulação de string volta com força: o <strong>protocolo de rede</strong> (C3) parseia comandos texto, o <strong>casamento de padrões</strong> do <code>KEYS</code> (C8) é a versão hardcore do <code>strstr</code>, e a <strong>codificação de caracteres</strong> (Fase 6) explica por que o <code>\0</code> e o UTF-8 se comportam assim. Dominar string agora é juros compostos lá na frente.</p>
+    </div>
+
+
+    <div class="part-head" id="cad-ingles" style="background:var(--blue)">
+      <div class="pk">Caderno de referência · Trilha de Inglês</div>
+      <h2>Inglês do zero — o caderno de gramática</h2>
+      <p>Do <strong>básico ao avançado</strong>, explicado do começo pra quem nunca estudou de verdade. A meta não é decorar regra — é entender a lógica do inglês pra construir frases sozinho. Tudo dividido em três níveis; cada exemplo tem a tradução.</p>
+    </div>
+
+    <div class="note">
+      <h4>A mentalidade certa antes de tudo</h4>
+      <p>O maior erro é <strong>traduzir palavra por palavra</strong> do português. Inglês tem uma lógica própria. Em vez de “como falo isso em inglês?”, treine “como o inglês diz essa ideia?”. Erre falando — errar é parte do método, não um problema. Foco em <strong>entender o padrão</strong>, não em decorar listas.</p>
+    </div>
+
+    <div class="levelhead"><span class="n" style="background:var(--green)">Nível 1 · Básico</span><span class="l"></span></div>
+    <div class="pillrow">
+      <span class="pl">1 · pronomes</span><span class="pl">2 · to be</span><span class="pl">3 · artigos</span>
+      <span class="pl">4 · plural</span><span class="pl">5 · present simple</span><span class="pl">6 · present continuous</span>
+      <span class="pl">7 · past</span><span class="pl">8 · futuro</span><span class="pl">9 · modais</span>
+      <span class="pl">10 · perguntas</span><span class="pl">11 · ordem da frase</span><span class="pl">12 · preposições</span>
+      <span class="pl">13 · there is/are</span><span class="pl">14 · erros de BR</span>
+    </div>
+
+    <h3 class="cad-sub">1 · Pronomes — quem faz a ação</h3>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Pessoal (sujeito)</th><th>Tradução</th><th>Possessivo</th><th>Tradução</th></tr></thead><tbody>
+      <tr><td>I</td><td class="th">eu</td><td>my</td><td>meu/minha</td></tr>
+      <tr><td>you</td><td class="th">você / vocês</td><td>your</td><td>seu/sua</td></tr>
+      <tr><td>he</td><td class="th">ele</td><td>his</td><td>dele</td></tr>
+      <tr><td>she</td><td class="th">ela</td><td>her</td><td>dela</td></tr>
+      <tr><td>it</td><td class="th">ele/ela (coisa/animal)</td><td>its</td><td>dele/dela</td></tr>
+      <tr><td>we</td><td class="th">nós</td><td>our</td><td>nosso</td></tr>
+      <tr><td>they</td><td class="th">eles/elas</td><td>their</td><td>deles</td></tr>
+    </tbody></table></div>
+    <div class="note"><h4>O segredo do <code>it</code></h4><p>Português não tem: usamos pra coisas, animais e situações. “O carro é novo” → <em>It is new</em>. “Está chovendo” → <em>It is raining</em>.</p></div>
+
+    <h3 class="cad-sub">2 · O verbo TO BE (ser/estar) — o mais importante</h3>
+    <p>É o primeiro verbo a dominar, porque aparece em tudo. Significa <strong>ser</strong> e <strong>estar</strong> ao mesmo tempo.</p>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Sujeito</th><th>To be</th><th>Forma curta</th><th>Exemplo</th></tr></thead><tbody>
+      <tr><td>I</td><td class="th">am</td><td>I'm</td><td>I'm Caio</td></tr>
+      <tr><td>he / she / it</td><td class="th">is</td><td>he's</td><td>She's happy</td></tr>
+      <tr><td>you / we / they</td><td class="th">are</td><td>we're</td><td>They're here</td></tr>
+    </tbody></table></div>
+    <div class="enex"><div class="en">I am a developer. / I'm a developer.</div><div class="pt">Eu sou um desenvolvedor.</div></div><div class="enex"><div class="en">She is happy. / She's happy.</div><div class="pt">Ela está feliz.</div></div>
+    <p><strong>Negativo:</strong> é só pôr <code>not</code> depois.</p>
+    <div class="enex"><div class="en">I am not tired. / I'm not tired.</div><div class="pt">Eu não estou cansado.</div></div><div class="enex"><div class="en">He is not (isn't) here.</div><div class="pt">Ele não está aqui.</div></div>
+    <p><strong>Pergunta:</strong> inverte — o verbo vem antes do sujeito.</p>
+    <div class="enex"><div class="en">Are you ready?</div><div class="pt">Você está pronto?</div></div><div class="enex"><div class="en">Is she a teacher?</div><div class="pt">Ela é professora?</div></div>
+    <div class="note"><h4>⚠ O erro nº1 do brasileiro</h4><p>Idade em inglês usa o TO BE, não o “ter”: <strong>I am 25</strong> (eu <em>sou</em> 25), e <strong>nunca</strong> “I have 25 years”. Mesma coisa pra fome/calor: <em>I'm hungry</em>, <em>I'm hot</em> (não “I have hunger”).</p></div>
+
+    <h3 class="cad-sub">3 · Artigos — <code>a</code>, <code>an</code>, <code>the</code></h3>
+    <ol class="steps">
+      <li><strong>a</strong> = um/uma, antes de som de consoante: <em>a car, a book, a university</em> (“iu”, som de consoante).</li>
+      <li><strong>an</strong> = um/uma, antes de som de vogal: <em>an apple, an hour</em> (o “h” é mudo).</li>
+      <li><strong>the</strong> = o/a/os/as, quando é algo específico: <em>the car I bought</em> (o carro <em>que</em> comprei).</li>
+    </ol>
+
+    <h3 class="cad-sub">4 · Plural dos substantivos</h3>
+    <ol class="steps">
+      <li>Regra geral: <strong>+s</strong> → <em>car → cars</em>, <em>book → books</em>.</li>
+      <li>Depois de s, x, ch, sh: <strong>+es</strong> → <em>box → boxes</em>, <em>watch → watches</em>.</li>
+      <li>Termina em consoante + y: <strong>y → ies</strong> → <em>city → cities</em>, <em>baby → babies</em>.</li>
+      <li>Irregulares (decore): <em>man → men, woman → women, child → children, person → people, foot → feet</em>.</li>
+    </ol>
+    <div class="note"><h4>⚠ <code>people</code> é plural</h4><p>“People” já é o plural de “person”. Então é <strong>people are</strong>, nunca “people is”. E não existe “peoples” no sentido de pessoas.</p></div>
+
+    <h3 class="cad-sub">5 · Present Simple — rotinas e fatos</h3>
+    <p>Usa pra hábitos, rotinas e verdades (“eu trabalho”, “ela mora”, “a água ferve a 100°”). É o tempo mais usado.</p>
+    <div class="enex"><div class="en">I work from home.</div><div class="pt">Eu trabalho de casa.</div></div><div class="enex"><div class="en">They study English every day.</div><div class="pt">Eles estudam inglês todo dia.</div></div>
+    <div class="note"><h4>A regra do <code>-s</code> na 3ª pessoa</h4><p>Com <strong>he / she / it</strong>, o verbo ganha <strong>-s</strong>: <em>He work<strong>s</strong></em>, <em>She live<strong>s</strong></em>. Esquecer esse “s” é o erro mais comum de todos — fique atento.</p></div>
+    <p><strong>Negativo e pergunta</strong> usam o auxiliar <code>do</code> (e <code>does</code> na 3ª pessoa). Repare: o “s” migra pro <em>does</em> e o verbo volta ao normal.</p>
+    <div class="enex"><div class="en">I don't work on Sundays.</div><div class="pt">Eu não trabalho aos domingos.</div></div><div class="enex"><div class="en">She doesn't like coffee.</div><div class="pt">Ela não gosta de café.</div></div><div class="enex"><div class="en">Do you speak English? / Does he work here?</div><div class="pt">Você fala inglês? / Ele trabalha aqui?</div></div>
+
+    <h3 class="cad-sub">6 · Present Continuous — acontecendo agora</h3>
+    <p>Pra ação em andamento neste momento. Fórmula: <strong>am/is/are + verbo-ing</strong>.</p>
+    <div class="enex"><div class="en">I am studying right now.</div><div class="pt">Eu estou estudando agora.</div></div><div class="enex"><div class="en">They are playing soccer.</div><div class="pt">Eles estão jogando futebol.</div></div>
+    <div class="note"><h4>Simple vs Continuous</h4><p><em>I work</em> = rotina (eu trabalho, em geral). <em>I'm working</em> = agora (estou trabalhando neste momento). Essa diferença não existe igual em português, então preste atenção no contexto.</p></div>
+
+    <h3 class="cad-sub">7 · Past Simple — o passado</h3>
+    <p>Ações terminadas no passado. Verbos <strong>regulares</strong> ganham <strong>-ed</strong>; os <strong>irregulares</strong> mudam de forma (tem que decorar os principais).</p>
+    <div class="enex"><div class="en">I worked yesterday. (work → worked)</div><div class="pt">Eu trabalhei ontem.</div></div><div class="enex"><div class="en">She went to the gym. (go → went)</div><div class="pt">Ela foi à academia.</div></div>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Verbo</th><th>Passado (irregular)</th><th>Tradução</th></tr></thead><tbody>
+      <tr><td>be</td><td class="th">was / were</td><td>ser/estar</td></tr>
+      <tr><td>go</td><td class="th">went</td><td>ir</td></tr>
+      <tr><td>have</td><td class="th">had</td><td>ter</td></tr>
+      <tr><td>do</td><td class="th">did</td><td>fazer</td></tr>
+      <tr><td>make</td><td class="th">made</td><td>fazer/criar</td></tr>
+      <tr><td>say</td><td class="th">said</td><td>dizer</td></tr>
+      <tr><td>get</td><td class="th">got</td><td>conseguir/pegar</td></tr>
+      <tr><td>see</td><td class="th">saw</td><td>ver</td></tr>
+    </tbody></table></div>
+    <p><strong>Negativo e pergunta</strong> usam <code>did</code> — e o verbo principal <strong>volta à forma base</strong> (sem -ed):</p>
+    <div class="enex"><div class="en">I didn't work yesterday.</div><div class="pt">Eu não trabalhei ontem.</div></div><div class="enex"><div class="en">Did you study?</div><div class="pt">Você estudou?</div></div>
+
+    <h3 class="cad-sub">8 · Futuro — <code>will</code> e <code>going to</code></h3>
+    <ol class="steps">
+      <li><strong>will + verbo</strong>: decisões na hora, previsões. <em>I will help you.</em> (Eu vou te ajudar.)</li>
+      <li><strong>be going to + verbo</strong>: planos já decididos. <em>I am going to study tonight.</em> (Vou estudar hoje à noite.)</li>
+    </ol>
+    <div class="enex"><div class="en">It will rain tomorrow.</div><div class="pt">Vai chover amanhã.</div></div><div class="enex"><div class="en">We are going to travel next month.</div><div class="pt">Nós vamos viajar mês que vem.</div></div>
+
+    <h3 class="cad-sub">9 · Verbos modais — can, should, must…</h3>
+    <p>Vêm antes do verbo principal (que fica na forma base) e dão um “tempero” de sentido.</p>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Modal</th><th>Sentido</th><th>Exemplo</th></tr></thead><tbody>
+      <tr><td>can</td><td class="th">poder / saber fazer</td><td>I can swim. (sei nadar)</td></tr>
+      <tr><td>could</td><td class="th">poderia (mais educado)</td><td>Could you help me?</td></tr>
+      <tr><td>should</td><td class="th">deveria (conselho)</td><td>You should rest.</td></tr>
+      <tr><td>must</td><td class="th">dever (obrigação forte)</td><td>You must stop.</td></tr>
+      <tr><td>would</td><td class="th">gostaria / condicional</td><td>I would like a coffee.</td></tr>
+    </tbody></table></div>
+    <div class="note"><h4>Depois de modal, verbo “pelado”</h4><p>É <em>She can <strong>swim</strong></em>, nunca “can to swim” nem “can swims”. O modal já faz o trabalho; o verbo fica na forma base.</p></div>
+
+    <h3 class="cad-sub">10 · Palavras de pergunta (WH-)</h3>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Palavra</th><th>Tradução</th><th>Exemplo</th></tr></thead><tbody>
+      <tr><td>What</td><td class="th">o que / qual</td><td>What is your name?</td></tr>
+      <tr><td>Where</td><td class="th">onde</td><td>Where do you live?</td></tr>
+      <tr><td>When</td><td class="th">quando</td><td>When is the meeting?</td></tr>
+      <tr><td>Who</td><td class="th">quem</td><td>Who is she?</td></tr>
+      <tr><td>Why</td><td class="th">por quê</td><td>Why are you late?</td></tr>
+      <tr><td>How</td><td class="th">como</td><td>How do you do it?</td></tr>
+      <tr><td>How much / many</td><td class="th">quanto / quantos</td><td>How much is it?</td></tr>
+    </tbody></table></div>
+
+    <h3 class="cad-sub">11 · Ordem das palavras na frase</h3>
+    <p>Inglês é bem mais rígido que português. A base é <strong>Sujeito + Verbo + Objeto</strong> (SVO).</p>
+    <div class="enex"><div class="en">I (sujeito) eat (verbo) pizza (objeto).</div><div class="pt">Eu como pizza.</div></div>
+    <div class="note"><h4>⚠ Adjetivo vem ANTES do substantivo</h4><p>Português: “carro <em>vermelho</em>”. Inglês: <strong>red car</strong> (vermelho + carro). Sempre o adjetivo primeiro: <em>a beautiful house</em>, <em>an old friend</em>. Dizer “a car red” é erro clássico.</p></div>
+
+    <h3 class="cad-sub">12 · Preposições — in, on, at</h3>
+    <p>As três que mais confundem. A lógica é “do maior/mais aberto pro menor/mais específico”.</p>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Prep.</th><th>Tempo</th><th>Lugar</th></tr></thead><tbody>
+      <tr><td>in</td><td class="th">meses, anos (in May, in 2026)</td><td>dentro / cidades (in Brazil, in the room)</td></tr>
+      <tr><td>on</td><td class="th">dias, datas (on Monday)</td><td>em cima de / superfície (on the table)</td></tr>
+      <tr><td>at</td><td class="th">horas (at 8 o'clock)</td><td>ponto específico (at home, at work)</td></tr>
+    </tbody></table></div>
+
+    <h3 class="cad-sub">13 · There is / There are — “tem / há”</h3>
+    <p>Pra dizer que algo existe. <strong>There is</strong> (singular) / <strong>There are</strong> (plural).</p>
+    <div class="enex"><div class="en">There is a problem.</div><div class="pt">Tem um problema.</div></div><div class="enex"><div class="en">There are many people here.</div><div class="pt">Tem muita gente aqui.</div></div>
+
+    <h3 class="cad-sub">14 · Erros clássicos de brasileiro (decore estes)</h3>
+    <ol class="steps">
+      <li><strong>Idade:</strong> “I <s>have</s> 25 years” → <em>I <strong>am</strong> 25</em>.</li>
+      <li><strong>People:</strong> “people <s>is</s>” → <em>people <strong>are</strong></em>.</li>
+      <li><strong>3ª pessoa:</strong> “he <s>work</s>” → <em>he work<strong>s</strong></em>.</li>
+      <li><strong>Adjetivo:</strong> “a car <s>red</s>” → <em>a <strong>red</strong> car</em>.</li>
+      <li><strong>Falsos amigos</strong> (parecem, mas enganam):
+        <em>pretend</em> = fingir (não “pretender”) · <em>push</em> = empurrar (não “puxar”) ·
+        <em>actually</em> = na verdade (não “atualmente”) · <em>library</em> = biblioteca (não “livraria”) ·
+        <em>parents</em> = pais (não “parentes”).</li>
+      <li><strong>Pronúncia do <code>-ed</code>:</strong> nem sempre é “ed”. <em>walked</em> soa “uókt”, <em>played</em> soa “pleid”, e só soa “id” quando o verbo termina em t/d (<em>wanted</em> = “uóntid”).</li>
+    </ol>
+
+    <div class="levelhead"><span class="n" style="background:var(--blue)">Nível 2 · Intermediário</span><span class="l"></span></div>
+    <div class="pillrow"><span class="pl">15 · present perfect</span><span class="pl">16 · perfect continuous</span><span class="pl">17 · past continuous</span><span class="pl">18 · past perfect</span><span class="pl">19 · comparativos</span><span class="pl">20 · contável/incontável</span><span class="pl">21 · gerúndio/infinitivo</span><span class="pl">22 · used to</span><span class="pl">23 · advérbios</span><span class="pl">24 · relative clauses</span><span class="pl">25 · question tags</span></div>
+
+    <h3 class="cad-sub">15 · Present Perfect — o passado que toca o presente</h3>
+    <p>Esse é o tempo que mais confunde brasileiro, porque <strong>não tem tradução exata</strong>. Fórmula: <strong>have/has + particípio</strong> (a 3ª forma do verbo). Liga uma ação do passado ao agora — sem dizer <em>quando</em> exatamente.</p>
+    <div class="enex"><div class="en">I have finished the report.</div><div class="pt">Eu terminei o relatório. (e está pronto agora)</div></div><div class="enex"><div class="en">She has lived here for ten years.</div><div class="pt">Ela mora aqui há dez anos. (e ainda mora)</div></div><div class="enex"><div class="en">Have you ever traveled abroad?</div><div class="pt">Você já viajou pro exterior? (experiência de vida)</div></div>
+    <div class="note"><h4><code>for</code> vs <code>since</code></h4><p><strong>for</strong> = um período (<em>for two years</em> = por dois anos). <strong>since</strong> = o ponto de início (<em>since 2020</em> = desde 2020). Companheiros úteis: <em>already</em> (já), <em>yet</em> (ainda — em negativas/perguntas), <em>just</em> (acabou de).</p></div>
+    <div class="note"><h4>⚠ Present Perfect vs Past Simple</h4><p>Use <strong>Past Simple</strong> quando diz <em>quando</em> (<em>I ate at 8pm</em>). Use <strong>Present Perfect</strong> quando o tempo é indefinido e o resultado importa agora (<em>I have eaten</em> = já comi, não estou com fome).</p></div>
+
+    <h3 class="cad-sub">16 · Present Perfect Continuous — duração que continua</h3>
+    <p>Fórmula: <strong>have/has been + verbo-ing</strong>. Enfatiza <em>quanto tempo</em> algo vem acontecendo (e geralmente ainda acontece).</p>
+    <div class="enex"><div class="en">I have been studying for three hours.</div><div class="pt">Estou estudando há três horas.</div></div><div class="enex"><div class="en">It has been raining all day.</div><div class="pt">Está chovendo o dia todo.</div></div>
+
+    <h3 class="cad-sub">17 · Past Continuous — o que estava rolando</h3>
+    <p>Fórmula: <strong>was/were + verbo-ing</strong>. Ação em andamento no passado, geralmente <strong>interrompida</strong> por outra (no Past Simple).</p>
+    <div class="enex"><div class="en">I was sleeping when the phone rang.</div><div class="pt">Eu estava dormindo quando o telefone tocou.</div></div><div class="enex"><div class="en">They were working while I was cooking.</div><div class="pt">Eles estavam trabalhando enquanto eu cozinhava.</div></div>
+
+    <h3 class="cad-sub">18 · Past Perfect — o passado do passado</h3>
+    <p>Fórmula: <strong>had + particípio</strong>. Marca algo que aconteceu <em>antes</em> de outro momento no passado.</p>
+    <div class="enex"><div class="en">When I arrived, the movie had already started.</div><div class="pt">Quando cheguei, o filme já tinha começado.</div></div><div class="enex"><div class="en">She had never seen snow before that trip.</div><div class="pt">Ela nunca tinha visto neve antes daquela viagem.</div></div>
+
+    <h3 class="cad-sub">19 · Comparativos e superlativos</h3>
+    <ol class="steps">
+      <li><strong>Adjetivos curtos (+er / +est):</strong> cheap → cheap<strong>er</strong> → the cheap<strong>est</strong>.</li>
+      <li><strong>Adjetivos longos (more / most):</strong> expensive → <strong>more</strong> expensive → the <strong>most</strong> expensive.</li>
+      <li><strong>Irregulares:</strong> good → better → best · bad → worse → worst · far → farther/further.</li>
+      <li><strong>Igualdade (as … as):</strong> tão … quanto.</li>
+    </ol>
+    <div class="enex"><div class="en">My code is faster than yours.</div><div class="pt">Meu código é mais rápido que o seu.</div></div><div class="enex"><div class="en">This is the most important part.</div><div class="pt">Esta é a parte mais importante.</div></div><div class="enex"><div class="en">She is as tall as her brother.</div><div class="pt">Ela é tão alta quanto o irmão.</div></div>
+
+    <h3 class="cad-sub">20 · Contável vs incontável + quantificadores</h3>
+    <div class="covwrap"><table class="cov"><thead><tr><th></th><th>Contáveis (têm plural)</th><th>Incontáveis (sem plural)</th></tr></thead><tbody>
+      <tr><td>Exemplos</td><td class="th">books, cars, people</td><td class="th">water, money, information, advice</td></tr>
+      <tr><td>"muito(s)"</td><td>many / a few</td><td>much / a little</td></tr>
+      <tr><td>Servem pros dois</td><td colspan="2">some / any · a lot of / lots of</td></tr>
+    </tbody></table></div>
+    <div class="note"><h4>⚠ Pegadinha de BR</h4><p><em>information</em>, <em>advice</em>, <em>news</em>, <em>money</em> são <strong>incontáveis</strong> em inglês: não existe “informations” nem “advices”. E <em>news is</em> (singular), apesar do “s”.</p></div>
+
+    <h3 class="cad-sub">21 · Gerúndio (-ing) vs Infinitivo (to)</h3>
+    <p>Depois de certos verbos vem <strong>-ing</strong>; depois de outros, <strong>to + verbo</strong>. Não tem regra mágica — os principais se decoram com o uso.</p>
+    <ol class="steps">
+      <li><strong>+ -ing:</strong> like, love, enjoy, hate, finish, avoid, e depois de <em>qualquer preposição</em>.</li>
+      <li><strong>+ to:</strong> want, need, decide, hope, would like, learn.</li>
+    </ol>
+    <div class="enex"><div class="en">I enjoy coding at night.</div><div class="pt">Eu gosto de programar à noite.</div></div><div class="enex"><div class="en">She wants to learn English.</div><div class="pt">Ela quer aprender inglês.</div></div>
+
+    <h3 class="cad-sub">22 · Used to — hábito do passado</h3>
+    <p><strong>used to + verbo</strong> = algo que você fazia/era no passado e <em>não é mais</em>.</p>
+    <div class="enex"><div class="en">I used to play soccer every weekend.</div><div class="pt">Eu costumava jogar futebol todo fim de semana.</div></div><div class="enex"><div class="en">There didn't use to be a building here.</div><div class="pt">Não costumava ter um prédio aqui.</div></div>
+
+    <h3 class="cad-sub">23 · Advérbios e frequência</h3>
+    <p>Advérbio diz <em>como</em> algo acontece. Formação comum: <strong>adjetivo + -ly</strong> (quick → quickly). Irregulares: good → <strong>well</strong>, fast → fast.</p>
+    <p>Advérbios de frequência (<em>always, usually, often, sometimes, rarely, never</em>) vêm <strong>antes do verbo principal</strong>, mas <strong>depois</strong> do TO BE.</p>
+    <div class="enex"><div class="en">I always wake up early.</div><div class="pt">Eu sempre acordo cedo.</div></div><div class="enex"><div class="en">She is never late.</div><div class="pt">Ela nunca está atrasada.</div></div>
+
+    <h3 class="cad-sub">24 · Relative clauses — who, which, that, where</h3>
+    <p>Servem pra dar mais informação sobre algo, ligando duas ideias.</p>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Palavra</th><th>Usa pra</th><th>Exemplo</th></tr></thead><tbody>
+      <tr><td>who</td><td class="th">pessoas</td><td>The man who called you…</td></tr>
+      <tr><td>which</td><td class="th">coisas</td><td>The car which broke down…</td></tr>
+      <tr><td>that</td><td class="th">pessoas ou coisas</td><td>The book that I read…</td></tr>
+      <tr><td>where</td><td class="th">lugares</td><td>The city where I live…</td></tr>
+      <tr><td>whose</td><td class="th">posse</td><td>The dev whose code we use…</td></tr>
+    </tbody></table></div>
+
+    <h3 class="cad-sub">25 · Question tags — “né?”</h3>
+    <p>Aquele rabinho de confirmação no fim da frase. Regra: frase <strong>afirmativa</strong> → tag <strong>negativa</strong>, e vice-versa, repetindo o auxiliar.</p>
+    <div class="enex"><div class="en">You are Brazilian, aren't you?</div><div class="pt">Você é brasileiro, né?</div></div><div class="enex"><div class="en">She doesn't smoke, does she?</div><div class="pt">Ela não fuma, né?</div></div>
+    <div class="levelhead"><span class="n" style="background:var(--ink)">Nível 3 · Avançado</span><span class="l"></span></div>
+    <div class="pillrow"><span class="pl">26 · condicionais</span><span class="pl">27 · voz passiva</span><span class="pl">28 · discurso indireto</span><span class="pl">29 · wish / if only</span><span class="pl">30 · modais avançados</span><span class="pl">31 · phrasal verbs</span><span class="pl">32 · conectores</span><span class="pl">33 · verbos irregulares</span></div>
+
+    <h3 class="cad-sub">26 · Condicionais (0, 1, 2, 3) — o grande tópico</h3>
+    <p>São quatro estruturas de “se… então…”, cada uma pra um grau de realidade diferente. Domine isto e seu inglês dá um salto.</p>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Tipo</th><th>Estrutura</th><th>Quando usar</th></tr></thead><tbody>
+      <tr><td>Zero</td><td class="th">If + presente, presente</td><td>fatos / verdades sempre</td></tr>
+      <tr><td>1ª (real)</td><td class="th">If + presente, will + verbo</td><td>futuro provável</td></tr>
+      <tr><td>2ª (hipotética)</td><td class="th">If + passado, would + verbo</td><td>imaginação no presente/futuro</td></tr>
+      <tr><td>3ª (impossível)</td><td class="th">If + past perfect, would have + particípio</td><td>arrependimento do passado</td></tr>
+    </tbody></table></div>
+    <div class="enex"><div class="en">If you heat water, it boils. (zero)</div><div class="pt">Se você esquenta a água, ela ferve.</div></div><div class="enex"><div class="en">If it rains, I will stay home. (1ª)</div><div class="pt">Se chover, eu fico em casa.</div></div><div class="enex"><div class="en">If I had money, I would travel. (2ª)</div><div class="pt">Se eu tivesse dinheiro, eu viajaria.</div></div><div class="enex"><div class="en">If I had studied, I would have passed. (3ª)</div><div class="pt">Se eu tivesse estudado, teria passado.</div></div>
+
+    <h3 class="cad-sub">27 · Voz passiva</h3>
+    <p>Quando o foco vai pra <em>quem sofre a ação</em>, não pra quem faz. Fórmula: <strong>be (no tempo certo) + particípio</strong>.</p>
+    <div class="enex"><div class="en">Active: They built the house in 1990.</div><div class="pt">Ativa: Eles construíram a casa em 1990.</div></div><div class="enex"><div class="en">Passive: The house was built in 1990.</div><div class="pt">Passiva: A casa foi construída em 1990.</div></div>
+    <div class="note"><h4>Em vários tempos</h4><p>Só muda o <em>be</em>: <em>is made</em> (presente), <em>was made</em> (passado), <em>has been made</em> (present perfect), <em>will be made</em> (futuro).</p></div>
+
+    <h3 class="cad-sub">28 · Discurso indireto (reported speech)</h3>
+    <p>Quando você conta o que alguém disse. Os tempos “andam um passo pra trás” (backshift): presente vira passado, <em>will</em> vira <em>would</em>, <em>can</em> vira <em>could</em>.</p>
+    <div class="enex"><div class="en">Direct: "I am tired."</div><div class="pt">Direto: “Estou cansado.”</div></div><div class="enex"><div class="en">Reported: He said he was tired.</div><div class="pt">Indireto: Ele disse que estava cansado.</div></div><div class="enex"><div class="en">Reported: She said she would call me.</div><div class="pt">Ela disse que me ligaria.</div></div>
+
+    <h3 class="cad-sub">29 · Wish / If only — desejos e arrependimentos</h3>
+    <p>Pra falar do que você gostaria que fosse diferente. Repare que o tempo “recua”: pra um desejo no presente, usa-se passado; pra arrependimento do passado, past perfect.</p>
+    <div class="enex"><div class="en">I wish I had more time.</div><div class="pt">Eu queria ter mais tempo. (presente)</div></div><div class="enex"><div class="en">I wish I had studied harder.</div><div class="pt">Eu queria ter estudado mais. (arrependimento)</div></div>
+
+    <h3 class="cad-sub">30 · Modais avançados — dedução e “modal perfect”</h3>
+    <ol class="steps">
+      <li><strong>Dedução:</strong> <em>must be</em> (deve ser — quase certeza), <em>can't be</em> (não pode ser), <em>might/could be</em> (talvez).</li>
+      <li><strong>Modal + have + particípio</strong> (sobre o passado): <em>should have done</em> (deveria ter feito), <em>must have done</em> (deve ter feito), <em>could have done</em> (poderia ter feito).</li>
+    </ol>
+    <div class="enex"><div class="en">You must be exhausted after that.</div><div class="pt">Você deve estar exausto depois disso.</div></div><div class="enex"><div class="en">I should have called you yesterday.</div><div class="pt">Eu deveria ter te ligado ontem.</div></div>
+
+    <h3 class="cad-sub">31 · Phrasal verbs — como funcionam</h3>
+    <p>São verbo + partícula (preposição/advérbio) que, juntos, mudam o sentido. <em>look</em> = olhar, mas <em>look for</em> = procurar, <em>look after</em> = cuidar de. Não dá pra traduzir ao pé da letra — aprende-se pelo uso.</p>
+    <p>Alguns do dia a dia: <em>get up</em> (levantar), <em>give up</em> (desistir), <em>find out</em> (descobrir), <em>turn on/off</em> (ligar/desligar), <em>come back</em> (voltar), <em>look for</em> (procurar).</p>
+    <div class="note"><h4>Separáveis</h4><p>Muitos aceitam o objeto no meio: <em>turn the light off</em> = <em>turn off the light</em>. Com pronome, é obrigatório no meio: <em>turn it off</em> (nunca “turn off it”).</p></div>
+
+    <h3 class="cad-sub">32 · Conectores de texto (escrita avançada)</h3>
+    <p>São o que dá fluidez a um texto/post profissional — útil direto pro LinkedIn de vocês.</p>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Ideia</th><th>Conectores</th><th>Exemplo</th></tr></thead><tbody>
+      <tr><td>Contraste</td><td class="th">but, however, although, despite</td><td>Although it rained, we went out.</td></tr>
+      <tr><td>Causa</td><td class="th">because, since, as</td><td>I left because I was tired.</td></tr>
+      <tr><td>Consequência</td><td class="th">so, therefore, thus</td><td>It was late, so I went home.</td></tr>
+      <tr><td>Adição</td><td class="th">also, in addition, moreover</td><td>It's fast. Moreover, it's cheap.</td></tr>
+    </tbody></table></div>
+    <div class="note"><h4>⚠ <code>although</code> vs <code>despite</code></h4><p><strong>although</strong> vem antes de uma <em>frase</em> (sujeito + verbo): <em>although it was raining</em>. <strong>despite / in spite of</strong> vem antes de <em>substantivo ou -ing</em>: <em>despite the rain</em>, <em>despite being tired</em>.</p></div>
+
+    <h3 class="cad-sub">33 · Verbos irregulares (as 3 formas)</h3>
+    <p>Pra Past Simple e particípio (Present/Past Perfect, passiva), esses verbos não seguem o <code>-ed</code>. Os mais usados — decore aos poucos:</p>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Base</th><th>Past Simple</th><th>Particípio</th><th>Tradução</th></tr></thead><tbody>
+      <tr><td>be</td><td class="th">was / were</td><td>been</td><td>ser/estar</td></tr>
+      <tr><td>have</td><td class="th">had</td><td>had</td><td>ter</td></tr>
+      <tr><td>do</td><td class="th">did</td><td>done</td><td>fazer</td></tr>
+      <tr><td>go</td><td class="th">went</td><td>gone</td><td>ir</td></tr>
+      <tr><td>make</td><td class="th">made</td><td>made</td><td>fazer/criar</td></tr>
+      <tr><td>take</td><td class="th">took</td><td>taken</td><td>pegar/levar</td></tr>
+      <tr><td>get</td><td class="th">got</td><td>got / gotten</td><td>conseguir</td></tr>
+      <tr><td>see</td><td class="th">saw</td><td>seen</td><td>ver</td></tr>
+      <tr><td>come</td><td class="th">came</td><td>come</td><td>vir</td></tr>
+      <tr><td>give</td><td class="th">gave</td><td>given</td><td>dar</td></tr>
+      <tr><td>find</td><td class="th">found</td><td>found</td><td>encontrar</td></tr>
+      <tr><td>think</td><td class="th">thought</td><td>thought</td><td>pensar</td></tr>
+      <tr><td>write</td><td class="th">wrote</td><td>written</td><td>escrever</td></tr>
+      <tr><td>read</td><td class="th">read</td><td>read</td><td>ler (muda só o som)</td></tr>
+      <tr><td>speak</td><td class="th">spoke</td><td>spoken</td><td>falar</td></tr>
+      <tr><td>eat</td><td class="th">ate</td><td>eaten</td><td>comer</td></tr>
+      <tr><td>buy</td><td class="th">bought</td><td>bought</td><td>comprar</td></tr>
+      <tr><td>build</td><td class="th">built</td><td>built</td><td>construir</td></tr>
+    </tbody></table></div>
+
+    <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Série de carrosséis: <b>“English for devs”</b> — um post por tempo verbal (present perfect, conditionals, passive). Ensinar em inglês fixa o conteúdo e treina escrita ao mesmo tempo.</div></div>
+    <div class="note green">
+      <h4>Como treinar (vale ouro pra leigo)</h4>
+      <p><strong>1.</strong> Mude o celular e o YouTube pra inglês — imersão de graça o dia todo. &nbsp; <strong>2.</strong> <em>Shadowing</em>: ouça uma frase curta e repita imitando o som, sem se preocupar com a regra. &nbsp; <strong>3.</strong> Assista com <strong>legenda em inglês</strong> (não em português). &nbsp; <strong>4.</strong> Fale errado sem medo — fluência vem de uso, não de teoria. &nbsp; <strong>5.</strong> 15 min por dia &gt; 3h no fim de semana.</p>
+    </div>
+
+    <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post bilíngue: <b>“Learning English while learning to code — 3 mistakes Brazilian devs make”</b>. Mostra sua jornada de inglês e treina escrita ao mesmo tempo. Recrutador internacional adora ver isso.</div></div>
+
+    <div class="check">
+      <div class="ttl">Checkpoint do caderno</div>
+      <p><strong>Básico:</strong> (1) se apresentar com o TO BE; (2) uma rotina no Present Simple + negativo; (3) contar o que fez ontem no Past Simple; (4) 3 perguntas com WH-. <strong>Intermediário:</strong> (5) uma frase no Present Perfect com <em>for/since</em>; (6) comparar duas coisas. <strong>Avançado:</strong> (7) uma frase em cada condicional (1ª, 2ª e 3ª); (8) transformar uma frase ativa em passiva. Falem em voz alta — o objetivo é produzir, não reconhecer.</p>
     </div>
 
     <!-- TIMELINE -->
