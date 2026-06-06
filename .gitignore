@@ -1,52 +1,44 @@
-# ───────────────────────────────
-#  Sistema operacional
-# ───────────────────────────────
-.DS_Store          # macOS
+# Sistema operacional
+.DS_Store
 .AppleDouble
-Thumbs.db          # Windows
+Thumbs.db
 ehthumbs.db
 desktop.ini
-*~                 # backups do Linux
+*~
 
-# ───────────────────────────────
-#  Editores / IDEs
-# ───────────────────────────────
-.vscode/           # VS Code
-.idea/             # JetBrains (CLion, Rider...)
+# Editores / IDEs
+.vscode/
+.idea/
 *.sublime-project
 *.sublime-workspace
-*.layout           # Dev-C++ (arquivo de layout do projeto)
-*.dev              # Dev-C++ (arquivo de projeto)
 
-# ───────────────────────────────
-#  Artefatos de build em C
-#  (caso alguém deixe código de prática no repo)
-# ───────────────────────────────
-*.o                # objetos
+# Dev-C++ (arquivos de projeto/layout)
+*.dev
+*.layout
+
+# Artefatos de build em C
+# (caso alguem deixe codigo de pratica no repo)
+*.o
 *.obj
-*.exe              # executável (Dev-C++ gera isso)
+*.exe
 *.out
 a.out
 *.app
-*.so               # bibliotecas
+*.so
 *.dll
 *.dylib
 *.a
 *.lib
-*.gch              # cabeçalhos pré-compilados
+*.gch
 *.pch
 
-# ───────────────────────────────
-#  Logs e temporários
-# ───────────────────────────────
+# Logs e temporarios
 *.log
 *.tmp
 *.bak
-*.swp              # vim
+*.swp
 
-# ───────────────────────────────
-#  Segredos / ambiente (nunca commitar)
-# ───────────────────────────────
+# Segredos / ambiente (nunca commitar)
 .env
 .env.local
 *.pem
