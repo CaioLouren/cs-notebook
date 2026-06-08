@@ -289,6 +289,7 @@
     <div class="lbl">Cadernos</div>
     <a href="#cad-c">C — fundamentos</a>
     <a href="#cad-strings">Strings em C</a>
+    <a href="#cad-dsa">Estruturas de Dados</a>
     <a href="#cad-ingles">Inglês do zero</a>
     <div class="lbl">Elite</div>
     <a href="#elite">Nível craque mundial</a>
@@ -1495,6 +1496,928 @@ sscanf(<span class="s">"06/06/2026"</span>, <span class="s">"%d/%d/%d"</span>, &
       <h4>Liga com o projeto</h4>
       <p>Isto não morre na Fase 0. No capstone, manipulação de string volta com força: o <strong>protocolo de rede</strong> (C3) parseia comandos texto, o <strong>casamento de padrões</strong> do <code>KEYS</code> (C8) é a versão hardcore do <code>strstr</code>, e a <strong>codificação de caracteres</strong> (Fase 6) explica por que o <code>\0</code> e o UTF-8 se comportam assim. Dominar string agora é juros compostos lá na frente.</p>
     </div>
+
+
+    <!-- ===================== CADERNO DS&A — INÍCIO ===================== -->
+    <div class="part-head" id="cad-dsa" style="background:var(--rust)">
+      <div class="pk">Caderno de referência · Estrutura de Dados &amp; Algoritmos (em C)</div>
+      <h2>Estrutura de Dados &amp; Algoritmos — o caderno</h2>
+      <p>As estruturas que faltavam do roadmap, escritas do zero <strong>em C</strong>. Cada tópico segue o mesmo padrão: o que é (com analogia), quando usar, Big-O, diagrama, implementação comentada linha a linha, a pegadinha nº1, amarração com o capstone (Camadas C0–C8), exercícios com gabarito e flashcards de Anki. Os marcados ✅ no roadmap já estão nas suas anotações; aqui entram os 🆕.</p>
+    </div>
+
+    <div class="pillrow">
+      <span class="pl">Fundação</span><span class="pl">Complexidade</span><span class="pl">Árvores</span>
+      <span class="pl">Heaps</span><span class="pl">Grafos</span><span class="pl">Especializadas</span><span class="pl">Nível FAANG</span>
+    </div>
+
+    <div class="note">
+      <h4>Status deste caderno</h4>
+      <p>Construído em lotes pra não perder qualidade. <strong>Prontos:</strong> Fundação (3 · 7 · 9), Complexidade (6 · 7) e Árvores · parte 1 (6 · AVL · 7 · Rubro-Negra). <strong>Próximos lotes:</strong> Árvores · parte 2 (B-Tree, Trie, Segment, Fenwick…), Heaps, Grafos, Especializadas e Nível FAANG. A numeração segue o roadmap (por isso pula os ✅).</p>
+    </div>
+
+    <!-- ============ FUNDAÇÃO ============ -->
+    <div class="levelhead"><span class="n" style="background:var(--rust)">Fundação</span><span class="l"></span></div>
+    <p>Os tijolos. Aqui moram os 🆕 da base: o vetor que cresce sozinho, a fila de duas pontas e a versão "raiz" da tabela hash. Os ✅ (Array, Linked List, Stack, Queue, Hash Table básico) você já tem.</p>
+
+    <!-- ---- 3 · Dynamic Array ---- -->
+    <h3 class="cad-sub">3 · Dynamic Array a fundo</h3>
+    <p>Um <strong>vetor dinâmico</strong> (<em>dynamic array</em>) é um array comum que <strong>cresce sozinho</strong> quando enche. Por baixo ele continua sendo um bloco contíguo de memória — o mesmo array de sempre — só que guarda dois números: quantos itens já tem (<code>size</code>) e quantos cabem no bloco atual (<code>capacity</code>). Pensa num ônibus: enquanto tem assento vago, sobe gente; quando lota, você troca por um do dobro do tamanho e passa todo mundo pro novo. O <code>List&lt;T&gt;</code> do C# e o <code>std::vector</code> do C++ são isso — em C, você monta na mão com <code>malloc</code>/<code>realloc</code>.</p>
+
+    <div class="note">
+      <h4>Quando usar / quando NÃO usar</h4>
+      <p><strong>USE</strong> quando: quer <strong>acesso por índice O(1)</strong>, precisa iterar rápido (memória contígua é amiga do cache da CPU), <strong>não sabe o tamanho final</strong> e a maioria das inserções é <strong>no fim</strong>.</p>
+      <p><strong>NÃO use</strong> quando: vai inserir/remover muito <strong>no meio</strong> (empurra todo mundo, O(n)); precisa de <strong>ponteiros estáveis</strong> pros elementos (o <code>realloc</code> pode mover o bloco e seus ponteiros viram lixo); ou já sabe o <strong>tamanho exato</strong> (aí um <code>malloc</code> único basta).</p>
+    </div>
+
+    <div class="covwrap"><table class="cov"><thead><tr><th>Operação</th><th>Tempo (Big-O)</th><th>Espaço</th></tr></thead><tbody>
+      <tr><td>Acesso por índice (get/set)</td><td class="th">O(1)</td><td>O(1)</td></tr>
+      <tr><td>Append no fim (push) · caso médio</td><td class="th">O(1) <em>amortizado</em></td><td>O(1) amort.</td></tr>
+      <tr><td>Append no fim (push) · pior caso (realoca)</td><td class="th">O(n)</td><td>O(n) só na cópia</td></tr>
+      <tr><td>Remover do fim (pop)</td><td class="th">O(1)</td><td>O(1)</td></tr>
+      <tr><td>Inserir / remover no <strong>meio</strong></td><td class="th">O(n)</td><td>O(1)</td></tr>
+      <tr><td>Buscar valor (não ordenado)</td><td class="th">O(n)</td><td>O(1)</td></tr>
+      <tr><td>Memória total</td><td class="th">O(n)</td><td>até ~2× (folga da capacity)</td></tr>
+    </tbody></table></div>
+    <p>O <code>push</code> é O(1) <em>amortizado</em>, não O(1) sempre: quase sempre só escreve numa posição livre (O(1)); de vez em quando enche e copia tudo pro bloco novo (O(n)). Como a capacidade <strong>dobra</strong>, essas cópias ficam raras — em <em>n</em> inserções o custo total dá O(n), ou seja, O(1) por inserção na média. (Isso é a <em>Análise Amortizada</em>, tópico 6 daqui.)</p>
+
+<svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Expansão geométrica de um vetor dinâmico">
+  <text x="20" y="26" font-size="16" font-weight="700" fill="#1F1C16">Expansão geométrica: quando enche, dobra a capacidade</text>
+  <text x="20" y="58" font-size="13" fill="#1F1C16">Antes — size = 4, capacity = 4 (CHEIO)</text>
+  <rect x="20" y="68" width="56" height="40" fill="#B5481F" stroke="#1F1C16"/><rect x="76" y="68" width="56" height="40" fill="#B5481F" stroke="#1F1C16"/><rect x="132" y="68" width="56" height="40" fill="#B5481F" stroke="#1F1C16"/><rect x="188" y="68" width="56" height="40" fill="#B5481F" stroke="#1F1C16"/>
+  <text x="48" y="93" font-size="14" fill="#FAF5EC" text-anchor="middle">10</text><text x="104" y="93" font-size="14" fill="#FAF5EC" text-anchor="middle">20</text><text x="160" y="93" font-size="14" fill="#FAF5EC" text-anchor="middle">30</text><text x="216" y="93" font-size="14" fill="#FAF5EC" text-anchor="middle">40</text>
+  <text x="258" y="93" font-size="13" fill="#1F1C16">← todos os slots ocupados</text>
+  <line x1="132" y1="116" x2="132" y2="150" stroke="#1F1C16" stroke-width="2"/><polygon points="132,156 127,146 137,146" fill="#1F1C16"/>
+  <text x="148" y="140" font-size="13" fill="#2C5F8A">push(50): não cabe → realloc dobra a capacidade</text>
+  <text x="20" y="186" font-size="13" fill="#1F1C16">Depois — size = 5, capacity = 8</text>
+  <rect x="20" y="196" width="56" height="40" fill="#B5481F" stroke="#1F1C16"/><rect x="76" y="196" width="56" height="40" fill="#B5481F" stroke="#1F1C16"/><rect x="132" y="196" width="56" height="40" fill="#B5481F" stroke="#1F1C16"/><rect x="188" y="196" width="56" height="40" fill="#B5481F" stroke="#1F1C16"/><rect x="244" y="196" width="56" height="40" fill="#3C6B4A" stroke="#1F1C16"/><rect x="300" y="196" width="56" height="40" fill="#FAF5EC" stroke="#1F1C16" stroke-dasharray="4 3"/><rect x="356" y="196" width="56" height="40" fill="#FAF5EC" stroke="#1F1C16" stroke-dasharray="4 3"/><rect x="412" y="196" width="56" height="40" fill="#FAF5EC" stroke="#1F1C16" stroke-dasharray="4 3"/>
+  <text x="48" y="221" font-size="14" fill="#FAF5EC" text-anchor="middle">10</text><text x="104" y="221" font-size="14" fill="#FAF5EC" text-anchor="middle">20</text><text x="160" y="221" font-size="14" fill="#FAF5EC" text-anchor="middle">30</text><text x="216" y="221" font-size="14" fill="#FAF5EC" text-anchor="middle">40</text><text x="272" y="221" font-size="14" fill="#FAF5EC" text-anchor="middle">50</text>
+  <text x="20" y="256" font-size="12" fill="#1F1C16">└─ copiados do bloco antigo (o O(n) acontece só aqui) ─┘</text>
+  <text x="244" y="272" font-size="12" fill="#3C6B4A">▲ novo</text>
+  <text x="300" y="256" font-size="12" fill="#8A7E66">folga: próximos push são O(1)</text>
+  <text x="20" y="296" font-size="12" fill="#1F1C16">O bloco antigo é liberado com free. O ponteiro pode mudar de endereço!</text>
+</svg>
+
+<pre class="code"><span class="p">#include &lt;stdlib.h&gt;</span>   <span class="c">// malloc, realloc, free</span>
+<span class="p">#include &lt;stddef.h&gt;</span>   <span class="c">// size_t</span>
+
+<span class="c">// A struct guarda 3 coisas. Os dois números (size e capacity) são o segredo.</span>
+typedef struct {
+    int    *data;       <span class="c">// ponteiro pro bloco contíguo na heap</span>
+    size_t  size;       <span class="c">// quantos elementos ESTÃO em uso</span>
+    size_t  capacity;   <span class="c">// quantos CABEM antes de precisar crescer</span>
+} DynArray;
+
+<span class="c">// Começa vazio: nenhum bloco, nenhum item.</span>
+void da_init(DynArray *a) {
+    a-&gt;data = NULL;     <span class="c">// ainda não pedimos memória nenhuma</span>
+    a-&gt;size = 0;
+    a-&gt;capacity = 0;
+}
+
+<span class="c">// Garante espaço p/ +1 item. É AQUI que mora a expansão geométrica.</span>
+static int da_grow(DynArray *a) {
+    if (a-&gt;size &lt; a-&gt;capacity) return 1;          <span class="c">// já tem folga: nada a fazer</span>
+    size_t nova = (a-&gt;capacity == 0) ? 4 : a-&gt;capacity * 2;  <span class="c">// dobra (ou começa em 4)</span>
+    int *novo = realloc(a-&gt;data, nova * sizeof(int));       <span class="c">// pede um bloco maior</span>
+    if (novo == NULL) return 0;                  <span class="c">// falhou: o bloco antigo segue válido</span>
+    a-&gt;data = novo;        <span class="c">// realloc pode ter MOVIDO tudo -&gt; atualiza o ponteiro</span>
+    a-&gt;capacity = nova;
+    return 1;
+}
+
+<span class="c">// Adiciona no fim. Custo O(1) amortizado (raramente realoca).</span>
+int da_push(DynArray *a, int valor) {
+    if (!da_grow(a)) return 0;     <span class="c">// garante espaço (pode realocar/copiar)</span>
+    a-&gt;data[a-&gt;size] = valor;       <span class="c">// escreve na 1ª posição livre</span>
+    a-&gt;size++;                      <span class="c">// agora tem 1 a mais</span>
+    return 1;
+}
+
+int da_get(DynArray *a, size_t i) {
+    return a-&gt;data[i];   <span class="c">// O(1) puro (sem checar limite aqui, p/ ficar curto)</span>
+}
+
+void da_free(DynArray *a) {
+    free(a-&gt;data);      <span class="c">// devolve o bloco ao sistema</span>
+    a-&gt;data = NULL;     <span class="c">// evita ponteiro pendurado (dangling)</span>
+    a-&gt;size = a-&gt;capacity = 0;
+}
+<span class="c">// Uso: DynArray a; da_init(&amp;a); da_push(&amp;a,10); int x=da_get(&amp;a,0); da_free(&amp;a);</span></pre>
+
+    <div class="note">
+      <h4>⚠ Erro nº1: ponteiro pendurado depois de crescer</h4>
+      <p>Você guarda um ponteiro (ou o endereço de um elemento) e <em>depois</em> dá <code>push</code>. Se nesse push o array encher, o <code>realloc</code> pode <strong>mover o bloco inteiro</strong> de lugar — e seu ponteiro antigo passa a apontar pra lixo (<em>use-after-free</em>). Regra de ouro: <strong>nunca</strong> segure ponteiro pra dentro do vetor atravessando um push; guarde o <strong>índice</strong> e refaça <code>a-&gt;data[i]</code>. Bônus: confundir <code>size</code> com <code>capacity</code> (iterar até <code>capacity</code> lê lixo) e não checar se o <code>realloc</code> deu <code>NULL</code> (vaza o bloco antigo).</p>
+    </div>
+
+    <div class="note green">
+      <h4>Direto no projeto (mini-Redis)</h4>
+      <p>É a espinha dorsal do store. A struct <code>{data, size, capacity}</code> vira (a) a <strong>string dinâmica</strong> estilo <code>sds</code> — buffer de <code>char</code> que cresce no append, usado pra guardar valores e montar respostas; e (b) o <strong>buffer de argumentos</strong> ao parsear RESP (<code>SET chave valor</code> → vetor de tokens que cresce). Encaixa na <strong>Camada C0</strong> (estruturas base) e reaparece no protocolo da <strong>C3</strong>.</p>
+    </div>
+
+    <ol class="steps">
+      <li><strong>(Fácil)</strong> Implemente <code>int da_pop(DynArray *a)</code>: remove o último e devolve o valor. Precisa realocar? O que muda em <code>size</code>?</li>
+      <li><strong>(Médio)</strong> Encolhimento: quando <code>size &lt;= capacity/4</code>, corte a <code>capacity</code> pela metade. <em>Por que disparar em <code>/4</code> e não em <code>/2</code>?</em></li>
+      <li><strong>(Difícil)</strong> <code>da_insert(a, i, valor)</code> inserindo no meio (empurra pra direita). Qual o Big-O? Em que sentido você percorre o array?</li>
+    </ol>
+    <div class="note">
+      <h4>Gabarito</h4>
+      <p><strong>1.</strong> <code>if(a-&gt;size==0){/*erro*/} a-&gt;size--; return a-&gt;data[a-&gt;size];</code> — só decrementa <code>size</code>; não precisa realocar.</p>
+      <p><strong>2.</strong> Disparar em <code>/4</code> cria <em>histerese</em> (folga). Se cortasse já em <code>/2</code>, um padrão <code>push,pop,push,pop…</code> na fronteira realocaria a cada operação (<em>thrashing</em>, O(n) repetido). Cortando só em <code>/4</code> e voltando pra <code>/2</code>, o amortizado continua O(1).</p>
+      <p><strong>3.</strong> <strong>O(n)</strong>: empurra os <code>(size-i)</code> elementos. Percorra <strong>de trás pra frente</strong> pra não sobrescrever: <code>for(size_t j=a-&gt;size; j&gt;i; j--) a-&gt;data[j]=a-&gt;data[j-1];</code> depois <code>a-&gt;data[i]=valor; a-&gt;size++;</code> (com <code>da_grow</code> antes).</p>
+    </div>
+    <div class="note green">
+      <h4>Anki</h4>
+      <p><strong>P:</strong> Diferença entre <code>size</code> e <code>capacity</code>? → <strong>R:</strong> size = itens em uso; capacity = quantos cabem antes de realocar.</p>
+      <p><strong>P:</strong> Por que push é O(1) amortizado e não O(1) sempre? → <strong>R:</strong> às vezes enche e copia tudo (O(n)), mas como dobra, o total de n pushes é O(n).</p>
+      <p><strong>P:</strong> Por que dobrar (geométrico) e não +1 (aritmético)? → <strong>R:</strong> +1 daria O(n²) total; dobrar deixa as cópias raras → O(1) amortizado.</p>
+      <p><strong>P:</strong> Bug clássico de guardar ponteiro pra elemento e dar push? → <strong>R:</strong> realloc pode mover o bloco e o ponteiro vira dangling; guarde o índice.</p>
+      <p><strong>P:</strong> Em C, qual função cresce o bloco preservando o conteúdo? → <strong>R:</strong> realloc (cheque se não retornou NULL).</p>
+    </div>
+
+    <!-- ---- 7 · Deque ---- -->
+    <h3 class="cad-sub">7 · Deque (fila de duas pontas)</h3>
+    <p>Um <strong>deque</strong> (<em>double-ended queue</em>, fala-se "déqui") é uma fila em que você <strong>adiciona e remove pelas duas pontas</strong> — frente e trás — tudo em O(1). É o "canivete suíço" das estruturas lineares: ele <strong>generaliza</strong> a pilha (mexe só numa ponta) e a fila (entra atrás, sai na frente). Analogia: uma fila de pessoas onde dá pra entrar e sair tanto pela frente quanto pelo fundo.</p>
+
+    <div class="note">
+      <h4>Quando usar / quando NÃO usar</h4>
+      <p><strong>USE</strong> em: janela deslizante (<em>sliding window</em>), undo/redo, <em>work-stealing</em> de threads, e qualquer buffer onde você precisa das duas pontas.</p>
+      <p><strong>NÃO use</strong> quando: só precisa de uma ponta (uma pilha ou fila é mais simples e enxuta), ou quando precisa de <strong>acesso por índice no meio</strong> com frequência (na versão de lista ligada isso é O(n)).</p>
+    </div>
+
+    <div class="covwrap"><table class="cov"><thead><tr><th>Operação</th><th>Tempo (Big-O)</th><th>Espaço</th></tr></thead><tbody>
+      <tr><td>push_front / push_back</td><td class="th">O(1)</td><td>O(1)</td></tr>
+      <tr><td>pop_front / pop_back</td><td class="th">O(1)</td><td>O(1)</td></tr>
+      <tr><td>peek_front / peek_back</td><td class="th">O(1)</td><td>O(1)</td></tr>
+      <tr><td>Acesso por índice (no meio)</td><td class="th">O(n) <em>(lista ligada)</em></td><td>O(1)</td></tr>
+      <tr><td>Memória total</td><td class="th">O(n)</td><td>+2 ponteiros por nó</td></tr>
+    </tbody></table></div>
+    <p>Existem duas implementações clássicas: <strong>lista duplamente ligada</strong> (a daqui — todas as pontas O(1), mas gasta 2 ponteiros por nó e não tem índice O(1)) e <strong>buffer circular</strong> (array com início/fim que "dão a volta" — índice O(1) e cache-friendly, mas capacidade fixa ou com realloc). Veja o exercício 2.</p>
+
+<svg viewBox="0 0 720 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Deque como lista duplamente ligada">
+  <text x="20" y="26" font-size="16" font-weight="700" fill="#1F1C16">Deque = lista duplamente ligada (ponteiros nos dois sentidos)</text>
+  <text x="40" y="58" font-size="12" fill="#3C6B4A">head</text><line x1="55" y1="62" x2="55" y2="86" stroke="#3C6B4A" stroke-width="2"/><polygon points="55,92 50,82 60,82" fill="#3C6B4A"/>
+  <text x="640" y="58" font-size="12" fill="#2C5F8A">tail</text><line x1="650" y1="62" x2="650" y2="86" stroke="#2C5F8A" stroke-width="2"/><polygon points="650,92 645,82 655,82" fill="#2C5F8A"/>
+  <rect x="20" y="96" width="90" height="46" fill="#FAF5EC" stroke="#1F1C16"/><text x="65" y="124" font-size="15" fill="#1F1C16" text-anchor="middle">10</text>
+  <rect x="180" y="96" width="90" height="46" fill="#FAF5EC" stroke="#1F1C16"/><text x="225" y="124" font-size="15" fill="#1F1C16" text-anchor="middle">20</text>
+  <rect x="340" y="96" width="90" height="46" fill="#FAF5EC" stroke="#1F1C16"/><text x="385" y="124" font-size="15" fill="#1F1C16" text-anchor="middle">30</text>
+  <rect x="620" y="96" width="90" height="46" fill="#FAF5EC" stroke="#1F1C16"/><text x="665" y="124" font-size="15" fill="#1F1C16" text-anchor="middle">40</text>
+  <text x="500" y="124" font-size="15" fill="#8A7E66" text-anchor="middle">· · ·</text>
+  <!-- next (azul) e prev (verde) entre 10 e 20 -->
+  <line x1="110" y1="110" x2="180" y2="110" stroke="#2C5F8A" stroke-width="2"/><polygon points="180,110 170,105 170,115" fill="#2C5F8A"/>
+  <line x1="180" y1="128" x2="110" y2="128" stroke="#3C6B4A" stroke-width="2"/><polygon points="110,128 120,123 120,133" fill="#3C6B4A"/>
+  <line x1="270" y1="110" x2="340" y2="110" stroke="#2C5F8A" stroke-width="2"/><polygon points="340,110 330,105 330,115" fill="#2C5F8A"/>
+  <line x1="340" y1="128" x2="270" y2="128" stroke="#3C6B4A" stroke-width="2"/><polygon points="270,128 280,123 280,133" fill="#3C6B4A"/>
+  <text x="125" y="170" font-size="12" fill="#2C5F8A">→ next</text>
+  <text x="125" y="188" font-size="12" fill="#3C6B4A">← prev</text>
+  <text x="360" y="180" font-size="12" fill="#1F1C16">push_front mexe no head · push_back mexe no tail · ambos O(1)</text>
+</svg>
+
+<pre class="code"><span class="p">#include &lt;stdlib.h&gt;</span>
+<span class="p">#include &lt;stddef.h&gt;</span>
+
+<span class="c">// Cada nó aponta pro anterior E pro próximo (por isso "duplamente ligada").</span>
+typedef struct Node {
+    int           val;
+    struct Node  *prev, *next;
+} Node;
+
+typedef struct {
+    Node  *head, *tail;   <span class="c">// as duas pontas</span>
+    size_t size;
+} Deque;
+
+void dq_init(Deque *d) { d-&gt;head = d-&gt;tail = NULL; d-&gt;size = 0; }
+
+<span class="c">// Adiciona na FRENTE.</span>
+int dq_push_front(Deque *d, int v) {
+    Node *n = malloc(sizeof(Node));
+    if (!n) return 0;
+    n-&gt;val = v; n-&gt;prev = NULL; n-&gt;next = d-&gt;head;
+    if (d-&gt;head) d-&gt;head-&gt;prev = n;   <span class="c">// liga o antigo 1º de volta no novo</span>
+    else         d-&gt;tail = n;        <span class="c">// lista estava VAZIA -&gt; novo é head e tail</span>
+    d-&gt;head = n; d-&gt;size++;
+    return 1;
+}
+
+<span class="c">// Adiciona ATRÁS (espelho exato do push_front).</span>
+int dq_push_back(Deque *d, int v) {
+    Node *n = malloc(sizeof(Node));
+    if (!n) return 0;
+    n-&gt;val = v; n-&gt;next = NULL; n-&gt;prev = d-&gt;tail;
+    if (d-&gt;tail) d-&gt;tail-&gt;next = n;
+    else         d-&gt;head = n;        <span class="c">// estava vazia</span>
+    d-&gt;tail = n; d-&gt;size++;
+    return 1;
+}
+
+<span class="c">// Remove da FRENTE. Devolve 0 se vazia; o valor sai por *out.</span>
+int dq_pop_front(Deque *d, int *out) {
+    if (!d-&gt;head) return 0;          <span class="c">// vazia</span>
+    Node *n = d-&gt;head; *out = n-&gt;val;
+    d-&gt;head = n-&gt;next;
+    if (d-&gt;head) d-&gt;head-&gt;prev = NULL; <span class="c">// novo 1º não tem anterior</span>
+    else         d-&gt;tail = NULL;      <span class="c">// removeu o ÚLTIMO -&gt; lista ficou vazia</span>
+    free(n); d-&gt;size--;
+    return 1;
+}
+
+<span class="c">// Remove ATRÁS (espelho do pop_front).</span>
+int dq_pop_back(Deque *d, int *out) {
+    if (!d-&gt;tail) return 0;
+    Node *n = d-&gt;tail; *out = n-&gt;val;
+    d-&gt;tail = n-&gt;prev;
+    if (d-&gt;tail) d-&gt;tail-&gt;next = NULL;
+    else         d-&gt;head = NULL;
+    free(n); d-&gt;size--;
+    return 1;
+}
+
+void dq_free(Deque *d) {
+    Node *cur = d-&gt;head;
+    while (cur) { Node *nx = cur-&gt;next; free(cur); cur = nx; } <span class="c">// libera nó a nó</span>
+    d-&gt;head = d-&gt;tail = NULL; d-&gt;size = 0;
+}</pre>
+
+    <div class="note">
+      <h4>⚠ Erro nº1: esquecer um dos casos de borda (lista vazia / único nó)</h4>
+      <p>Numa lista <em>duplamente</em> ligada todo insert/remove mexe em <strong>dois</strong> ponteiros (<code>prev</code> e <code>next</code>) — esquecer um deixa a lista corrompida. E os dois casos que mais derrubam: inserir na <strong>lista vazia</strong> (precisa setar <code>head</code> E <code>tail</code>) e remover o <strong>último nó</strong> (a outra ponta tem que virar <code>NULL</code>, senão fica apontando pra memória já liberada). Sempre teste com 0 e 1 elemento.</p>
+    </div>
+
+    <div class="note green">
+      <h4>Direto no projeto (mini-Redis)</h4>
+      <p>O deque é literalmente o <strong>tipo List do Redis</strong> (<code>LPUSH</code>/<code>RPUSH</code>/<code>LPOP</code>/<code>RPOP</code> = push/pop nas duas pontas) — entra na <strong>Camada C8</strong>. E a lista duplamente ligada é metade do <strong>cache LRU</strong> da <strong>Camada C1</strong>: a lista mantém a ordem de uso (o mais recente na frente, o "candidato a despejo" atrás) e o hash dá o O(1) pra achar o nó.</p>
+    </div>
+
+    <ol class="steps">
+      <li><strong>(Fácil)</strong> Implemente <code>dq_peek_front</code> e <code>dq_peek_back</code> (olham sem remover).</li>
+      <li><strong>(Médio)</strong> Refaça o deque como <strong>buffer circular</strong> de capacidade fixa (array + índices <code>head</code>/<code>tail</code> que dão a volta com <code>%</code>). Por que assim você ganha índice O(1) e zero <code>malloc</code> por operação?</li>
+      <li><strong>(Difícil)</strong> <em>Sliding window maximum</em>: dado um array e uma janela <code>k</code>, devolva o máximo de cada janela em <strong>O(n)</strong> usando um deque <em>monotônico</em> (guarda índices em ordem decrescente de valor). É o aperitivo do tópico "Monotonic Stack/Queue".</li>
+    </ol>
+    <div class="note">
+      <h4>Gabarito</h4>
+      <p><strong>1.</strong> <code>int dq_peek_front(Deque *d,int *out){ if(!d-&gt;head) return 0; *out=d-&gt;head-&gt;val; return 1; }</code> — e o back usa <code>d-&gt;tail</code>.</p>
+      <p><strong>2.</strong> Num array de tamanho <code>cap</code>, guarde <code>head</code> e <code>count</code>. <code>push_back</code> escreve em <code>(head+count)%cap</code>; <code>push_front</code> em <code>head=(head-1+cap)%cap</code>. Como tudo vive num bloco contíguo já alocado, não há <code>malloc</code>/<code>free</code> por operação (mais rápido e cache-friendly) e o elemento <code>i</code> está em <code>(head+i)%cap</code> → índice O(1). O preço é a capacidade fixa (ou crescer com realloc + recolocação).</p>
+      <p><strong>3.</strong> Percorra o array uma vez. Para cada <code>i</code>: remova de <strong>trás</strong> do deque todos os índices cujo valor é <code>&lt;= arr[i]</code> (nunca mais serão máximo) e dê <code>push_back(i)</code>. Remova da <strong>frente</strong> o índice que saiu da janela (<code>&lt;= i-k</code>). O máximo da janela é sempre <code>arr[deque.front]</code>. Cada índice entra e sai uma vez → O(n).</p>
+    </div>
+    <div class="note green">
+      <h4>Anki</h4>
+      <p><strong>P:</strong> O que um deque generaliza? → <strong>R:</strong> pilha (1 ponta) e fila (entra atrás, sai na frente) — ele faz as duas pontas em O(1).</p>
+      <p><strong>P:</strong> Duas implementações clássicas e o trade-off? → <strong>R:</strong> lista duplamente ligada (todas as pontas O(1), sem índice O(1)) e buffer circular (índice O(1), cache-friendly, capacidade fixa).</p>
+      <p><strong>P:</strong> Por que o pop do último nó é perigoso? → <strong>R:</strong> a outra ponta precisa virar NULL, senão aponta pra memória liberada.</p>
+      <p><strong>P:</strong> Qual tipo do Redis é um deque? → <strong>R:</strong> List (LPUSH/RPUSH/LPOP/RPOP).</p>
+      <p><strong>P:</strong> Custo do sliding-window-max com deque monotônico? → <strong>R:</strong> O(n) — cada índice entra e sai uma vez.</p>
+    </div>
+
+    <!-- ---- 9 · Hash Table avançado ---- -->
+    <h3 class="cad-sub">9 · Hash Table avançado — open addressing</h3>
+    <p>A tabela hash básica resolve colisão com <strong>encadeamento</strong> (uma listinha pendurada em cada balde). O <strong>open addressing</strong> (endereçamento aberto) faz o contrário: guarda tudo dentro do <strong>próprio array</strong>. Se o balde calculado já está ocupado, ele <strong>procura o próximo livre</strong> — isso se chama <em>probing</em> (sondagem). Analogia: estacionamento de shopping. Sua vaga "natural" está ocupada? Você anda até achar a próxima livre. Pra sair (buscar), você refaz o mesmo caminho.</p>
+
+    <div class="note">
+      <h4>Quando usar / quando NÃO usar</h4>
+      <p><strong>USE</strong> quando: quer velocidade bruta e <strong>cache-friendliness</strong> (tudo num bloco contíguo, zero ponteiros pulando pela memória) e memória apertada (sem o custo dos nós de lista).</p>
+      <p><strong>NÃO use</strong> quando: o <strong>fator de carga</strong> vai passar de ~0,7 (aí formam-se <em>clusters</em> e tudo degrada pra O(n)), ou quando há <strong>muitos deletes</strong> (precisa de <em>tombstones</em>, que poluem a tabela com o tempo).</p>
+    </div>
+
+    <div class="covwrap"><table class="cov"><thead><tr><th>Operação / variante</th><th>Tempo (Big-O)</th><th>Observação</th></tr></thead><tbody>
+      <tr><td>Inserir / buscar / remover · médio</td><td class="th">O(1)</td><td>com fator de carga baixo</td></tr>
+      <tr><td>Inserir / buscar / remover · pior</td><td class="th">O(n)</td><td>tabela quase cheia / clustering</td></tr>
+      <tr><td>Linear probing</td><td class="th">O(1) médio</td><td>simples, mas faz <em>clustering primário</em></td></tr>
+      <tr><td>Robin Hood</td><td class="th">O(1) médio</td><td>variância baixa: "rouba" do rico</td></tr>
+      <tr><td>Cuckoo hashing</td><td class="th">O(1) <strong>no pior caso</strong> p/ busca</td><td>2 hashes; insert pode reorganizar</td></tr>
+      <tr><td>Memória</td><td class="th">O(n)</td><td>array com folga (carga &lt; 1)</td></tr>
+    </tbody></table></div>
+
+<svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Linear probing numa tabela de open addressing">
+  <text x="20" y="26" font-size="16" font-weight="700" fill="#1F1C16">Linear probing: balde ocupado? anda pro próximo livre</text>
+  <text x="20" y="56" font-size="13" fill="#1F1C16">Inserir K (hash(K) = 3), mas 3, 4 estão ocupados → vai pro 5</text>
+  <!-- 8 slots -->
+  <g font-size="12" fill="#8A7E66" text-anchor="middle">
+    <text x="56" y="84">0</text><text x="136" y="84">1</text><text x="216" y="84">2</text><text x="296" y="84">3</text><text x="376" y="84">4</text><text x="456" y="84">5</text><text x="536" y="84">6</text><text x="616" y="84">7</text>
+  </g>
+  <rect x="24" y="92" width="64" height="44" fill="#FAF5EC" stroke="#1F1C16"/>
+  <rect x="104" y="92" width="64" height="44" fill="#B5481F" stroke="#1F1C16"/><text x="136" y="120" font-size="14" fill="#FAF5EC" text-anchor="middle">A</text>
+  <rect x="184" y="92" width="64" height="44" fill="#FAF5EC" stroke="#1F1C16"/>
+  <rect x="264" y="92" width="64" height="44" fill="#B5481F" stroke="#1F1C16"/><text x="296" y="120" font-size="14" fill="#FAF5EC" text-anchor="middle">B</text>
+  <rect x="344" y="92" width="64" height="44" fill="#B5481F" stroke="#1F1C16"/><text x="376" y="120" font-size="14" fill="#FAF5EC" text-anchor="middle">C</text>
+  <rect x="424" y="92" width="64" height="44" fill="#3C6B4A" stroke="#1F1C16"/><text x="456" y="120" font-size="14" fill="#FAF5EC" text-anchor="middle">K</text>
+  <rect x="504" y="92" width="64" height="44" fill="#FAF5EC" stroke="#1F1C16"/>
+  <rect x="584" y="92" width="64" height="44" fill="#FAF5EC" stroke="#1F1C16"/>
+  <!-- caminho da sondagem -->
+  <line x1="296" y1="150" x2="456" y2="150" stroke="#2C5F8A" stroke-width="2" stroke-dasharray="5 3"/>
+  <polygon points="456,150 446,145 446,155" fill="#2C5F8A"/>
+  <text x="300" y="172" font-size="12" fill="#2C5F8A">hash = 3 (ocupado)</text>
+  <text x="350" y="190" font-size="12" fill="#2C5F8A">→ 4 (ocupado) → 5 (livre!) ✓</text>
+  <text x="20" y="222" font-size="12" fill="#1F1C16">Buscar K refaz o MESMO caminho: 3, 4, 5. Por isso DELETE vira tombstone, não EMPTY.</text>
+</svg>
+
+<pre class="code"><span class="p">#include &lt;stdlib.h&gt;</span>
+<span class="p">#include &lt;stddef.h&gt;</span>
+
+<span class="c">// Cada slot tem 3 estados. calloc zera tudo, então EMPTY tem que ser 0.</span>
+typedef enum { EMPTY = 0, USED, DELETED } State;
+typedef struct { int key, val; State state; } Slot;
+typedef struct { Slot *slots; size_t cap, size; } HMap;
+
+<span class="c">// Espalha a chave pela tabela. (Em produção use um hash melhor, ex. FNV-1a.)</span>
+static size_t hsh(int key, size_t cap) {
+    return ((size_t)(unsigned)key * 2654435761u) % cap;
+}
+
+void hm_init(HMap *h, size_t cap) {
+    h-&gt;cap = cap; h-&gt;size = 0;
+    h-&gt;slots = calloc(cap, sizeof(Slot));  <span class="c">// zera -&gt; todos EMPTY</span>
+}
+
+static void hm_resize(HMap *h, size_t newcap);  <span class="c">// declarado antes de usar</span>
+
+<span class="c">// Insere ou atualiza. Cresce quando passa de ~70% de ocupação.</span>
+int hm_put(HMap *h, int key, int val) {
+    if ((h-&gt;size + 1) * 10 &gt;= h-&gt;cap * 7) hm_resize(h, h-&gt;cap * 2);
+    size_t i = hsh(key, h-&gt;cap);
+    size_t first_del = h-&gt;cap;          <span class="c">// guarda o 1º tombstone p/ reaproveitar</span>
+    for (size_t step = 0; step &lt; h-&gt;cap; step++) {
+        size_t pos = (i + step) % h-&gt;cap;            <span class="c">// sondagem linear (dá a volta)</span>
+        if (h-&gt;slots[pos].state == USED) {
+            if (h-&gt;slots[pos].key == key) { h-&gt;slots[pos].val = val; return 1; } <span class="c">// já existe</span>
+        } else if (h-&gt;slots[pos].state == DELETED) {
+            if (first_del == h-&gt;cap) first_del = pos;  <span class="c">// anota e segue sondando</span>
+        } else {                                       <span class="c">// EMPTY: a chave não está aqui</span>
+            size_t put = (first_del != h-&gt;cap) ? first_del : pos; <span class="c">// reusa tombstone se houver</span>
+            h-&gt;slots[put].key = key; h-&gt;slots[put].val = val;
+            h-&gt;slots[put].state = USED; h-&gt;size++;
+            return 1;
+        }
+    }
+    return 0;  <span class="c">// tabela cheia (não ocorre por causa do resize)</span>
+}
+
+<span class="c">// Busca. Para num EMPTY (não existe), mas PULA tombstones.</span>
+int hm_get(HMap *h, int key, int *out) {
+    size_t i = hsh(key, h-&gt;cap);
+    for (size_t step = 0; step &lt; h-&gt;cap; step++) {
+        size_t pos = (i + step) % h-&gt;cap;
+        if (h-&gt;slots[pos].state == EMPTY) return 0;   <span class="c">// buraco real -&gt; acabou a cadeia</span>
+        if (h-&gt;slots[pos].state == USED &amp;&amp; h-&gt;slots[pos].key == key) { *out = h-&gt;slots[pos].val; return 1; }
+        <span class="c">// DELETED: NÃO pare aqui — a chave pode estar adiante</span>
+    }
+    return 0;
+}
+
+<span class="c">// Remove deixando TOMBSTONE (DELETED), nunca EMPTY — senão quebra a busca.</span>
+int hm_del(HMap *h, int key) {
+    size_t i = hsh(key, h-&gt;cap);
+    for (size_t step = 0; step &lt; h-&gt;cap; step++) {
+        size_t pos = (i + step) % h-&gt;cap;
+        if (h-&gt;slots[pos].state == EMPTY) return 0;
+        if (h-&gt;slots[pos].state == USED &amp;&amp; h-&gt;slots[pos].key == key) {
+            h-&gt;slots[pos].state = DELETED; h-&gt;size--;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+<span class="c">// Dobra e re-insere tudo (rehash). Os tombstones somem nessa faxina.</span>
+static void hm_resize(HMap *h, size_t newcap) {
+    Slot  *old = h-&gt;slots; size_t oldcap = h-&gt;cap;
+    h-&gt;slots = calloc(newcap, sizeof(Slot));
+    h-&gt;cap = newcap; h-&gt;size = 0;
+    for (size_t k = 0; k &lt; oldcap; k++)
+        if (old[k].state == USED) hm_put(h, old[k].key, old[k].val);
+    free(old);
+}</pre>
+
+    <div class="note">
+      <h4>⚠ Erro nº1: apagar virando EMPTY em vez de tombstone</h4>
+      <p>Se ao remover você marcar o slot como <code>EMPTY</code>, você <strong>fura a cadeia de sondagem</strong>: a busca por uma chave que estava "depois" do buraco vai parar nele e dizer "não existe" — mesmo a chave estando lá. Por isso DELETE marca <code>DELETED</code> (tombstone) e a busca <em>pula</em> tombstones, só parando em <code>EMPTY</code>. O outro vilão é o <strong>fator de carga alto</strong>: passou de ~0,7 e os clusters fazem tudo virar O(n) — por isso o <code>resize</code> não é opcional.</p>
+    </div>
+
+    <div class="note green">
+      <h4>Direto no projeto (mini-Redis)</h4>
+      <p>A tabela hash é o <strong>coração do store</strong> — a <strong>Camada C0</strong> (o <code>GET</code>/<code>SET</code>/<code>DEL</code> são put/get/del nela). O Redis de verdade usa encadeamento com <strong>rehash incremental</strong> (move os baldes aos poucos pra não travar o servidor num resize gigante) — e isso é exatamente <em>análise amortizada</em> (próximo tópico) aplicada, encostando na concorrência da <strong>C2</strong>. Implementar open addressing aqui é o exercício que faz você entender por que cada escolha existe.</p>
+    </div>
+
+    <ol class="steps">
+      <li><strong>(Fácil)</strong> Escreva <code>double hm_load(HMap *h)</code> que devolve o fator de carga (<code>size/cap</code>) e dispare o resize quando passar de 0,7.</li>
+      <li><strong>(Médio)</strong> <strong>Robin Hood</strong>: ao inserir, se a sua "distância de sondagem" for maior que a do ocupante, <em>troque de lugar com ele</em> e continue inserindo o que foi deslocado. Por que isso reduz a variância (a pior busca fica bem menor)?</li>
+      <li><strong>(Difícil)</strong> <strong>Cuckoo hashing</strong>: duas tabelas e dois hashes. Cada chave mora num de dois lugares possíveis; ao inserir, se ambos estão ocupados, <em>expulse</em> um e o realoque na outra tabela (pode virar uma corrente). Por que a <strong>busca</strong> vira O(1) garantido — e o que fazer quando entra em ciclo?</li>
+    </ol>
+    <div class="note">
+      <h4>Gabarito</h4>
+      <p><strong>1.</strong> <code>double hm_load(HMap *h){ return (double)h-&gt;size / h-&gt;cap; }</code> — chame no início do <code>hm_put</code>; se <code>&gt; 0.7</code>, <code>hm_resize(h, h-&gt;cap*2)</code>. (No código acima isso já está como aritmética inteira <code>size*10 &gt;= cap*7</code> pra evitar ponto flutuante.)</p>
+      <p><strong>2.</strong> Em Robin Hood, ninguém fica "rico" (perto do seu balde ideal) enquanto outro está "pobre" (longe): você equaliza as distâncias trocando. Como a maior distância de sondagem cai, o <strong>pior caso de busca</strong> encolhe muito — a tabela fica com desempenho mais previsível, mesmo cheia.</p>
+      <p><strong>3.</strong> Na busca você só olha <strong>dois</strong> lugares (hash1 na tabela 1, hash2 na tabela 2): se não está em nenhum, não existe → O(1) garantido. O insert é que pode "chutar" inquilinos em cadeia; se a corrente passar de um limite (ciclo), você faz <strong>rehash</strong> com novas funções hash (ou cresce as tabelas) e tenta de novo.</p>
+    </div>
+    <div class="note green">
+      <h4>Anki</h4>
+      <p><strong>P:</strong> Encadeamento vs open addressing? → <strong>R:</strong> encadeamento pendura uma lista por balde; open addressing guarda tudo no próprio array e sonda o próximo livre.</p>
+      <p><strong>P:</strong> Por que delete vira tombstone e não EMPTY? → <strong>R:</strong> EMPTY furaria a cadeia de sondagem e a busca acharia "não existe" erroneamente.</p>
+      <p><strong>P:</strong> O que é fator de carga e por que importa? → <strong>R:</strong> size/cap; acima de ~0,7 formam-se clusters e as operações degradam pra O(n).</p>
+      <p><strong>P:</strong> A vantagem do cuckoo hashing? → <strong>R:</strong> busca O(1) no pior caso (só 2 posições possíveis).</p>
+      <p><strong>P:</strong> O que Robin Hood otimiza? → <strong>R:</strong> a variância — reduz a maior distância de sondagem, deixando o pior caso menor.</p>
+    </div>
+
+    <!-- ============ COMPLEXIDADE ============ -->
+    <div class="levelhead"><span class="n" style="background:var(--blue)">Complexidade</span><span class="l"></span></div>
+    <p>Os 🆕 da análise. Os ✅ (Big-O, Ω, Θ, o/ω, runtimes comuns) você já tem. Faltavam os dois mais "manhosos": custo amortizado e espaço.</p>
+
+    <!-- ---- 6 · Amortized Analysis ---- -->
+    <h3 class="cad-sub">6 · Amortized Analysis</h3>
+    <p>Análise <strong>amortizada</strong> é o custo <strong>médio por operação ao longo de uma sequência</strong> — mesmo que uma operação isolada, de vez em quando, seja cara. Analogia: assinatura anual da academia. Você paga um valorzão uma vez, mas dividido pelos treinos do ano sai barato <em>por treino</em>. Atenção: isso <strong>não</strong> é "caso médio" (que é probabilístico, depende de sorte na entrada). Amortizado é uma <strong>garantia</strong> sobre a sequência inteira, sem depender de probabilidade.</p>
+
+    <div class="note">
+      <h4>Quando usar / quando NÃO usar</h4>
+      <p><strong>USE</strong> pra avaliar estruturas com operações <strong>esporádicas e caras, mas raras</strong>: o <code>push</code> do vetor dinâmico (dobra de vez em quando), o Union-Find com compressão de caminho, a Splay Tree.</p>
+      <p><strong>NÃO</strong> confunda com caso médio. E cuidado: amortizado O(1) <strong>não</strong> significa que <em>cada</em> operação é O(1) — a cara ainda existe. Em <strong>tempo real</strong> (jogos, áudio, robótica) esse pico de latência pode ser inaceitável.</p>
+    </div>
+
+    <div class="covwrap"><table class="cov"><thead><tr><th>Exemplo</th><th>Pior caso (1 op)</th><th>Amortizado</th></tr></thead><tbody>
+      <tr><td>push do vetor dinâmico (dobrando)</td><td class="th">O(n)</td><td>O(1)</td></tr>
+      <tr><td>incrementar contador binário</td><td class="th">O(k bits)</td><td>O(1)</td></tr>
+      <tr><td>Union-Find (compressão + rank)</td><td class="th">O(log n)</td><td>~O(α(n)) ≈ O(1)</td></tr>
+      <tr><td>rehash incremental da hash table</td><td class="th">O(n)</td><td>O(1)</td></tr>
+    </tbody></table></div>
+    <p>Três métodos pra provar: <strong>agregado</strong> (soma o custo de <em>n</em> operações e divide por <em>n</em>), <strong>contábil/banqueiro</strong> (cobra um "extra" barato em cada op pra pagar a cara depois) e <strong>potencial</strong> (define uma função Φ que mede "energia acumulada"). O agregado é o mais intuitivo pra começar.</p>
+
+<svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Custo por push: picos nas potências de 2, média amortizada baixa">
+  <text x="20" y="26" font-size="16" font-weight="700" fill="#1F1C16">Custo de cada push: picos raros, média (amortizado) baixa</text>
+  <!-- eixos -->
+  <line x1="50" y1="200" x2="690" y2="200" stroke="#1F1C16" stroke-width="1.5"/>
+  <line x1="50" y1="60" x2="50" y2="200" stroke="#1F1C16" stroke-width="1.5"/>
+  <text x="40" y="205" font-size="11" fill="#8A7E66" text-anchor="end">0</text>
+  <text x="30" y="64" font-size="11" fill="#8A7E66">custo</text>
+  <text x="660" y="218" font-size="11" fill="#8A7E66">push nº →</text>
+  <!-- barras: maioria altura 1; picos em 1,2,4,8,16 -->
+  <g fill="#B5481F">
+    <rect x="60" y="186" width="14" height="14"/>
+    <rect x="80" y="160" width="14" height="40"/>   <!-- pico -->
+    <rect x="100" y="186" width="14" height="14"/>
+    <rect x="120" y="150" width="14" height="50"/>  <!-- pico -->
+    <rect x="140" y="186" width="14" height="14"/>
+    <rect x="160" y="186" width="14" height="14"/>
+    <rect x="180" y="186" width="14" height="14"/>
+    <rect x="200" y="135" width="14" height="65"/>  <!-- pico -->
+    <rect x="220" y="186" width="14" height="14"/>
+    <rect x="240" y="186" width="14" height="14"/>
+    <rect x="260" y="186" width="14" height="14"/>
+    <rect x="280" y="186" width="14" height="14"/>
+    <rect x="300" y="186" width="14" height="14"/>
+    <rect x="320" y="186" width="14" height="14"/>
+    <rect x="340" y="186" width="14" height="14"/>
+    <rect x="360" y="110" width="14" height="90"/>  <!-- pico grande -->
+    <rect x="380" y="186" width="14" height="14"/>
+    <rect x="400" y="186" width="14" height="14"/>
+    <rect x="420" y="186" width="14" height="14"/>
+    <rect x="440" y="186" width="14" height="14"/>
+    <rect x="460" y="186" width="14" height="14"/>
+    <rect x="480" y="186" width="14" height="14"/>
+    <rect x="500" y="186" width="14" height="14"/>
+    <rect x="520" y="186" width="14" height="14"/>
+  </g>
+  <!-- linha amortizada -->
+  <line x1="55" y1="178" x2="540" y2="178" stroke="#3C6B4A" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="548" y="182" font-size="12" fill="#3C6B4A">≈ 2 por push (O(1) amortizado)</text>
+  <text x="80" y="150" font-size="11" fill="#2C5F8A">↑ picos = a hora de copiar tudo (potências de 2)</text>
+</svg>
+
+<pre class="code"><span class="p">#include &lt;stdio.h&gt;</span>
+<span class="p">#include &lt;stdlib.h&gt;</span>
+
+<span class="c">// Prova EMPÍRICA do agregado: faz N pushes e CONTA quantas cópias o crescimento</span>
+<span class="c">// fez no total. Vai dar ~N (cada push "paga" ~1 cópia) -&gt; O(1) amortizado.</span>
+int main(void) {
+    int   *data = NULL;
+    size_t size = 0, cap = 0;
+    long   copias = 0;            <span class="c">// total de cópias feitas pelos crescimentos</span>
+    int    N = 1000000;
+
+    for (int i = 0; i &lt; N; i++) {
+        if (size == cap) {                       <span class="c">// encheu: hora de crescer</span>
+            size_t nova = (cap == 0) ? 1 : cap * 2;
+            int *novo = malloc(nova * sizeof(int));
+            for (size_t k = 0; k &lt; size; k++) {  <span class="c">// copia manual SÓ p/ contar</span>
+                novo[k] = data[k];
+                copias++;
+            }
+            free(data); data = novo; cap = nova;
+        }
+        data[size++] = i;                        <span class="c">// o push barato (a maioria das vezes)</span>
+    }
+    printf(<span class="s">"N pushes  = %d\n"</span>, N);
+    printf(<span class="s">"copias    = %ld\n"</span>, copias);
+    printf(<span class="s">"por push  = %.2f  (constante -&gt; O(1) amortizado)\n"</span>, (double)copias / N);
+    free(data);
+    return 0;
+}</pre>
+
+    <div class="note">
+      <h4>⚠ Erro nº1: confundir amortizado com caso médio (e achar que "cada" op é barata)</h4>
+      <p><strong>Caso médio</strong> depende da distribuição da entrada (probabilidade). <strong>Amortizado</strong> é garantido sobre a sequência, sem sorte nenhuma — são coisas diferentes. E o pega-ratão: "O(1) amortizado" <strong>não</strong> quer dizer que toda operação é O(1). Aquele <em>push</em> que dobra ainda é O(n) <em>naquele instante</em> — num sistema sensível a latência, esse pico importa (é por isso que existe o rehash <em>incremental</em>).</p>
+    </div>
+
+    <div class="note green">
+      <h4>Direto no projeto (mini-Redis)</h4>
+      <p>Tudo que "cresce sozinho" no seu banco é amortizado: o buffer de comandos e a <code>sds</code> (<strong>C0</strong>/<strong>C3</strong>) e, principalmente, o <strong>rehash</strong> da tabela hash. O Redis faz o rehash <em>incremental</em> justamente pra transformar um O(n) gigante (que travaria o servidor) em vários passinhos O(1) amortizados — análise amortizada na prática, encostando na concorrência da <strong>C2</strong>.</p>
+    </div>
+
+    <ol class="steps">
+      <li><strong>(Fácil)</strong> Pelo método <strong>agregado</strong>, mostre que <em>n</em> pushes num vetor que dobra custam O(n) no total. (Dica: some <code>1 + 2 + 4 + … + n/2</code>.)</li>
+      <li><strong>(Médio)</strong> <strong>Contador binário</strong>: incrementar um número binário de 0 até <em>n</em>. Mostre que o número total de <em>bits virados</em> é O(n) (não O(n·log n)), logo O(1) amortizado por incremento.</li>
+      <li><strong>(Difícil)</strong> Método do <strong>potencial</strong>: defina Φ = 2·size − capacity pro vetor dinâmico e mostre que o custo amortizado do push (real + ΔΦ) é constante.</li>
+    </ol>
+    <div class="note">
+      <h4>Gabarito</h4>
+      <p><strong>1.</strong> A soma das cópias é a série geométrica <code>1 + 2 + 4 + … + n/2 = n − 1 &lt; n</code>. Some os <em>n</em> pushes baratos (n) e dá <code>&lt; 2n = O(n)</code> total → O(1) por push.</p>
+      <p><strong>2.</strong> O bit 0 vira em todo incremento (n vezes); o bit 1 vira a cada 2 (n/2); o bit 2 a cada 4 (n/4)… Total = <code>n + n/2 + n/4 + … &lt; 2n = O(n)</code>. Dividido por n incrementos → O(1) amortizado.</p>
+      <p><strong>3.</strong> Num push sem crescer: custo real 1, ΔΦ = +2 (size sobe 1) → amortizado = 1 + 2 = 3. No push que dobra (size = capacity = m): custo real ≈ m+1, mas Φ cai de ≈ m pra ≈ 2 (a folga nova "guarda crédito"), ΔΦ ≈ 2 − m, então amortizado ≈ (m+1) + (2 − m) = 3 = O(1). Φ "paga" as cópias.</p>
+    </div>
+    <div class="note green">
+      <h4>Anki</h4>
+      <p><strong>P:</strong> Amortizado vs caso médio? → <strong>R:</strong> amortizado é garantia sobre a sequência (sem probabilidade); caso médio depende da distribuição da entrada.</p>
+      <p><strong>P:</strong> Os três métodos de análise amortizada? → <strong>R:</strong> agregado, contábil (banqueiro) e potencial.</p>
+      <p><strong>P:</strong> "O(1) amortizado" garante que toda op é O(1)? → <strong>R:</strong> não — a operação cara ainda existe; só o custo médio da sequência é O(1).</p>
+      <p><strong>P:</strong> Por que o rehash do Redis é incremental? → <strong>R:</strong> pra diluir um O(n) que travaria o servidor em passos O(1) amortizados.</p>
+      <p><strong>P:</strong> Total de cópias em n pushes dobrando? → <strong>R:</strong> &lt; n (série geométrica), logo O(1) por push.</p>
+    </div>
+
+    <!-- ---- 7 · Space Complexity ---- -->
+    <h3 class="cad-sub">7 · Space Complexity a fundo</h3>
+    <p><strong>Complexidade de espaço</strong> é quanta <strong>memória extra</strong> um algoritmo usa em função do tamanho da entrada. A pegadinha é separar duas coisas: o espaço da <strong>própria entrada</strong> (que você recebe pronta) e o <strong>espaço auxiliar</strong> (o que você aloca <em>a mais</em> pra resolver). Quando alguém diz "esse algoritmo é O(1) de espaço", está falando do auxiliar. Analogia: cozinhar — os ingredientes na bancada são a entrada; as tigelas e panelas extras que você suja são o espaço auxiliar.</p>
+
+    <div class="note">
+      <h4>Quando importa</h4>
+      <p>Quando memória é o gargalo: <strong>embarcados</strong>, <strong>big data</strong>, e código <strong>cache-sensível</strong>. E sempre que houver <strong>recursão profunda</strong> — cada chamada empilha um <em>frame</em>, então recursão tem custo de espaço na <strong>pilha</strong> que muita gente esquece. Quase sempre existe um <strong>trade-off tempo × espaço</strong>: memoização gasta memória pra ganhar tempo, e vice-versa.</p>
+    </div>
+
+    <div class="covwrap"><table class="cov"><thead><tr><th>Algoritmo</th><th>Espaço auxiliar</th><th>Observação</th></tr></thead><tbody>
+      <tr><td>Somar um array (laço)</td><td class="th">O(1)</td><td>só um acumulador</td></tr>
+      <tr><td>Inverter array no lugar (in-place)</td><td class="th">O(1)</td><td>troca por troca</td></tr>
+      <tr><td>Fibonacci recursivo ingênuo</td><td class="th">O(n)</td><td>profundidade da pilha</td></tr>
+      <tr><td>Merge Sort</td><td class="th">O(n)</td><td>array auxiliar do merge</td></tr>
+      <tr><td>Quick Sort</td><td class="th">O(log n) médio · O(n) pior</td><td>pilha de recursão</td></tr>
+      <tr><td>DP com tabulação 1D</td><td class="th">O(n)</td><td>às vezes dá pra cair p/ O(1)</td></tr>
+    </tbody></table></div>
+
+<svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pilha de recursão O(n) vs iterativo O(1)">
+  <text x="20" y="26" font-size="16" font-weight="700" fill="#1F1C16">O custo escondido: a pilha de recursão</text>
+  <!-- recursivo: frames empilhados -->
+  <text x="40" y="56" font-size="13" fill="#B5481F" font-weight="700">Recursivo — O(n) na pilha</text>
+  <rect x="40" y="66" width="200" height="26" fill="#B5481F" stroke="#1F1C16"/><text x="50" y="84" font-size="12" fill="#FAF5EC">soma_rec(n)</text>
+  <rect x="40" y="94" width="200" height="26" fill="#B5481F" stroke="#1F1C16"/><text x="50" y="112" font-size="12" fill="#FAF5EC">soma_rec(n-1)</text>
+  <rect x="40" y="122" width="200" height="26" fill="#B5481F" stroke="#1F1C16"/><text x="50" y="140" font-size="12" fill="#FAF5EC">soma_rec(n-2)</text>
+  <rect x="40" y="150" width="200" height="26" fill="#B5481F" stroke="#1F1C16"/><text x="50" y="168" font-size="12" fill="#FAF5EC">…</text>
+  <rect x="40" y="178" width="200" height="26" fill="#B5481F" stroke="#1F1C16"/><text x="50" y="196" font-size="12" fill="#FAF5EC">soma_rec(0)</text>
+  <text x="40" y="222" font-size="12" fill="#1F1C16">n frames vivos ao mesmo tempo</text>
+  <!-- iterativo: 1 frame -->
+  <text x="420" y="56" font-size="13" fill="#3C6B4A" font-weight="700">Iterativo — O(1) na pilha</text>
+  <rect x="420" y="66" width="220" height="40" fill="#3C6B4A" stroke="#1F1C16"/><text x="430" y="91" font-size="12" fill="#FAF5EC">soma_iter(n) · 1 acumulador</text>
+  <text x="420" y="140" font-size="12" fill="#1F1C16">Um único frame, um único `long s`.</text>
+  <text x="420" y="160" font-size="12" fill="#1F1C16">Mesmo resultado, sem encher a pilha.</text>
+  <text x="420" y="196" font-size="12" fill="#2C5F8A">↳ recursão profunda demais = stack overflow</text>
+</svg>
+
+<pre class="code"><span class="c">// RECURSIVO: parece inocente, mas cada chamada empilha um frame.</span>
+<span class="c">// Espaço auxiliar = O(n) na PILHA (n frames abertos antes de fechar o 1º).</span>
+long soma_rec(int n) {
+    if (n == 0) return 0;            <span class="c">// caso base</span>
+    return n + soma_rec(n - 1);      <span class="c">// abre outro frame... e outro... e outro</span>
+}
+
+<span class="c">// ITERATIVO: um único frame, uma variável. Espaço auxiliar = O(1).</span>
+long soma_iter(int n) {
+    long s = 0;                      <span class="c">// o ÚNICO espaço extra</span>
+    for (int i = 1; i &lt;= n; i++) s += i;
+    return s;                        <span class="c">// mesmo resultado, sem risco de stack overflow</span>
+}
+
+<span class="c">// Inverter um array IN-PLACE: O(1) de espaço (troca nas pontas, sem cópia).</span>
+void inverte(int *v, size_t n) {
+    size_t i = 0, j = n - 1;
+    while (i &lt; j) {                   <span class="c">// caminha das pontas pro meio</span>
+        int t = v[i]; v[i] = v[j]; v[j] = t;  <span class="c">// troca; só 1 var temporária</span>
+        i++; j--;
+    }
+}</pre>
+
+    <div class="note">
+      <h4>⚠ Erro nº1: esquecer a pilha de recursão (e contar a entrada como auxiliar)</h4>
+      <p>Dizer que um algoritmo recursivo é "O(1) de espaço" porque "não aloco nada" é o erro clássico — <strong>a pilha de chamadas é espaço</strong>, e uma recursão de profundidade <em>n</em> é O(n) de espaço (e pode estourar a pilha). O outro deslize é <strong>contar a entrada como auxiliar</strong>: se o problema já te entrega o array, esse array não conta no espaço <em>extra</em> — só conta o que você aloca além dele.</p>
+    </div>
+
+    <div class="note green">
+      <h4>Direto no projeto (mini-Redis)</h4>
+      <p>Memória é caro num banco em RAM. Nas travessias dos índices em árvore (<strong>C4</strong>/<strong>C8</strong>), prefira versão <strong>iterativa com pilha explícita</strong> a recursão funda — você controla o limite e não arrisca estourar a pilha do SO com uma árvore degenerada. E o <strong>despejo</strong> (<strong>C1</strong>) é o trade-off tempo×espaço em pessoa: você "gasta" estrutura extra (LRU/LFU) pra economizar a memória total do store.</p>
+    </div>
+
+    <ol class="steps">
+      <li><strong>(Fácil)</strong> Qual o espaço auxiliar de inverter uma string in-place? E de checar se ela é palíndromo?</li>
+      <li><strong>(Médio)</strong> Reescreva o Fibonacci pra rodar em <strong>O(1)</strong> de espaço (sem recursão, sem array — só duas variáveis).</li>
+      <li><strong>(Difícil)</strong> Converta uma travessia <em>in-order</em> recursiva (O(h) de pilha) numa <strong>iterativa com pilha explícita</strong> (mesma O(h), mas sob seu controle). Depois pesquise o <em>Morris traversal</em> e diga por que ele consegue O(1) de espaço.</li>
+    </ol>
+    <div class="note">
+      <h4>Gabarito</h4>
+      <p><strong>1.</strong> Ambos <strong>O(1)</strong>: você só usa dois índices (e uma temporária pra trocar). A string em si é a entrada — não conta como auxiliar.</p>
+      <p><strong>2.</strong> <code>long fib(int n){ long a=0,b=1; for(int i=0;i&lt;n;i++){ long t=a+b; a=b; b=t; } return a; }</code> — guarda só os dois últimos termos → O(1) espaço, O(n) tempo.</p>
+      <p><strong>3.</strong> Use uma pilha explícita: empurre indo todo à esquerda; ao desempilhar, visite o nó e vá pra subárvore direita. A profundidade máxima da pilha é a altura <em>h</em> → O(h), igual à recursiva, mas sem usar a pilha do SO. O <em>Morris traversal</em> atinge O(1) "tomando emprestados" os ponteiros nulos da árvore (threads temporários) pra voltar sem pilha — restaurando a árvore no fim.</p>
+    </div>
+    <div class="note green">
+      <h4>Anki</h4>
+      <p><strong>P:</strong> Espaço da entrada vs espaço auxiliar? → <strong>R:</strong> entrada é o que você recebe pronto; auxiliar é o que você aloca a mais. "O(1) de espaço" se refere ao auxiliar.</p>
+      <p><strong>P:</strong> Por que recursão tem custo de espaço? → <strong>R:</strong> cada chamada empilha um frame; profundidade n → O(n) de pilha (e risco de stack overflow).</p>
+      <p><strong>P:</strong> Espaço auxiliar do Merge Sort e do Quick Sort? → <strong>R:</strong> Merge O(n) (array do merge); Quick O(log n) médio / O(n) pior (pilha).</p>
+      <p><strong>P:</strong> Como deixar o Fibonacci O(1) de espaço? → <strong>R:</strong> iterativo guardando só os dois últimos termos.</p>
+      <p><strong>P:</strong> O que o Morris traversal alcança? → <strong>R:</strong> travessia in-order em O(1) de espaço, usando ponteiros nulos como threads temporários.</p>
+    </div>
+
+    <!-- ============ ÁRVORES ============ -->
+    <div class="levelhead"><span class="n" style="background:var(--green)">Árvores</span><span class="l"></span></div>
+    <p>Os 🆕 das árvores. Os ✅ (Tree, Binary Tree, travessias, BST, full/complete/perfect/balanced) você já tem. Começamos pelas duas <strong>autobalanceadas</strong> — as que garantem altura O(log n) e nunca degeneram numa "lista torta".</p>
+
+    <!-- ---- 6 · AVL ---- -->
+    <h3 class="cad-sub">6 · Árvore AVL</h3>
+    <p>Uma <strong>AVL</strong> é uma BST que <strong>se reequilibra sozinha</strong> a cada inserção/remoção, garantindo que a altura fique sempre em O(log n). O segredo é o <strong>fator de balanço</strong> de cada nó (altura da subárvore esquerda − altura da direita): ele só pode ser −1, 0 ou +1. Passou disso, a árvore faz uma <strong>rotação</strong> e se ajeita. Analogia: uma estante de livros que, toda vez que pende demais pra um lado, você reorganiza pra ela não tombar — em vez de virar uma "torre de Pisa" (a BST degenerada vira uma lista O(n)).</p>
+
+    <div class="note">
+      <h4>Quando usar / quando NÃO usar</h4>
+      <p><strong>USE</strong> quando <strong>buscas dominam</strong> e você precisa de lookup previsível O(log n) sempre — a AVL fica a árvore mais "rasa" possível.</p>
+      <p><strong>NÃO use</strong> quando inserir/remover é o mais frequente (a AVL roda mais que a Rubro-Negra pra manter o equilíbrio apertado) ou quando os dados chegam bem embaralhados (uma BST simples já fica boa na média e é mais barata).</p>
+    </div>
+
+    <div class="covwrap"><table class="cov"><thead><tr><th>Operação</th><th>Tempo (Big-O)</th><th>Espaço</th></tr></thead><tbody>
+      <tr><td>Buscar</td><td class="th">O(log n) <em>garantido</em></td><td>O(1) iterativo</td></tr>
+      <tr><td>Inserir</td><td class="th">O(log n)</td><td>O(log n) pilha</td></tr>
+      <tr><td>Remover</td><td class="th">O(log n)</td><td>O(log n) pilha</td></tr>
+      <tr><td>Memória</td><td class="th">O(n)</td><td>+1 inteiro (altura) por nó</td></tr>
+    </tbody></table></div>
+    <p>O ganho sobre a BST comum é no <strong>pior caso</strong>: a BST pode virar uma lista (insira 1,2,3,4,5… em ordem → altura n → busca O(n)). A AVL <em>garante</em> O(log n) mesmo nesse cenário. São <strong>4 casos</strong> de desequilíbrio, resolvidos com 1 ou 2 rotações: <strong>Esq-Esq</strong> (1 rotação à direita), <strong>Dir-Dir</strong> (1 à esquerda), <strong>Esq-Dir</strong> e <strong>Dir-Esq</strong> (rotação dupla).</p>
+
+<svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rotação à direita corrige o caso Esquerda-Esquerda na AVL">
+  <text x="20" y="26" font-size="16" font-weight="700" fill="#1F1C16">Caso Esquerda-Esquerda → 1 rotação à direita</text>
+  <!-- ANTES -->
+  <text x="40" y="58" font-size="13" fill="#B5481F" font-weight="700">Antes (desbalanceado, BF do 30 = +2)</text>
+  <circle cx="200" cy="80" r="20" fill="#B5481F" stroke="#1F1C16"/><text x="200" y="85" font-size="14" fill="#FAF5EC" text-anchor="middle">30</text>
+  <circle cx="140" cy="140" r="20" fill="#FAF5EC" stroke="#1F1C16"/><text x="140" y="145" font-size="14" fill="#1F1C16" text-anchor="middle">20</text>
+  <circle cx="80" cy="200" r="20" fill="#FAF5EC" stroke="#1F1C16"/><text x="80" y="205" font-size="14" fill="#1F1C16" text-anchor="middle">10</text>
+  <line x1="186" y1="93" x2="154" y2="127" stroke="#1F1C16"/><line x1="126" y1="153" x2="94" y2="187" stroke="#1F1C16"/>
+  <!-- seta -->
+  <line x1="300" y1="140" x2="380" y2="140" stroke="#2C5F8A" stroke-width="2"/><polygon points="386,140 376,135 376,145" fill="#2C5F8A"/>
+  <text x="300" y="130" font-size="12" fill="#2C5F8A">rotação à direita no 30</text>
+  <!-- DEPOIS -->
+  <text x="470" y="58" font-size="13" fill="#3C6B4A" font-weight="700">Depois (balanceado)</text>
+  <circle cx="560" cy="100" r="20" fill="#3C6B4A" stroke="#1F1C16"/><text x="560" y="105" font-size="14" fill="#FAF5EC" text-anchor="middle">20</text>
+  <circle cx="500" cy="170" r="20" fill="#FAF5EC" stroke="#1F1C16"/><text x="500" y="175" font-size="14" fill="#1F1C16" text-anchor="middle">10</text>
+  <circle cx="620" cy="170" r="20" fill="#FAF5EC" stroke="#1F1C16"/><text x="620" y="175" font-size="14" fill="#1F1C16" text-anchor="middle">30</text>
+  <line x1="546" y1="113" x2="514" y2="157" stroke="#1F1C16"/><line x1="574" y1="113" x2="606" y2="157" stroke="#1F1C16"/>
+  <text x="470" y="215" font-size="12" fill="#1F1C16">o do meio (20) sobe e vira a raiz</text>
+</svg>
+
+<pre class="code"><span class="p">#include &lt;stdlib.h&gt;</span>
+
+typedef struct Node {
+    int          key, height;       <span class="c">// guardamos a altura no próprio nó</span>
+    struct Node *left, *right;
+} Node;
+
+static int h(Node *n)   { return n ? n-&gt;height : 0; }              <span class="c">// altura de NULL = 0</span>
+static int mx(int a,int b){ return a &gt; b ? a : b; }
+static int bf(Node *n)  { return n ? h(n-&gt;left) - h(n-&gt;right) : 0; } <span class="c">// fator de balanço</span>
+
+static Node* novo(int key) {
+    Node *n = malloc(sizeof(Node));
+    n-&gt;key = key; n-&gt;height = 1; n-&gt;left = n-&gt;right = NULL;
+    return n;
+}
+
+<span class="c">// Rotação à DIREITA (conserta o caso Esquerda-Esquerda).</span>
+static Node* rot_right(Node *y) {
+    Node *x = y-&gt;left, *t = x-&gt;right;
+    x-&gt;right = y; y-&gt;left = t;                    <span class="c">// gira: x sobe, y desce</span>
+    y-&gt;height = 1 + mx(h(y-&gt;left), h(y-&gt;right));  <span class="c">// atualiza y PRIMEIRO (virou filho)</span>
+    x-&gt;height = 1 + mx(h(x-&gt;left), h(x-&gt;right));  <span class="c">// depois x (virou pai)</span>
+    return x;                                    <span class="c">// x é a nova raiz da subárvore</span>
+}
+
+<span class="c">// Rotação à ESQUERDA: espelho exato (troca left&lt;-&gt;right).</span>
+static Node* rot_left(Node *x) {
+    Node *y = x-&gt;right, *t = y-&gt;left;
+    y-&gt;left = x; x-&gt;right = t;
+    x-&gt;height = 1 + mx(h(x-&gt;left), h(x-&gt;right));
+    y-&gt;height = 1 + mx(h(y-&gt;left), h(y-&gt;right));
+    return y;
+}
+
+<span class="c">// Insere e, na VOLTA da recursão, reequilibra cada nó no caminho.</span>
+Node* avl_insert(Node *n, int key) {
+    if (!n) return novo(key);                    <span class="c">// achou o lugar: cria a folha</span>
+    if      (key &lt; n-&gt;key) n-&gt;left  = avl_insert(n-&gt;left,  key);
+    else if (key &gt; n-&gt;key) n-&gt;right = avl_insert(n-&gt;right, key);
+    else    return n;                            <span class="c">// chave repetida: ignora</span>
+
+    n-&gt;height = 1 + mx(h(n-&gt;left), h(n-&gt;right));  <span class="c">// recalcula a altura subindo</span>
+    int b = bf(n);                               <span class="c">// desbalanceou?</span>
+
+    if (b &gt; 1  &amp;&amp; key &lt; n-&gt;left-&gt;key)  return rot_right(n);  <span class="c">// Esq-Esq</span>
+    if (b &lt; -1 &amp;&amp; key &gt; n-&gt;right-&gt;key) return rot_left(n);   <span class="c">// Dir-Dir</span>
+    if (b &gt; 1  &amp;&amp; key &gt; n-&gt;left-&gt;key)  {           <span class="c">// Esq-Dir (rotação dupla)</span>
+        n-&gt;left = rot_left(n-&gt;left); return rot_right(n);
+    }
+    if (b &lt; -1 &amp;&amp; key &lt; n-&gt;right-&gt;key) {           <span class="c">// Dir-Esq (rotação dupla)</span>
+        n-&gt;right = rot_right(n-&gt;right); return rot_left(n);
+    }
+    return n;                                     <span class="c">// já estava balanceado</span>
+}</pre>
+
+    <div class="note">
+      <h4>⚠ Erro nº1: esquecer de atualizar as alturas (na ordem certa) após rotacionar</h4>
+      <p>Depois de girar, o nó que <em>desceu</em> tem que ter a altura recalculada <strong>antes</strong> do que <em>subiu</em> (filho antes do pai) — inverter a ordem dá altura errada e a árvore vai desbalanceando em silêncio. O outro tropeço é confundir os casos duplos: <strong>Esq-Dir</strong> é uma rotação à <em>esquerda</em> no filho esquerdo e <em>depois</em> à direita na raiz (e o <strong>Dir-Esq</strong> é o espelho). Decore: o "joelho dobrado" (zig-zag) precisa de duas rotações pra virar "linha reta".</p>
+    </div>
+
+    <div class="note green">
+      <h4>Direto no projeto (mini-Redis)</h4>
+      <p>Toda estrutura <strong>ordenada</strong> com busca rápida cai aqui. No capstone, é a base teórica dos <strong>índices secundários</strong> (<strong>Camada C4</strong>) e do <strong>Sorted Set</strong> (<strong>C8</strong>) — manter chaves em ordem pra responder <code>ZRANGE</code>/range queries em O(log n). O Redis real usa <em>skip list</em> pro ZSET (próximo lote), mas a AVL é a versão "livro-texto" do mesmo papel, e a B-Tree (lote de árvores parte 2) é a versão pra disco.</p>
+    </div>
+
+    <ol class="steps">
+      <li><strong>(Fácil)</strong> Escreva uma função que, dado um nó, diga em qual dos 4 casos (EE, DD, ED, DE) ele está — ou que está balanceado.</li>
+      <li><strong>(Médio)</strong> Dado o <code>rot_right</code>, prove que o <code>rot_left</code> é o espelho exato (escreva-o sem olhar e confira).</li>
+      <li><strong>(Difícil)</strong> Implemente <code>avl_delete</code>: remova como numa BST (caso da folha, do nó com 1 filho e do nó com 2 filhos via sucessor in-order) e <strong>reequilibre na volta</strong>, igual ao insert.</li>
+    </ol>
+    <div class="note">
+      <h4>Gabarito</h4>
+      <p><strong>1.</strong> Calcule <code>b = bf(n)</code>. Se <code>b&gt;1</code>: é EE se <code>bf(n-&gt;left)&gt;=0</code>, senão ED. Se <code>b&lt;-1</code>: é DD se <code>bf(n-&gt;right)&lt;=0</code>, senão DE. <code>|b|&lt;=1</code> → balanceado. (Olhar o filho diz se o desequilíbrio é "reto" ou "joelho".)</p>
+      <p><strong>2.</strong> Troque sistematicamente <code>left</code>↔<code>right</code> no <code>rot_right</code>: pega <code>y = x-&gt;right</code>, move <code>y-&gt;left</code> pra <code>x-&gt;right</code>, faz <code>y-&gt;left = x</code>. É exatamente o código acima.</p>
+      <p><strong>3.</strong> O esqueleto é o mesmo do insert: desça recursivo até achar a chave; nos 3 casos de remoção, no de 2 filhos copie o <strong>menor da subárvore direita</strong> (sucessor) e remova-o lá embaixo; na volta, recalcule <code>height</code> e aplique as mesmas 4 checagens de rotação — só que aqui o desequilíbrio pode aparecer mesmo "do outro lado", então use <code>bf</code> dos filhos pra decidir o caso (não dá pra usar a "key inserida").</p>
+    </div>
+    <div class="note green">
+      <h4>Anki</h4>
+      <p><strong>P:</strong> O que a AVL garante e como? → <strong>R:</strong> altura O(log n), mantendo o fator de balanço de todo nó em {−1,0,+1} via rotações.</p>
+      <p><strong>P:</strong> Os 4 casos de desequilíbrio? → <strong>R:</strong> Esq-Esq, Dir-Dir (1 rotação) e Esq-Dir, Dir-Esq (rotação dupla).</p>
+      <p><strong>P:</strong> Por que a BST comum pode ser O(n)? → <strong>R:</strong> inserções em ordem crescente a degeneram numa lista; a AVL impede isso.</p>
+      <p><strong>P:</strong> Ordem de atualizar as alturas após rotação? → <strong>R:</strong> filho (quem desceu) antes do pai (quem subiu).</p>
+      <p><strong>P:</strong> AVL vs Rubro-Negra, em uma frase? → <strong>R:</strong> AVL é mais rasa (busca melhor); RB roda menos (escrita melhor).</p>
+    </div>
+
+    <!-- ---- 7 · Rubro-Negra ---- -->
+    <h3 class="cad-sub">7 · Árvore Rubro-Negra (Red-Black)</h3>
+    <p>Outra BST autobalanceada — mas em vez de medir altura exata, ela segue <strong>regras de cor</strong> (cada nó é vermelho ou preto). Isso deixa o balanceamento mais "frouxo" que a AVL (a árvore não fica tão perfeitamente rasa), e em troca ela faz <strong>menos rotações</strong> nas inserções e remoções. Por isso é o cavalo de batalha de bibliotecas inteiras: <code>std::map</code>/<code>std::set</code> do C++, <code>TreeMap</code> do Java, o escalonador CFS do kernel Linux. Analogia: regras de trânsito por cor — você não mede a distância exata de tudo, segue 5 regrinhas de cor que mantêm o sistema "bom o suficiente" e estável.</p>
+
+    <div class="note">
+      <h4>Quando usar / quando NÃO usar</h4>
+      <p><strong>USE</strong> quando inserir/remover é frequente e você quer um balanceamento "bom o suficiente" com poucas rotações por escrita — é a escolha padrão de mapas/sets ordenados nas linguagens.</p>
+      <p><strong>NÃO use</strong> quando a leitura é absolutamente dominante e cada nível conta (a AVL fica um tiquinho mais rasa), ou quando você não precisa de ordenação (uma hash table dá O(1) e é bem mais simples). Implementar RB <em>certo</em> é notoriamente chato — não reinvente se a lib já tem.</p>
+    </div>
+
+    <div class="covwrap"><table class="cov"><thead><tr><th>Operação</th><th>Tempo (Big-O)</th><th>Observação</th></tr></thead><tbody>
+      <tr><td>Buscar / Inserir / Remover</td><td class="th">O(log n) <em>garantido</em></td><td>altura ≤ 2·log₂(n+1)</td></tr>
+      <tr><td>Rotações por inserção</td><td class="th">≤ 2</td><td>menos que a AVL no pior caso</td></tr>
+      <tr><td>Memória</td><td class="th">O(n)</td><td>+1 bit (cor) por nó</td></tr>
+    </tbody></table></div>
+    <p>As <strong>5 propriedades</strong> que toda RB mantém: (1) todo nó é vermelho ou preto; (2) a <strong>raiz é preta</strong>; (3) toda folha NIL é preta; (4) filho de nó vermelho é preto (<strong>não há dois vermelhos seguidos</strong>); (5) todo caminho da raiz até as folhas tem o <strong>mesmo número de nós pretos</strong> (a "altura-preta"). São essas 5 regras que forçam a árvore a ficar aproximadamente balanceada.</p>
+
+<svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Árvore Rubro-Negra e suas propriedades">
+  <text x="20" y="26" font-size="16" font-weight="700" fill="#1F1C16">As 5 regras de cor mantêm a árvore "rasa o suficiente"</text>
+  <!-- nós -->
+  <circle cx="300" cy="70" r="22" fill="#1F1C16" stroke="#1F1C16"/><text x="300" y="76" font-size="14" fill="#FAF5EC" text-anchor="middle">13</text>
+  <circle cx="180" cy="140" r="22" fill="#B5481F" stroke="#1F1C16"/><text x="180" y="146" font-size="14" fill="#FAF5EC" text-anchor="middle">8</text>
+  <circle cx="420" cy="140" r="22" fill="#B5481F" stroke="#1F1C16"/><text x="420" y="146" font-size="14" fill="#FAF5EC" text-anchor="middle">17</text>
+  <circle cx="120" cy="205" r="20" fill="#1F1C16" stroke="#1F1C16"/><text x="120" y="211" font-size="13" fill="#FAF5EC" text-anchor="middle">1</text>
+  <circle cx="240" cy="205" r="20" fill="#1F1C16" stroke="#1F1C16"/><text x="240" y="211" font-size="13" fill="#FAF5EC" text-anchor="middle">11</text>
+  <circle cx="360" cy="205" r="20" fill="#1F1C16" stroke="#1F1C16"/><text x="360" y="211" font-size="13" fill="#FAF5EC" text-anchor="middle">15</text>
+  <circle cx="480" cy="205" r="20" fill="#1F1C16" stroke="#1F1C16"/><text x="480" y="211" font-size="13" fill="#FAF5EC" text-anchor="middle">25</text>
+  <line x1="286" y1="87" x2="194" y2="123" stroke="#1F1C16"/><line x1="314" y1="87" x2="406" y2="123" stroke="#1F1C16"/>
+  <line x1="168" y1="158" x2="132" y2="188" stroke="#1F1C16"/><line x1="192" y1="158" x2="228" y2="188" stroke="#1F1C16"/>
+  <line x1="408" y1="158" x2="372" y2="188" stroke="#1F1C16"/><line x1="432" y1="158" x2="468" y2="188" stroke="#1F1C16"/>
+  <!-- legenda -->
+  <circle cx="560" cy="70" r="12" fill="#1F1C16"/><text x="580" y="75" font-size="13" fill="#1F1C16">preto</text>
+  <circle cx="560" cy="100" r="12" fill="#B5481F"/><text x="580" y="105" font-size="13" fill="#1F1C16">vermelho</text>
+  <text x="540" y="145" font-size="12" fill="#1F1C16">raiz preta ✓</text>
+  <text x="540" y="165" font-size="12" fill="#1F1C16">sem 2 vermelhos seguidos ✓</text>
+  <text x="540" y="185" font-size="12" fill="#1F1C16">mesma altura-preta ✓</text>
+</svg>
+
+<pre class="code"><span class="p">#include &lt;stdlib.h&gt;</span>
+
+typedef enum { RED, BLACK } Color;
+typedef struct Node {
+    int           key;
+    Color         color;
+    struct Node  *left, *right, *parent;
+} Node;
+
+typedef struct {
+    Node *root;
+    Node *nil;   <span class="c">// SENTINELA: uma folha preta única que substitui todo NULL</span>
+} RBTree;
+
+void rb_init(RBTree *t) {
+    t-&gt;nil = malloc(sizeof(Node));
+    t-&gt;nil-&gt;color = BLACK;                       <span class="c">// a sentinela é sempre preta</span>
+    t-&gt;nil-&gt;left = t-&gt;nil-&gt;right = t-&gt;nil-&gt;parent = t-&gt;nil;
+    t-&gt;root = t-&gt;nil;
+}
+
+<span class="c">// Rotação à esquerda em torno de x (o filho direito, y, sobe).</span>
+static void rot_left(RBTree *t, Node *x) {
+    Node *y = x-&gt;right;
+    x-&gt;right = y-&gt;left;                          <span class="c">// a subárvore esq. de y vira dir. de x</span>
+    if (y-&gt;left != t-&gt;nil) y-&gt;left-&gt;parent = x;
+    y-&gt;parent = x-&gt;parent;                       <span class="c">// liga y ao pai de x</span>
+    if      (x-&gt;parent == t-&gt;nil)   t-&gt;root = y;
+    else if (x == x-&gt;parent-&gt;left)  x-&gt;parent-&gt;left = y;
+    else                           x-&gt;parent-&gt;right = y;
+    y-&gt;left = x; x-&gt;parent = y;                  <span class="c">// x desce pra esquerda de y</span>
+}
+
+<span class="c">// Rotação à direita: espelho exato (left&lt;-&gt;right).</span>
+static void rot_right(RBTree *t, Node *x) {
+    Node *y = x-&gt;left;
+    x-&gt;left = y-&gt;right;
+    if (y-&gt;right != t-&gt;nil) y-&gt;right-&gt;parent = x;
+    y-&gt;parent = x-&gt;parent;
+    if      (x-&gt;parent == t-&gt;nil)    t-&gt;root = y;
+    else if (x == x-&gt;parent-&gt;right)  x-&gt;parent-&gt;right = y;
+    else                            x-&gt;parent-&gt;left = y;
+    y-&gt;right = x; x-&gt;parent = y;
+}
+
+<span class="c">// Conserta as 5 propriedades depois de inserir z (que entra VERMELHO).</span>
+static void rb_fix(RBTree *t, Node *z) {
+    while (z-&gt;parent-&gt;color == RED) {            <span class="c">// só há problema com pai vermelho</span>
+        if (z-&gt;parent == z-&gt;parent-&gt;parent-&gt;left) {
+            Node *tio = z-&gt;parent-&gt;parent-&gt;right;
+            if (tio-&gt;color == RED) {             <span class="c">// CASO 1: tio vermelho -&gt; só recolore</span>
+                z-&gt;parent-&gt;color = BLACK; tio-&gt;color = BLACK;
+                z-&gt;parent-&gt;parent-&gt;color = RED;
+                z = z-&gt;parent-&gt;parent;           <span class="c">// sobe e repete</span>
+            } else {
+                if (z == z-&gt;parent-&gt;right) {     <span class="c">// CASO 2: "joelho" -&gt; vira linha</span>
+                    z = z-&gt;parent; rot_left(t, z);
+                }
+                z-&gt;parent-&gt;color = BLACK;        <span class="c">// CASO 3: linha -&gt; recolore + roda</span>
+                z-&gt;parent-&gt;parent-&gt;color = RED;
+                rot_right(t, z-&gt;parent-&gt;parent);
+            }
+        } else {                                <span class="c">// espelho (pai é filho direito)</span>
+            Node *tio = z-&gt;parent-&gt;parent-&gt;left;
+            if (tio-&gt;color == RED) {
+                z-&gt;parent-&gt;color = BLACK; tio-&gt;color = BLACK;
+                z-&gt;parent-&gt;parent-&gt;color = RED;
+                z = z-&gt;parent-&gt;parent;
+            } else {
+                if (z == z-&gt;parent-&gt;left) { z = z-&gt;parent; rot_right(t, z); }
+                z-&gt;parent-&gt;color = BLACK;
+                z-&gt;parent-&gt;parent-&gt;color = RED;
+                rot_left(t, z-&gt;parent-&gt;parent);
+            }
+        }
+    }
+    t-&gt;root-&gt;color = BLACK;                      <span class="c">// regra de ouro: raiz SEMPRE preta</span>
+}
+
+void rb_insert(RBTree *t, int key) {
+    Node *z = malloc(sizeof(Node));
+    z-&gt;key = key; z-&gt;color = RED;                <span class="c">// todo nó novo entra vermelho</span>
+    z-&gt;left = z-&gt;right = t-&gt;nil;
+    Node *y = t-&gt;nil, *x = t-&gt;root;              <span class="c">// BST normal pra achar o lugar</span>
+    while (x != t-&gt;nil) { y = x; x = (key &lt; x-&gt;key) ? x-&gt;left : x-&gt;right; }
+    z-&gt;parent = y;
+    if      (y == t-&gt;nil)     t-&gt;root = z;
+    else if (key &lt; y-&gt;key)    y-&gt;left = z;
+    else                     y-&gt;right = z;
+    rb_fix(t, z);                               <span class="c">// reequilibra por cor/rotação</span>
+}</pre>
+
+    <div class="note">
+      <h4>⚠ Erro nº1: usar NULL em vez da sentinela (e esquecer que a raiz é preta)</h4>
+      <p>O <code>rb_fix</code> lê a cor do <strong>tio</strong> e do <strong>avô</strong> sem checar se existem. Se você usar <code>NULL</code> pras folhas, vai dar <em>segfault</em> ao ler <code>NULL-&gt;color</code>. A solução clássica é a <strong>sentinela <code>nil</code></strong>: um único nó preto que faz papel de todas as folhas — assim você nunca lê um ponteiro nulo. O segundo erro é terminar o fixup sem forçar <code>root-&gt;color = BLACK</code> (o Caso 1 pode ter pintado a raiz de vermelho).</p>
+    </div>
+
+    <div class="note green">
+      <h4>Direto no projeto (mini-Redis)</h4>
+      <p>Mesmo papel da AVL — estrutura <strong>ordenada</strong> pra <strong>índices secundários</strong> (<strong>C4</strong>) e <strong>Sorted Set</strong> (<strong>C8</strong>) — só que otimizada pra <em>escrita</em>. É exatamente por que <code>std::map</code> e <code>TreeMap</code> a escolhem: muitas inserções/remoções com balanceamento barato. Bom contraponto pro skip list (que o Redis realmente usa no ZSET) no próximo lote.</p>
+    </div>
+
+    <ol class="steps">
+      <li><strong>(Fácil)</strong> Liste as 5 propriedades de memória e explique, em uma frase, por que elas forçam altura ≤ 2·log₂(n+1).</li>
+      <li><strong>(Médio)</strong> No código acima eu escrevi <code>rot_right</code> como espelho de <code>rot_left</code>. Cubra-o e reescreva do zero, só trocando <code>left</code>↔<code>right</code>; confira.</li>
+      <li><strong>(Difícil)</strong> Pesquise e implemente o <code>rb_delete</code> com seu <code>rb_delete_fixup</code> (os 4 casos do irmão). É o trecho mais difícil de toda a estrutura de dados clássica — vale como projeto à parte.</li>
+    </ol>
+    <div class="note">
+      <h4>Gabarito</h4>
+      <p><strong>1.</strong> Como (4) proíbe dois vermelhos seguidos e (5) exige a mesma quantidade de pretos em todo caminho, o caminho mais longo (que alterna preto-vermelho) tem no máximo o <strong>dobro</strong> do mais curto (só pretos). Logo a altura é ≤ 2× a altura-preta ≈ 2·log₂(n+1) → O(log n).</p>
+      <p><strong>2.</strong> Pega <code>y = x-&gt;left</code>; move <code>y-&gt;right</code> pra <code>x-&gt;left</code>; religa o pai checando <code>x == x-&gt;parent-&gt;right</code>; faz <code>y-&gt;right = x</code>. É o que está no código.</p>
+      <p><strong>3.</strong> A remoção segue a BST (com a "transplante" de subárvores) e, se o nó removido/movido era <strong>preto</strong>, você cria um "preto a mais" que precisa ser empurrado pra cima pelo <code>fixup</code>, tratando os 4 casos do irmão (vermelho; preto com filhos pretos; preto com filho perto vermelho; preto com filho longe vermelho). Use a referência do CLRS — e teste com bateria de inserções/remoções aleatórias verificando as 5 propriedades a cada passo.</p>
+    </div>
+    <div class="note green">
+      <h4>Anki</h4>
+      <p><strong>P:</strong> A ideia central da Rubro-Negra? → <strong>R:</strong> balancear por regras de cor (não por altura exata), trocando "árvore mais rasa" por "menos rotações na escrita".</p>
+      <p><strong>P:</strong> As 5 propriedades, resumidas? → <strong>R:</strong> nó é R/B; raiz preta; folhas NIL pretas; sem dois vermelhos seguidos; mesma altura-preta em todo caminho.</p>
+      <p><strong>P:</strong> Por que usar uma sentinela nil? → <strong>R:</strong> pra nunca ler <code>NULL-&gt;color</code> no fixup (evita segfault) e simplificar os casos.</p>
+      <p><strong>P:</strong> De que cor entra um nó novo, e por quê? → <strong>R:</strong> vermelho — não viola a altura-preta; no pior caso vira só "dois vermelhos seguidos", que o fixup conserta.</p>
+      <p><strong>P:</strong> Quem usa Rubro-Negra na prática? → <strong>R:</strong> std::map/std::set (C++), TreeMap (Java), escalonador CFS do Linux.</p>
+    </div>
+
+    <!-- ===================== CADERNO DS&A — FIM (continua em próximos lotes) ===================== -->
 
 
     <div class="part-head" id="cad-ingles" style="background:var(--blue)">
