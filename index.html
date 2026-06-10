@@ -283,6 +283,7 @@
     <a href="#f13">13 · System Design</a>
     <div class="lbl">Projeto</div>
     <a href="#projeto">Trilha de projeto</a>
+    <a href="#lacunas">Lacunas &amp; satélites</a>
     <div class="lbl">Extras</div>
     <a href="#cobertura">Cobertura do roadmap</a>
     <a href="#linkedin">Build in Public</a>
@@ -758,6 +759,7 @@
         <p class="exer"><b>Exercita do roadmap:</b> Hash Table, Linked List, ponteiros, Makefile.</p>
         <p class="exer"><b>Dono:</b> <span class="owner">A · Core</span></p>
                 <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Anúncio de lançamento: <b>“Comecei a construir um banco de dados key-value do zero em C 🧵”</b> — Camada 0: hash table + GET/SET/DEL. Repo aberto no GitHub.</div></div>
+<div class="note"><h4>🎯 Stretch · vai a fundo</h4><p>Ligue <strong>ASan + UBSan + Valgrind no CI</strong> desde o 1º commit e compile com <code>-Wall -Wextra -Werror</code>. Meça o <em>throughput</em> (ops/s) com um cliente de carga. <strong>Entrega:</strong> build limpo (zero warnings, zero leaks) + um baseline de ops/s pra comparar nas próximas camadas. Crava: <em>Linguagem C</em> e <em>qualidade</em> a fundo.</p></div>
 <div class="milestones"><label class="ms"><input type="checkbox" data-id="p0"><span>Camada 0 entregue</span></label></div>
       </div>
     </div>
@@ -776,6 +778,7 @@
         <p class="exer"><b>Exercita do roadmap:</b> caches LRU/LFU, heap, análise de complexidade.</p>
         <p class="exer"><b>Dono:</b> <span class="owner">A + B</span></p>
                 <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post com número: <b>“Adicionei cache LRU/LFU ao meu mini-Redis — hit rate subiu de X% pra Y%”</b>. Métrica + gráfico simples.</div></div>
+<div class="note"><h4>🎯 Stretch · vai a fundo</h4><p>Implemente <em>aging</em> no LFU (decaimento de frequência) e meça o <strong>hit rate</strong> em 3 cargas: acesso uniforme, zipfiano (popularidade desigual) e <em>scan</em> sequencial. <strong>Entrega:</strong> um gráfico LRU × LFU mostrando em qual carga cada um ganha — e por quê.</p></div>
 <div class="milestones"><label class="ms"><input type="checkbox" data-id="p1"><span>Camada 1 entregue</span></label></div>
       </div>
     </div>
@@ -794,6 +797,7 @@
         <p class="exer"><b>Exercita do roadmap:</b> threads, mutex, semáforo, gerência de memória, escalonamento.</p>
         <p class="exer"><b>Dono:</b> <span class="owner">D · Infra</span></p>
                 <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Vídeo curto: <b>“Tornei meu banco de dados multi-thread”</b> — mostre o pool de threads rodando e fale do primeiro deadlock.</div></div>
+<div class="note"><h4>🎯 Stretch · vai a fundo</h4><p>Saia do lock global para <strong>locks por bucket</strong> (sharded locks) e rode tudo sob <strong>ThreadSanitizer</strong>. Provoque de propósito 1 <em>data race</em> e 1 <em>deadlock</em>, observe, e conserte. <strong>Entrega:</strong> curva de throughput de 1→8 threads (escalou?) + TSan limpo. Crava: <em>SO/concorrência</em> a fundo.</p></div>
 <div class="milestones"><label class="ms"><input type="checkbox" data-id="p2"><span>Camada 2 entregue</span></label></div>
       </div>
     </div>
@@ -812,6 +816,7 @@
         <p class="exer"><b>Exercita do roadmap:</b> sockets, TCP/IP, design de protocolo, HTTP (opcional).</p>
         <p class="exer"><b>Dono:</b> <span class="owner">B · Rede</span></p>
                 <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Demo em vídeo: <b>“Meu DB agora fala por TCP com protocolo próprio (estilo RESP do Redis)”</b> — cliente conectando pela rede.</div></div>
+<div class="note"><h4>🎯 Stretch · vai a fundo</h4><p>Faça o protocolo <strong>RESP de verdade</strong>, compatível com o <code>redis-cli</code> oficial (meta concreta!); troque thread-por-conexão por um <strong>event loop com epoll</strong> (single-thread, como o Redis real) e suporte <em>pipelining</em>. <strong>Entrega:</strong> o <code>redis-cli</code> oficial conectando e operando no SEU servidor. Crava: <em>Redes</em> e <em>I/O assíncrono</em> a fundo.</p></div>
 <div class="milestones"><label class="ms"><input type="checkbox" data-id="p3"><span>Camada 3 entregue</span></label></div>
       </div>
     </div>
@@ -830,6 +835,7 @@
         <p class="exer"><b>Exercita do roadmap:</b> internals de banco, transações, durabilidade (o "D" do ACID), I/O de disco.</p>
         <p class="exer"><b>Dono:</b> <span class="owner">C · Storage</span></p>
                 <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post: <b>“Persistência com Write-Ahead Log: meu banco sobrevive a um crash”</b> — explique o WAL com um diagrama.</div></div>
+<div class="note"><h4>🎯 Stretch · vai a fundo</h4><p>Suba pra transações <strong>ACID</strong> (<code>MULTI</code>/<code>EXEC</code>, isolamento) e um <strong>índice B+Tree em disco</strong> (não só hash em memória). <strong>Entrega (durabilidade PROVADA):</strong> um teste que dá <code>kill -9</code> no meio de uma escrita e, ao reiniciar, prova que nenhum dado confirmado se perdeu. Crava: <em>Bancos de dados</em> a fundo.</p></div>
 <div class="milestones"><label class="ms"><input type="checkbox" data-id="p4"><span>Camada 4 entregue</span></label></div>
       </div>
     </div>
@@ -847,6 +853,7 @@
         <p class="exer"><b>Exercita do roadmap:</b> hashing, criptografia, TLS, OWASP.</p>
         <p class="exer"><b>Dono:</b> <span class="owner">D + C</span></p>
                 <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post: <b>“Coloquei autenticação e TLS no meu banco de dados”</b> — fale de hash de senha vs texto puro (lição de segurança).</div></div>
+<div class="note"><h4>🎯 Stretch · vai a fundo</h4><p>Hash de senha com <strong>salt + bcrypt/argon2</strong> (nunca SHA cru), <strong>TLS</strong> via OpenSSL e comparação de senha em <em>tempo constante</em>. Depois, o exercício que mais ensina: <strong>ataque o próprio servidor</strong> (explore um buffer overflow seu; tente um timing attack) e conserte. <strong>Entrega:</strong> um mini-relatório "achei → explorei → corrigi". Crava: <em>Segurança</em> a fundo (aprende-se quebrando).</p></div>
 <div class="milestones"><label class="ms"><input type="checkbox" data-id="p5"><span>Camada 5 entregue</span></label></div>
       </div>
     </div>
@@ -865,6 +872,7 @@
         <p class="exer"><b>Exercita do roadmap:</b> design patterns, injeção de dependência, organização de projeto.</p>
         <p class="exer"><b>Dono:</b> <span class="owner">todos · refactor + code review</span></p>
                 <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Antes/depois: <b>“Refatorei meu projeto em arquitetura limpa + testes”</b> — print do diagrama de camadas e da suíte de testes verde.</div></div>
+<div class="note"><h4>🎯 Stretch · vai a fundo</h4><p>Cobertura de testes <strong>≥ 80%</strong>, <strong>fuzzing</strong> (libFuzzer/AFL) no parser do protocolo, e um <strong>ADR</strong> (Architecture Decision Record) curto por decisão grande (por que skip list e não árvore? por que WAL e não só snapshot?). <strong>Entrega:</strong> suíte verde + pasta <code>docs/adr/</code> no repo. Crava: <em>Design Patterns</em> e engenharia a fundo.</p></div>
 <div class="milestones"><label class="ms"><input type="checkbox" data-id="p6"><span>Camada 6 entregue</span></label></div>
       </div>
     </div>
@@ -883,6 +891,7 @@
         <p class="exer"><b>Exercita do roadmap:</b> replicação, sharding, CAP, load balancing, system design.</p>
         <p class="exer"><b>Dono:</b> <span class="owner">todos</span></p>
                 <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Post final (o que vira entrevista): <b>“Construí um banco de dados distribuído do zero em C — replicação, sharding e benchmark”</b> + link do repo e do doc de arquitetura.</div></div>
+<div class="note"><h4>🎯 Stretch · vai a fundo</h4><p>Use <strong>consistent hashing</strong> de verdade no sharding (não <code>hash % N</code>), adicione <strong>observabilidade</strong> (<code>INFO</code>, slowlog, métricas) e faça um <strong>teste de caos</strong>: derrube uma réplica em produção e prove o failover. <strong>Entrega:</strong> documento de arquitetura + demo do failover acontecendo. Crava: <em>System Design</em> a fundo.</p></div>
 <div class="milestones"><label class="ms"><input type="checkbox" data-id="p7"><span>Camada 7 entregue — projeto completo</span></label></div>
       </div>
     </div>
@@ -908,7 +917,8 @@
         <p class="exer"><b>Exercita do roadmap:</b> skip list, tries, K-D tree, casamento de padrões (KMP/Boyer-Moore/suffix), programação dinâmica, backtracking, bitwise, probabilidade/combinatória, ponto flutuante, grafos.</p>
         <p class="exer"><b>Dono:</b> <span class="owner">rotativo — uma estrutura por pessoa, com code review</span></p>
         <div class="li"><span class="ic">in</span><div class="lt"><div class="lab">Posta isso</div>Mini-série: <b>“Construindo os tipos do Redis do zero”</b> — um post por estrutura (skip list, trie, bloom filter, HyperLogLog). Conteúdo raro = muito alcance.</div></div>
-        <div class="milestones"><label class="ms"><input type="checkbox" data-id="p8"><span>Camada 8 — tipos avançados entregues</span></label></div>
+        <div class="note"><h4>🎯 Stretch · vai a fundo</h4><p>Escolha 2 tipos e <em>meça</em> em vez de só implementar: skip list × árvore balanceada (latência real), HyperLogLog (erro medido vs contagem exata), Bloom (falso positivo observado vs teórico). <strong>Entrega:</strong> um post comparativo com números reais e o gráfico. Crava: <em>DS&amp;A</em> e <em>matemática aplicada</em> a fundo.</p></div>
+<div class="milestones"><label class="ms"><input type="checkbox" data-id="p8"><span>Camada 8 — tipos avançados entregues</span></label></div>
       </div>
     </div>
 
@@ -917,6 +927,25 @@
       <p>README matador com diagrama de arquitetura · histórico de PRs com code review · benchmarks (operações por segundo) · um post ou apresentação contando as decisões e trade-offs. Esse repositório vale mais que qualquer certificado — porque quase ninguém constrói um banco de dados do zero.</p>
     </div>
 
+
+    <h2 id="lacunas"><span class="num">§</span>Lacunas do capstone — o que ele NÃO cobre (e como cobrir)</h2>
+    <p class="sub">Honestidade total: um KV store é fortíssimo em C, estruturas, rede, internals de banco, concorrência e system design — mas há nós que ele <strong>quase não toca</strong>. Nenhum projeto único cobre tudo. Aqui estão os buracos reais e os <strong>projetos-satélite</strong> (1–2 semanas cada) que os preenchem sem inchar o mini-Redis.</p>
+    <div class="covwrap"><table class="cov"><thead><tr><th>Lacuna</th><th>Por que o mini-Redis não cobre</th><th>Como cobrir (satélite)</th></tr></thead><tbody>
+      <tr><td>Algoritmos de entrevista (DP, backtracking, grafos variados)</td><td>o projeto usa só alguns</td><td class="pj">Trilha <strong>LeetCode</strong> estruturada (NeetCode 150) — os blocos "LeetCode · pratique" nos cadernos de DS e C já mapeiam por tópico</td></tr>
+      <tr><td>Teoria (autômatos, P/NP, compiladores)</td><td>KV store não exercita</td><td class="pj">Mini-projeto: <strong>regex engine</strong> (NFA/DFA) ou <strong>interpretador</strong> (livro <em>Crafting Interpreters</em>) — cobre parsing, gramáticas e teoria</td></tr>
+      <tr><td>SO em amplitude (processos, fork/exec, IPC, sinais)</td><td>C2 só cobre threads</td><td class="pj">Mini-projeto: <strong>shell em C</strong> (fork/exec/pipe/jobs/sinais) — clássico de MIT/Berkeley</td></tr>
+      <tr><td>Arquitetura de CPU (cache, pipeline, branch)</td><td>só com tuning deliberado</td><td class="pj">Escreva um <strong>alocador de memória próprio</strong> (mini-malloc) + profiling com <code>perf</code></td></tr>
+      <tr><td>OOP / UML / Design Patterns (amplitude)</td><td>C não é orientado a objetos</td><td class="pj">Refaça 1 módulo do capstone em <strong>C# ou Java</strong> OO (Observer/Factory/Decorator + diagrama UML)</td></tr>
+      <tr><td>Inglês técnico (produção real)</td><td>não é código</td><td class="pj">Bloco <strong>"Prática por nível"</strong> no caderno de inglês + escrever os posts de Build in Public em inglês</td></tr>
+    </tbody></table></div>
+    <div class="note green">
+      <h4>O método "prove, não afirme" — vale pra TODA camada e satélite</h4>
+      <p>O que transforma "implementei" em "domino" são <strong>4 entregáveis</strong> por feature: <strong>(1)</strong> um <em>número</em> (benchmark: latência p99, throughput, hit rate, memória); <strong>(2)</strong> um <em>teste que prova a propriedade</em> (ex.: <code>kill -9</code> no meio do WAL → reinicia → dados intactos = durabilidade provada); <strong>(3)</strong> <em>ler a fonte real</em> (código do Redis, papers do <strong>Dynamo</strong>, <strong>Raft</strong>, <strong>LSM/Bigtable</strong>) e escrever 1 parágrafo de "o que eles fazem diferente de mim e por quê"; <strong>(4)</strong> um <em>post</em> explicando o porquê. Sem os quatro, ficou superficial.</p>
+    </div>
+    <div class="note">
+      <h4>⚠ Disciplina de escopo</h4>
+      <p>Não deixe o capstone virar um monstro — C0–C8 já são ~6 meses de trabalho paralelo. <strong>Aprofunde onde o projeto já vai naturalmente</strong> (use os "Stretch · vai a fundo" de cada camada) e use os satélites só pros gaps genuínos. Melhor um mini-Redis profundo + 3 satélites focados do que um projeto gigante que ninguém termina.</p>
+    </div>
 
     <h2 id="cobertura"><span class="num">§</span>Cobertura do roadmap — onde cada skill é cravada</h2>
     <p class="sub">A regra do plano: <strong>todo nó do roadmap de Computer Science é estudado numa fase e exercitado no projeto</strong>. Onde for teoria pura e não couber em código, está marcado honestamente. É essa dupla — estudar &amp; construir — que transforma o repositório numa prova real de domínio, não num certificado a mais.</p>
@@ -1692,6 +1721,17 @@ public class OpenHash {
       • Garantia do Cuckoo hashing? → busca O(1) no pior caso (2 posições por chave).</p>
     </div>
 
+    <div class="note">
+      <h4>💻 LeetCode · pratique Fundação (array, lista, pilha, fila, hash)</h4>
+      <p>Resolva — alguns <em>em C</em>, pra treinar ponteiros/memória. Sempre declare o Big-O da sua solução.</p>
+      <ol class="steps">
+        <li><strong>Array / hash:</strong> Two Sum (1) · Contains Duplicate (217) · Valid Anagram (242) · Group Anagrams (49) · Top K Frequent Elements (347) · Product of Array Except Self (238) · Longest Consecutive Sequence (128).</li>
+        <li><strong>Lista encadeada:</strong> Reverse Linked List (206) · Merge Two Sorted Lists (21) · Linked List Cycle (141) · Remove Nth Node From End (19) · Add Two Numbers (2).</li>
+        <li><strong>Pilha:</strong> Valid Parentheses (20) · Min Stack (155) · Evaluate Reverse Polish Notation (150).</li>
+        <li><strong>Fila / Deque:</strong> Implement Queue using Stacks (232) · Design Circular Queue (622) · Sliding Window Maximum (239).</li>
+      </ol>
+    </div>
+
     <div class="secthead">Complexidade</div>
 
     <h3 class="cad-sub">10 · Big O — limite superior (o pior caso)</h3>
@@ -2128,6 +2168,17 @@ public static long FatIter(int n) {
       • Espaço auxiliar do merge sort? → O(n). Do quicksort? → O(log n).<br>
       • Trade-off da memoização? → gasta espaço O(n) pra cortar tempo exponencial.<br>
       • Como evitar stack overflow numa árvore alta? → travessia iterativa com pilha explícita, ou árvore balanceada.</p>
+    </div>
+
+    <div class="note">
+      <h4>💻 LeetCode · pratique Complexidade (Big-O na prática)</h4>
+      <p>Aqui o exercício é de <em>análise</em>, não de problema novo: em TODA submissão, declare o Big-O de tempo e espaço e busque a solução ótima. Bons casos onde a complexidade É o ponto:</p>
+      <ol class="steps">
+        <li>Two Sum (1): O(n²) força-bruta → O(n) com hash. Sinta a diferença na prática.</li>
+        <li>Best Time to Buy and Sell Stock (121): O(n²) → O(n) com uma passada.</li>
+        <li>Maximum Subarray (53): força-bruta → Kadane O(n).</li>
+        <li>Desafio amortizado: implemente um array dinâmico e mostre, somando as cópias, por que N inserções dão O(N) no total.</li>
+      </ol>
     </div>
 
     <div class="secthead">Árvores</div>
@@ -3541,6 +3592,17 @@ public class Treap {
       • Qual regra vale pra prioridade? → heap (pai maior que filhos).</p>
     </div>
 
+    <div class="note">
+      <h4>💻 LeetCode · pratique Árvores</h4>
+      <ol class="steps">
+        <li><strong>Binária / travessias:</strong> Maximum Depth (104) · Invert Binary Tree (226) · Same Tree (100) · Binary Tree Level Order Traversal (102, BFS) · Diameter of Binary Tree (543) · Binary Tree Inorder Traversal (94).</li>
+        <li><strong>BST:</strong> Validate Binary Search Tree (98) · Kth Smallest Element in a BST (230) · Lowest Common Ancestor of a BST (235) · Convert Sorted Array to BST (108).</li>
+        <li><strong>Balanceada:</strong> Balanced Binary Tree (110).</li>
+        <li><strong>Trie:</strong> Implement Trie (208) · Design Add and Search Words (211) · Word Search II (212).</li>
+        <li><strong>Segment / Fenwick:</strong> Range Sum Query - Mutable (307).</li>
+      </ol>
+    </div>
+
     <div class="secthead">Heaps</div>
 
     <h3 class="cad-sub">35 · Heap (binary heap, min/max — fila de prioridade)</h3>
@@ -3945,6 +4007,16 @@ public class IndexedMinPQ {
       • Regra de ouro da implementação? → atualizar o mapa em toda troca.<br>
       • Onde é indispensável? → Dijkstra e Prim.<br>
       • Alternativa preguiçosa? → inserir duplicatas e ignorar as obsoletas no extract.</p>
+    </div>
+
+    <div class="note">
+      <h4>💻 LeetCode · pratique Heaps / Fila de Prioridade</h4>
+      <ol class="steps">
+        <li>Kth Largest Element in an Array (215) · K Closest Points to Origin (973) · Task Scheduler (621).</li>
+        <li>Find Median from Data Stream (295) — técnica dos <em>dois heaps</em>.</li>
+        <li>Merge k Sorted Lists (23) — heap das k cabeças.</li>
+        <li>Indexed PQ na prática: Network Delay Time (743, Dijkstra com fila de prioridade).</li>
+      </ol>
     </div>
 
     <div class="secthead">Grafos</div>
@@ -4590,6 +4662,17 @@ public static bool EhBipartido(List&lt;int&gt;[] adj, int n) {
       • Como testar? → colorir com 2 cores via BFS/DFS (O(V+E)).<br>
       • O que um triângulo prova? → não-bipartição (ciclo ímpar).<br>
       • Aplicação típica? → emparelhamento (matching) entre duas categorias.</p>
+    </div>
+
+    <div class="note">
+      <h4>💻 LeetCode · pratique Grafos</h4>
+      <ol class="steps">
+        <li><strong>BFS / DFS:</strong> Number of Islands (200) · Clone Graph (133) · Rotting Oranges (994) · Pacific Atlantic Water Flow (417).</li>
+        <li><strong>DAG / ordenação topológica:</strong> Course Schedule (207) · Course Schedule II (210).</li>
+        <li><strong>Union-Find:</strong> Number of Provinces (547) · Redundant Connection (684).</li>
+        <li><strong>Ponderado / Dijkstra:</strong> Network Delay Time (743) · Cheapest Flights Within K Stops (787).</li>
+        <li><strong>Bipartite / MST:</strong> Is Graph Bipartite? (785) · Min Cost to Connect All Points (1584).</li>
+      </ol>
     </div>
 
     <div class="secthead">Especializadas (clássicos de entrevista)</div>
@@ -5622,6 +5705,17 @@ dict.AddOrUpdate(<span class="s">"x"</span>, 1, (k, v) =&gt; v + 1);   <span cla
       • Como evitar ABA? → contador de versão / tagged pointer no CAS.</p>
     </div>
 
+    <div class="note">
+      <h4>💻 LeetCode · pratique Especializadas</h4>
+      <ol class="steps">
+        <li><strong>Caches:</strong> LRU Cache (146) · LFU Cache (460).</li>
+        <li><strong>Monotonic stack/queue:</strong> Daily Temperatures (739) · Next Greater Element I (496) · Largest Rectangle in Histogram (84) · Sliding Window Maximum (239).</li>
+        <li><strong>Skip List:</strong> Design Skiplist (1206).</li>
+        <li><strong>Ring buffer:</strong> Design Circular Queue (622) · Design Circular Deque (641).</li>
+      </ol>
+      <p class="sub">Bloom filter, Count-Min Sketch e HyperLogLog <strong>não têm</strong> problema no LeetCode — são "System Design". Pratique-os direto no capstone (Camada C8).</p>
+    </div>
+
     <div class="secthead">Nível FAANG</div>
 
     <h3 class="cad-sub">64 · Consistent Hashing</h3>
@@ -5966,6 +6060,16 @@ public class Dawg {
       • Vantagem sobre a trie? → memória muito menor.<br>
       • Limitação? → conjunto estático (difícil atualizar).<br>
       • DAWG vs radix? → radix funde cadeias de prefixo; DAWG funde sufixos equivalentes.</p>
+    </div>
+
+    <div class="note">
+      <h4>💻 LeetCode · pratique Nível FAANG (mais System Design que algoritmo)</h4>
+      <p>Estes tópicos são, em geral, <strong>perguntas de System Design</strong>, não problemas clássicos de LeetCode. O que dá pra treinar no estilo "design":</p>
+      <ol class="steps">
+        <li>Design HashMap (706) · Design HashSet (705) — os fundamentos por baixo de tudo.</li>
+        <li>Design Search Autocomplete System (1268) — inverted index / trie aplicados.</li>
+        <li><strong>Consistent Hashing, Merkle Tree, LSM Tree, DAWG:</strong> implemente no capstone (Camadas C4/C7/C8) e estude em <em>System Design interviews</em> ("design a distributed key-value store / cache").</li>
+      </ol>
     </div>
 
     <!-- END:cad-dsa -->
@@ -10188,6 +10292,29 @@ gcc -Wall -Wextra -Werror -std=c11 programa.c</pre>
       • Trinca de qualidade? → estática + sanitizers + testes.</p>
     </div>
 
+    <div class="secthead">Pratique · LeetCode em C</div>
+
+    <h3 class="cad-sub">LeetCode em C — treine os fundamentos resolvendo em C puro</h3>
+    <p>O LeetCode é agnóstico de linguagem — mas resolver <strong>em C</strong> treina exatamente o que dói e o que as linguagens com garbage collector escondem: ponteiros, índices, gerência de memória (<code>malloc</code>/<code>free</code>) e strings com <code>'\0'</code>. A cada problema, rode mentalmente o "<em>e a memória?</em>" e valide com <strong>ASan/Valgrind</strong>. As seções <em>não-algorítmicas</em> de C (pré-processador, arquivos, modularização, baixo nível) <strong>não têm</strong> LeetCode — essas se praticam <em>escrevendo programas</em> (o capstone é o lugar).</p>
+
+    <div class="covwrap"><table class="cov"><thead><tr><th>Assunto de C</th><th>Treine resolvendo em C</th></tr></thead><tbody>
+      <tr><td>Arrays (Seção 7)</td><td>Two Sum (1) · Remove Duplicates from Sorted Array (26) · Rotate Array (189) · Move Zeroes (283) · Best Time to Buy/Sell Stock (121)</td></tr>
+      <tr><td>Strings (Seção 8)</td><td>Valid Palindrome (125) · Reverse String (344) · Implement strStr() (28) · Longest Common Prefix (14) · Valid Anagram (242)</td></tr>
+      <tr><td>Ponteiros (Seção 9)</td><td>resolva os acima com <em>ponteiro cru</em> (sem índice <code>[i]</code>) — ande com <code>*p++</code> pra sentir a aritmética de ponteiro</td></tr>
+      <tr><td>Recursão (Seção 6)</td><td>Reverse Linked List (206, versão recursiva) · Merge Two Sorted Lists (21) · Pow(x, n) (50)</td></tr>
+      <tr><td>Structs / auto-referência (Seção 11)</td><td>Reverse Linked List (206) · Linked List Cycle (141) · Add Two Numbers (2) · Remove Nth Node From End (19)</td></tr>
+      <tr><td>Memória / UB (Seção 10)</td><td>qualquer um acima — meta: passar no <strong>Valgrind/ASan</strong> com <em>zero leaks</em> e zero acessos inválidos</td></tr>
+    </tbody></table></div>
+
+    <div class="note">
+      <h4>⚠ O pulo do gato</h4>
+      <p>Nos problemas de <strong>lista encadeada em C</strong>, o LeetCode te dá os nós já alocados — mas se você criar nós novos, é você quem dá <code>malloc</code> (e quem vaza se esquecer). É aqui que o <em>dangling pointer</em> e o <em>use-after-free</em> (Seção 9, tópico 44) deixam de ser teoria. Resolver 10 problemas de lista em C ensina mais sobre memória que 100 em Python.</p>
+    </div>
+    <div class="note green">
+      <h4>Direto no projeto</h4>
+      <p>Cada problema resolvido em C é um músculo que o capstone vai cobrar: ponteiros e <code>malloc</code>/<code>free</code> sem vazar (Camadas C0+), parsing de strings (protocolo, C3), e arrays/buffers cache-friendly (tuning, Fase 7). Faça uma trilha curta (NeetCode 150) <em>em C</em> em paralelo às Fases 2–5.</p>
+    </div>
+
     <!-- END:cad-c -->
 
     <div class="part-head" id="cad-strings" style="background:var(--ink)">
@@ -14228,6 +14355,29 @@ sscanf(<span class="s">"06/06/2026"</span>, <span class="s">"%d/%d/%d"</span>, &
     <div class="note"><h4>Registro / a arte da mediação</h4><p>Mediar é ser a <strong>ponte</strong>: reformular o que A disse pra B entender, suavizar conflito, sintetizar posições, e traduzir <em>sentido</em> (não palavras). A tradução fina respeita o <strong>registro, o tom e a intenção</strong> do original — um xingamento traduzido por um palavrão neutro perde a cor; um trocadilho exige recriação, não tradução literal. É a função mais alta: você desaparece pra que a comunicação aconteça.</p></div>
     <div class="enex"><div class="en">"Let me see if I can bridge this: you're worried about cost, you're worried about quality — and actually, those aren't in conflict here. Here's how they fit together."</div><div class="pt">"Deixa eu tentar fazer a ponte: você se preocupa com custo, você com qualidade — e, na verdade, esses dois não estão em conflito aqui. Eis como se encaixam."</div></div>
     <div class="note green"><h4>Anki</h4><p>What she's getting at is… → O que ela quer dizer é… · If I understand you both correctly → Se entendi vocês dois · to bring it together → juntando tudo · traduzir sentido, não palavra → respeitar tom/registro/intenção · "saying the same thing, just differently" → desarmar conflito · mediar = ser a ponte (reformular/sintetizar/suavizar)</p></div>
+
+    <div class="levelhead"><span class="n" style="background:var(--rust)">Prática · o "LeetCode" do inglês</span><span class="l"></span></div>
+
+    <h3 class="cad-sub">Como treinar inglês de verdade (por nível)</h3>
+    <p>Não existe "LeetCode de inglês" — porque idioma <strong>não se resolve, se produz</strong>. A prática que move o ponteiro é <strong>ativa</strong> (falar e escrever), não passiva (só ler e ouvir). A métrica que importa não é "quantas regras eu sei", é <strong>"quantas frases eu produzo"</strong>. Meta mínima inegociável: <strong>falar OU escrever algo em inglês todo dia</strong>. Erre rápido, corrija, repita — é o mesmo loop do código.</p>
+
+    <div class="covwrap"><table class="cov"><thead><tr><th>Nível</th><th>Prática ativa (faça toda semana)</th></tr></thead><tbody>
+      <tr><td>A1</td><td>5 frases/dia no presente sobre sua rotina; Anki com o vocabulário deste caderno; descreva objetos da sua casa em voz alta.</td></tr>
+      <tr><td>A2</td><td>conte seu dia <em>no passado</em> (oral, 2 min); escreva um diário curto; mude o idioma do celular pra inglês.</td></tr>
+      <tr><td>B1</td><td>grave-se falando 3 min sobre um tema; escreva opiniões curtas (comentários, Reddit); <em>shadowing</em> (repetir junto com vídeos).</td></tr>
+      <tr><td>B2</td><td>participe de discussões (Discord/comunidades); escreva ensaios de 1 página e peça correção; assista séries <em>sem legenda</em>.</td></tr>
+      <tr><td>C1</td><td>debata temas complexos; escreva relatórios/posts técnicos; resuma podcasts/notícias com as suas palavras.</td></tr>
+      <tr><td>C2</td><td>produza conteúdo nativo (artigos, talks); faça <em>mediação</em> (traduza/explique pra terceiros); cace nuance (idioms, registro, humor) em mídia real.</td></tr>
+    </tbody></table></div>
+
+    <div class="note">
+      <h4>⚠ O erro nº1 do brasileiro (no método)</h4>
+      <p>Ficar <strong>"estudando pra começar a falar"</strong> pra sempre — acumulando regra e vocabulário sem nunca produzir. Inverte: <em>fale errado hoje</em>. Fluência vem de output + correção, não de input infinito. Outra armadilha: só consumir conteúdo passivo (Netflix legendado) e achar que é estudo — é exposição, não treino.</p>
+    </div>
+    <div class="note green">
+      <h4>Recursos (o "kit de treino")</h4>
+      <p><strong>Output/conversa:</strong> iTalki, Cambly, Tandem · <strong>Correção/tutor:</strong> ChatGPT (peça pra corrigir e explicar o erro) · <strong>Pronúncia em contexto:</strong> YouGlish · <strong>Leitura graduada:</strong> LingQ, Readlang · <strong>Flashcards:</strong> Anki (com os cards deste caderno) · <strong>Shadowing:</strong> qualquer série/podcast que você goste. Amarre com o <a href="#linkedin">Build in Public</a>: escreva os posts do projeto <em>em inglês</em> — pratica idioma e portfólio de uma vez.</p>
+    </div>
 
     <!-- END:cad-ingles -->
 
